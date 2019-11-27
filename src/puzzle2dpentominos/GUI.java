@@ -27,7 +27,6 @@ public class GUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Panel = new javax.swing.JPanel();
         MenuBar = new javax.swing.JMenuBar();
         ControlMenu = new javax.swing.JMenu();
         SolveOption = new javax.swing.JMenuItem();
@@ -44,11 +43,7 @@ public class GUI extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Puzzle2DPentominos");
         setSize(new java.awt.Dimension(1000, 1000));
-        getContentPane().setLayout(new java.awt.GridLayout());
-
-        Panel.setPreferredSize(new java.awt.Dimension(500, 500));
-        Panel.setLayout(new java.awt.GridLayout(8, 8));
-        getContentPane().add(Panel);
+        getContentPane().setLayout(new java.awt.GridLayout(2, 2));
 
         MenuBar.setSelectionModel(null);
 
@@ -203,7 +198,6 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JMenu ControlMenu;
     private javax.swing.JMenuItem ExitOption;
     private javax.swing.JMenuBar MenuBar;
-    private static javax.swing.JPanel Panel;
     private javax.swing.JMenuItem ResetOption;
     private javax.swing.JMenu SizeMenu;
     private javax.swing.JMenuItem SolveOption;
