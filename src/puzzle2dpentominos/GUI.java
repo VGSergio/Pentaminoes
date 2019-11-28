@@ -6,8 +6,8 @@
 package puzzle2dpentominos;
 
 /**
- *
- * @author Sergio
+ * @authors Sergio Vega     (43480752B)
+ *          Andreas Korn    (X4890193W)
  */
 public class GUI extends javax.swing.JFrame {
 
@@ -45,7 +45,7 @@ public class GUI extends javax.swing.JFrame {
         setSize(new java.awt.Dimension(1000, 1000));
         getContentPane().setLayout(new java.awt.GridLayout(2, 2));
 
-        MenuBar.setSelectionModel(null);
+        MenuBar.setSelectionModel(MenuBar.getSelectionModel());
 
         ControlMenu.setText("Control");
         ControlMenu.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -94,15 +94,35 @@ public class GUI extends javax.swing.JFrame {
         });
 
         BoardSize1.setText("6 x 10");
+        BoardSize1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                BoardSize1MouseReleased(evt);
+            }
+        });
         SizeMenu.add(BoardSize1);
 
         BoardSize2.setText("5 x 12");
+        BoardSize2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                BoardSize2MouseReleased(evt);
+            }
+        });
         SizeMenu.add(BoardSize2);
 
         BoardSize3.setText("4 x 15");
+        BoardSize3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                BoardSize3MouseReleased(evt);
+            }
+        });
         SizeMenu.add(BoardSize3);
 
         BoardSize4.setText("3 x 20");
+        BoardSize4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                BoardSize4MouseReleased(evt);
+            }
+        });
         SizeMenu.add(BoardSize4);
 
         MenuBar.add(SizeMenu);
@@ -154,41 +174,57 @@ public class GUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_ControlMenuMouseEntered
 
+    private void BoardSize1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize1MouseReleased
+        Tablero t = new Tablero(6, 10);
+    }//GEN-LAST:event_BoardSize1MouseReleased
+
+    private void BoardSize2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize2MouseReleased
+        Tablero t = new Tablero(5, 12);
+    }//GEN-LAST:event_BoardSize2MouseReleased
+
+    private void BoardSize3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize3MouseReleased
+        Tablero t = new Tablero(4, 15);
+    }//GEN-LAST:event_BoardSize3MouseReleased
+
+    private void BoardSize4MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize4MouseReleased
+        Tablero t = new Tablero(3, 20);
+    }//GEN-LAST:event_BoardSize4MouseReleased
+
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new GUI().setVisible(true);
-            }
-        });
-        
-    }
+//    public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(GUI.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new GUI().setVisible(true);
+//            }
+//        });
+//        
+//    }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem BoardSize1;

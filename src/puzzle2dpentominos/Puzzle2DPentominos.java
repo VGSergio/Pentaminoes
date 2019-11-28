@@ -6,16 +6,21 @@
 package puzzle2dpentominos;
 
 /**
- *
- * @author Sergio
+ * @authors Sergio Vega     (43480752B)
+ *          Andreas Korn    (X4890193W)
  */
 public class Puzzle2DPentominos {
 
-//    /**
-//     * @param args the command line arguments
-//     */
-//    public static void main(String[] args) {
-//        new GUI().setVisible(true);
-//    }
+    private static Tablero tablero;
     
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        new GUI().setVisible(true);
+    }
+    
+    private void GeneraTablero(){
+        
+    }
 }
