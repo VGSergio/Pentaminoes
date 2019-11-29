@@ -13,10 +13,6 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Control"/>
           </Properties>
-          <Events>
-            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="ControlMenuMouseEntered"/>
-            <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="ControlMenuMouseReleased"/>
-          </Events>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="SolveOption">
               <Properties>
@@ -39,10 +35,6 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Speed"/>
           </Properties>
-          <Events>
-            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="SpeedMenuMouseEntered"/>
-            <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="SpeedMenuMouseReleased"/>
-          </Events>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="jMenuItem1">
               <Properties>
@@ -55,10 +47,6 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Size"/>
           </Properties>
-          <Events>
-            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="SizeMenuMouseEntered"/>
-            <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="SizeMenuMouseReleased"/>
-          </Events>
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="BoardSize1">
               <Properties>

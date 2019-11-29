@@ -48,14 +48,6 @@ public class GUI extends javax.swing.JFrame {
         MenuBar.setSelectionModel(MenuBar.getSelectionModel());
 
         ControlMenu.setText("Control");
-        ControlMenu.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                ControlMenuMouseEntered(evt);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                ControlMenuMouseReleased(evt);
-            }
-        });
 
         SolveOption.setText("Solve");
         ControlMenu.add(SolveOption);
@@ -69,14 +61,6 @@ public class GUI extends javax.swing.JFrame {
         MenuBar.add(ControlMenu);
 
         SpeedMenu.setText("Speed");
-        SpeedMenu.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                SpeedMenuMouseEntered(evt);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                SpeedMenuMouseReleased(evt);
-            }
-        });
 
         jMenuItem1.setText("jMenuItem1");
         SpeedMenu.add(jMenuItem1);
@@ -84,14 +68,6 @@ public class GUI extends javax.swing.JFrame {
         MenuBar.add(SpeedMenu);
 
         SizeMenu.setText("Size");
-        SizeMenu.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                SizeMenuMouseEntered(evt);
-            }
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                SizeMenuMouseReleased(evt);
-            }
-        });
 
         BoardSize1.setText("6 x 10");
         BoardSize1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -131,48 +107,6 @@ public class GUI extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void SizeMenuMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SizeMenuMouseReleased
-        ControlMenu.setPopupMenuVisible(false);
-        SpeedMenu.setPopupMenuVisible(false);
-        SizeMenu.setPopupMenuVisible(true);
-    }//GEN-LAST:event_SizeMenuMouseReleased
-
-    private void SizeMenuMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SizeMenuMouseEntered
-        if (ControlMenu.getPopupMenu().isVisible() || SpeedMenu.getPopupMenu().isVisible()){
-            ControlMenu.setPopupMenuVisible(false);
-            SpeedMenu.setPopupMenuVisible(false);
-            SizeMenu.setPopupMenuVisible(true);
-        }
-    }//GEN-LAST:event_SizeMenuMouseEntered
-
-    private void SpeedMenuMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SpeedMenuMouseReleased
-        ControlMenu.setPopupMenuVisible(false);
-        SpeedMenu.setPopupMenuVisible(true);
-        SizeMenu.setPopupMenuVisible(false);
-    }//GEN-LAST:event_SpeedMenuMouseReleased
-
-    private void SpeedMenuMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SpeedMenuMouseEntered
-        if (ControlMenu.getPopupMenu().isVisible() || SizeMenu.getPopupMenu().isVisible()){
-            ControlMenu.setPopupMenuVisible(false);
-            SpeedMenu.setPopupMenuVisible(true);
-            SizeMenu.setPopupMenuVisible(false);
-        }
-    }//GEN-LAST:event_SpeedMenuMouseEntered
-
-    private void ControlMenuMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ControlMenuMouseReleased
-        ControlMenu.setPopupMenuVisible(true);
-        SpeedMenu.setPopupMenuVisible(false);
-        SizeMenu.setPopupMenuVisible(false);
-    }//GEN-LAST:event_ControlMenuMouseReleased
-
-    private void ControlMenuMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ControlMenuMouseEntered
-        if (SpeedMenu.getPopupMenu().isVisible()|| SizeMenu.getPopupMenu().isVisible()){
-            ControlMenu.setPopupMenuVisible(true);
-            SpeedMenu.setPopupMenuVisible(false);
-            SizeMenu.setPopupMenuVisible(false);
-        }
-    }//GEN-LAST:event_ControlMenuMouseEntered
 
     private void BoardSize1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize1MouseReleased
         Tablero t = new Tablero(6, 10);
