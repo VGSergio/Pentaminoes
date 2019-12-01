@@ -16,9 +16,9 @@ public class Puzzle2DPentominos {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        new GUI().setVisible(true);
-    }
+//    public static void main(String[] args) {
+//        new GUI().setVisible(true);
+//    }
     
     private void GeneraTablero(){
         
