@@ -1,9 +1,12 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * 
+ * 
+ * 
  */
 package puzzle2dpentominos;
+
+import java.awt.*;
+import javax.swing.*;
 
 /**
  * @authors Sergio Vega     (43480752B)
@@ -12,15 +15,22 @@ package puzzle2dpentominos;
 public class Puzzle2DPentominos {
 
     private static Tablero tablero;
+    private static final int SIZE = 50;
     
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String[] args) {
-//        new GUI().setVisible(true);
-//    }
-    
-    private void GeneraTablero(){
-        
+    public Puzzle2DPentominos(Tablero tablero){
+        this.tablero = tablero;
     }
+    
+    public JPanel GeneraTablero(){
+        JPanel panel = new JPanel();
+        panel.setSize(SIZE*tablero.getY(), SIZE*tablero.getX());
+        panel.setLayout(new GridLayout(tablero.getX(), tablero.getY()));
+        for (int i=0; i<tablero.getX()*tablero.getY(); i++){
+            JButton button = new JButton(String.valueOf(i));
+            button.setSize(SIZE, SIZE);
+            panel.add(button);
+        }
+        return panel;
+    }
+    
 }
