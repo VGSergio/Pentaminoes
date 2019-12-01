@@ -1,7 +1,7 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * 
+ * 
+ * 
  */
 package puzzle2dpentominos;
 
@@ -12,7 +12,7 @@ import java.awt.*;
  *          Andreas Korn    (X4890193W)
  */
 public class Casilla {
-    private final int LADO = 10;
+    private final int LADO = 50;
     private final Color COLOR;
     
     public Casilla(Color col){
