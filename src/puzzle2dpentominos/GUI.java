@@ -5,36 +5,42 @@
  */
 package puzzle2dpentominos;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 
 /**
  * @authors Sergio Vega     (43480752B)
  *          Andreas Korn    (X4890193W)
  */
-public class GUI extends javax.swing.JFrame {
+public class GUI extends JFrame {
 
-    private static Puzzle2DPentominos Puzle;
-    private static JPanel Panel;
-    private static int Speed;
+    private Tablero Tablero;
+    private int x = 6, y = 10;
+    private int Speed;
     
     /**
      * Creates new form GUI
      */
     public GUI() {
         initComponents();
-        setLocationRelativeTo(null);
-        GeneraTablero(6,10);
+        GeneraTablero(x, y);
+        
     }
 
     /**
      * 
      */
     private void GeneraTablero(int x, int y){
-        getContentPane().removeAll();
-        Puzle = new Puzzle2DPentominos(new Tablero(x,y));
-        Panel = Puzle.GeneraTablero();
-        getContentPane().add(Panel);
-        setSize(Panel.getWidth()+20,Panel.getHeight()+65);
+        int FixWidth = 6;
+        int FixHeight = 10;
+        if (Tablero!=null){         //Tablero inicializado
+            setSize(-FixWidth, getHeight()-Tablero.getHeight()+FixHeight);                  //Reseteamos tamaño frame
+            getContentPane().remove(Tablero);                                                                //Borramos tablero anterior
+        }                                                
+        Tablero = new Tablero(x, y);                                                        //Genera un nuevo tablero
+        getContentPane().add(Tablero);                                                                       //Añadimos nuevo tablero
+        setSize(Tablero.getWidth()+FixWidth, getHeight()+Tablero.getHeight()-FixHeight);    //Adapta el tamaño del frame
+        setLocationRelativeTo(null);                                                        //Centra el frame 
+        setResizable(false);
     }
     
     /**
@@ -46,7 +52,6 @@ public class GUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
         MenuBar = new javax.swing.JMenuBar();
         ControlMenu = new javax.swing.JMenu();
         SolveOption = new javax.swing.JMenuItem();
@@ -64,17 +69,6 @@ public class GUI extends javax.swing.JFrame {
         setTitle("Puzzle2DPentominos");
         setSize(new java.awt.Dimension(1000, 1000));
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 792, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 513, Short.MAX_VALUE)
-        );
-
         MenuBar.setSelectionModel(MenuBar.getSelectionModel());
 
         ControlMenu.setText("Control");
@@ -83,6 +77,11 @@ public class GUI extends javax.swing.JFrame {
         ControlMenu.add(SolveOption);
 
         ResetOption.setText("Reset");
+        ResetOption.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                ResetOptionMouseReleased(evt);
+            }
+        });
         ControlMenu.add(ResetOption);
 
         ExitOption.setText("Exit");
@@ -144,11 +143,11 @@ public class GUI extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 549, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         pack();
@@ -156,23 +155,31 @@ public class GUI extends javax.swing.JFrame {
 
     private void BoardSize1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize1MouseReleased
         GeneraTablero(6,10);
+        x = 6;  y = 10;
     }//GEN-LAST:event_BoardSize1MouseReleased
 
     private void BoardSize2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize2MouseReleased
         GeneraTablero(5,12);
+        x = 5;  y = 12;
     }//GEN-LAST:event_BoardSize2MouseReleased
 
     private void BoardSize3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize3MouseReleased
         GeneraTablero(4,15);
+        x = 4;  y = 15;
     }//GEN-LAST:event_BoardSize3MouseReleased
 
     private void BoardSize4MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize4MouseReleased
         GeneraTablero(3,20);
+        x = 3;  y = 20;
     }//GEN-LAST:event_BoardSize4MouseReleased
 
     private void ExitOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExitOptionMouseReleased
         System.exit(0);
     }//GEN-LAST:event_ExitOptionMouseReleased
+
+    private void ResetOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResetOptionMouseReleased
+        GeneraTablero(x, y);
+    }//GEN-LAST:event_ResetOptionMouseReleased
 
     /**
      * @param args the command line arguments
@@ -204,7 +211,7 @@ public class GUI extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new GUI().setVisible(true);
+                new GUI().setVisible(true);     //Inicia el puzzle
             }
         });
         
@@ -223,6 +230,5 @@ public class GUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem SolveOption;
     private javax.swing.JMenu SpeedMenu;
     private javax.swing.JMenuItem jMenuItem1;
-    private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }
