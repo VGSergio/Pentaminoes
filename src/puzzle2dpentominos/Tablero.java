@@ -14,32 +14,30 @@ import javax.swing.*;
  */
 public class Tablero extends JPanel{
     
-    private int x ,y;
+    private int filas ,columnas;
     private final Casilla[] CASILLAS;
     private final int[] SIZE = new int[2];
     
-    public Tablero(int x, int y){
-        CASILLAS = new Casilla[x*y];
+    public Tablero(int filas, int columnas){
+        CASILLAS = new Casilla[filas*columnas];
         int Lado = new Casilla(Color.BLACK,0,0).getLado();
-        for (int i = 0; i < x; i++) {
-            for (int j = 0; j < y; j++) {
-                int pos = (i*y)+j;
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                int pos = (i*columnas)+j;
                 float rojo  = (float) Math.random(); float verde = (float) Math.random(); float azul  = (float) Math.random();
                 CASILLAS[pos] = new Casilla(new Color(rojo,verde,azul), i*Lado, j*Lado);
             }
         }
-        SIZE[0] = x*Lado;
-        SIZE[1] = y*Lado;
+        SIZE[0] = filas*Lado;
+        SIZE[1] = columnas*Lado;
     }
         
-    @Override
-    public int getX(){
-        return x;
+    public int getFilas(){
+        return filas;
     }
         
-    @Override
-    public int getY(){
-        return y;
+    public int getColumnas(){
+        return columnas;
     }
     
     @Override
@@ -51,11 +49,11 @@ public class Tablero extends JPanel{
     
     @Override
     public int getWidth(){
-        return SIZE[0];
+        return SIZE[1];
     }
     
     @Override
     public int getHeight(){
-        return SIZE[1];
+        return SIZE[0];
     }
 }

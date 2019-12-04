@@ -14,7 +14,7 @@ import javax.swing.*;
 public class GUI extends JFrame {
 
     private Tablero Tablero;
-    private int x = 6, y = 10;
+    private int filas = 6, columnas = 10;
     private int Speed;
     
     /**
@@ -22,21 +22,21 @@ public class GUI extends JFrame {
      */
     public GUI() {
         initComponents();
-        GeneraTablero(x, y);
+        GeneraTablero(filas, columnas);
         
     }
 
     /**
      * 
      */
-    private void GeneraTablero(int x, int y){
+    private void GeneraTablero(int filas, int columnas){
         int FixWidth = 6;
         int FixHeight = 10;
         if (Tablero!=null){         //Tablero inicializado
             setSize(-FixWidth, getHeight()-Tablero.getHeight()+FixHeight);                  //Reseteamos tamaño frame
             getContentPane().remove(Tablero);                                                                //Borramos tablero anterior
         }                                                
-        Tablero = new Tablero(x, y);                                                        //Genera un nuevo tablero
+        Tablero = new Tablero(filas, columnas);                                                        //Genera un nuevo tablero
         getContentPane().add(Tablero);                                                                       //Añadimos nuevo tablero
         setSize(Tablero.getWidth()+FixWidth, getHeight()+Tablero.getHeight()-FixHeight);    //Adapta el tamaño del frame
         setLocationRelativeTo(null);                                                        //Centra el frame 
@@ -155,22 +155,22 @@ public class GUI extends JFrame {
 
     private void BoardSize1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize1MouseReleased
         GeneraTablero(6,10);
-        x = 6;  y = 10;
+        filas = 6;  columnas = 10;
     }//GEN-LAST:event_BoardSize1MouseReleased
 
     private void BoardSize2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize2MouseReleased
         GeneraTablero(5,12);
-        x = 5;  y = 12;
+        filas = 5;  columnas = 12;
     }//GEN-LAST:event_BoardSize2MouseReleased
 
     private void BoardSize3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize3MouseReleased
         GeneraTablero(4,15);
-        x = 4;  y = 15;
+        filas = 4;  columnas = 15;
     }//GEN-LAST:event_BoardSize3MouseReleased
 
     private void BoardSize4MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize4MouseReleased
         GeneraTablero(3,20);
-        x = 3;  y = 20;
+        filas = 3;  columnas = 20;
     }//GEN-LAST:event_BoardSize4MouseReleased
 
     private void ExitOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExitOptionMouseReleased
@@ -178,7 +178,7 @@ public class GUI extends JFrame {
     }//GEN-LAST:event_ExitOptionMouseReleased
 
     private void ResetOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResetOptionMouseReleased
-        GeneraTablero(x, y);
+        GeneraTablero(filas, columnas);
     }//GEN-LAST:event_ResetOptionMouseReleased
 
     /**

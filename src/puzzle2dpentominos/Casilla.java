@@ -15,19 +15,19 @@ public class Casilla {
     
     private static final int LADO = 40;
     private final Color COLOR;
-    private final int x, y;
+    private final int fila, columna;
     
-    public Casilla(Color col, int x, int y){
+    public Casilla(Color col, int fila, int columna){
         this.COLOR = col;
-        this.x = x;
-        this.y = y;
+        this.fila = fila;
+        this.columna = columna;
     }
     
     public void Dibuja(Graphics g){
 //        g.setColor(Color.BLACK);
-//        g.drawRect(x, y, LADO, LADO);
+//        g.drawRect(columna, fila, LADO, LADO);
         g.setColor(COLOR);
-        g.fillRect(x, y, LADO, LADO);
+        g.fillRect(columna, fila, LADO, LADO);
     }
     
     public int getLado(){
