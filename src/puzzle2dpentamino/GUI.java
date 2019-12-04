@@ -1,44 +1,42 @@
-/*
- * 
- * 
- * 
+/* GUI class. The GUI has an options bar, the board and 
+ * a text with the status of the game or some instructions
  */
-package puzzle2dpentominos;
+package puzzle2dpentamino;
 
+import java.awt.event.KeyEvent;
 import javax.swing.*;
 
 /**
  * @authors Sergio Vega     (43480752B)
  *          Andreas Korn    (X4890193W)
  */
-public class GUI extends JFrame {
+public class GUI extends JFrame{
 
-    private Tablero Tablero;
-    private int filas = 6, columnas = 10;
+    private Board Board;
+    private int Rows = 6, Columns = 10;
     private int Speed;
+    private final int FixWidth = 6;
+    private final int FixHeight = 10;
     
     /**
      * Creates new form GUI
      */
     public GUI() {
         initComponents();
-        GeneraTablero(filas, columnas);
-        
+        GenerateBoard(Rows, Columns);
     }
 
     /**
-     * 
+     * Creates a new empty board
      */
-    private void GeneraTablero(int filas, int columnas){
-        int FixWidth = 6;
-        int FixHeight = 10;
-        if (Tablero!=null){         //Tablero inicializado
-            setSize(-FixWidth, getHeight()-Tablero.getHeight()+FixHeight);                  //Reseteamos tamaño frame
-            getContentPane().remove(Tablero);                                                                //Borramos tablero anterior
+    private void GenerateBoard(int rows, int columns){
+        if (Board!=null){                                                                   //Tablero inicializado
+            setSize(-FixWidth, getHeight()-Board.getHeight()+FixHeight);                    //Reseteamos tamaño frame
+            getContentPane().remove(Board);                                                 //Borramos tablero anterior
         }                                                
-        Tablero = new Tablero(filas, columnas);                                                        //Genera un nuevo tablero
-        getContentPane().add(Tablero);                                                                       //Añadimos nuevo tablero
-        setSize(Tablero.getWidth()+FixWidth, getHeight()+Tablero.getHeight()-FixHeight);    //Adapta el tamaño del frame
+        Board = new Board(rows, columns);                                                   //Genera un nuevo tablero
+        getContentPane().add(Board);                                                        //Añadimos nuevo tablero
+        setSize(Board.getWidth()+FixWidth, getHeight()+Board.getHeight()-FixHeight);        //Adapta el tamaño del frame
         setLocationRelativeTo(null);                                                        //Centra el frame 
         setResizable(false);
     }
@@ -68,14 +66,26 @@ public class GUI extends JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Puzzle2DPentominos");
         setSize(new java.awt.Dimension(1000, 1000));
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                formMouseReleased(evt);
+            }
+        });
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                formKeyReleased(evt);
+            }
+        });
 
         MenuBar.setSelectionModel(MenuBar.getSelectionModel());
 
         ControlMenu.setText("Control");
 
+        SolveOption.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         SolveOption.setText("Solve");
         ControlMenu.add(SolveOption);
 
+        ResetOption.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
         ResetOption.setText("Reset");
         ResetOption.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -84,6 +94,7 @@ public class GUI extends JFrame {
         });
         ControlMenu.add(ResetOption);
 
+        ExitOption.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_MASK));
         ExitOption.setText("Exit");
         ExitOption.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
@@ -154,23 +165,27 @@ public class GUI extends JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void BoardSize1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize1MouseReleased
-        GeneraTablero(6,10);
-        filas = 6;  columnas = 10;
+        GenerateBoard(6,10);
+        Rows = 6;  Columns = 10;
+        evt.consume();
     }//GEN-LAST:event_BoardSize1MouseReleased
 
     private void BoardSize2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize2MouseReleased
-        GeneraTablero(5,12);
-        filas = 5;  columnas = 12;
+        GenerateBoard(5,12);
+        Rows = 5;  Columns = 12;
+        evt.consume();
     }//GEN-LAST:event_BoardSize2MouseReleased
 
     private void BoardSize3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize3MouseReleased
-        GeneraTablero(4,15);
-        filas = 4;  columnas = 15;
+        GenerateBoard(4,15);
+        Rows = 4;  Columns = 15;
+        evt.consume();
     }//GEN-LAST:event_BoardSize3MouseReleased
 
     private void BoardSize4MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize4MouseReleased
-        GeneraTablero(3,20);
-        filas = 3;  columnas = 20;
+        GenerateBoard(3,20);
+        Rows = 3;  Columns = 20;
+        evt.consume();
     }//GEN-LAST:event_BoardSize4MouseReleased
 
     private void ExitOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExitOptionMouseReleased
@@ -178,8 +193,35 @@ public class GUI extends JFrame {
     }//GEN-LAST:event_ExitOptionMouseReleased
 
     private void ResetOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResetOptionMouseReleased
-        GeneraTablero(filas, columnas);
+        GenerateBoard(Rows, Columns);
+        evt.consume();
     }//GEN-LAST:event_ResetOptionMouseReleased
+
+    private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
+        if (evt.getY() > getInsets().top + MenuBar.getHeight()){
+            int x = evt.getX()-FixWidth/2;
+            int y = evt.getY()+FixHeight;
+            evt.consume();
+            Board.blockSquare(x, y);
+            repaint();
+        }
+    }//GEN-LAST:event_formMouseReleased
+
+    private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
+        int key = evt.getKeyCode();
+        if (evt.isControlDown() && (key == KeyEvent.VK_E)){
+            System.exit(0);
+            evt.consume();
+        }
+        else if (evt.isControlDown() && (key == KeyEvent.VK_R)){
+            GenerateBoard(Rows, Columns);
+            evt.consume();
+        }
+        else if (evt.isControlDown() && (key == KeyEvent.VK_S)){
+            
+            evt.consume();
+        }
+    }//GEN-LAST:event_formKeyReleased
 
     /**
      * @param args the command line arguments
@@ -231,4 +273,5 @@ public class GUI extends JFrame {
     private javax.swing.JMenu SpeedMenu;
     private javax.swing.JMenuItem jMenuItem1;
     // End of variables declaration//GEN-END:variables
+
 }
