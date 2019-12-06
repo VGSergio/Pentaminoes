@@ -3,6 +3,7 @@
  */
 package puzzle2dpentamino;
 
+import java.awt.Font;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
 
@@ -11,34 +12,53 @@ import javax.swing.*;
  *          Andreas Korn    (X4890193W)
  */
 public class GUI extends JFrame{
-
+    
     private Board Board;
+    private final JLabel MESSAGE = new JLabel();
     private int Rows = 6, Columns = 10;
     private int Speed;
-    private final int FixWidth = 6;
-    private final int FixHeight = 10;
+    private final int FIXWIDTH = 6;
+    private final int FIXHEIGHT = 10;
     
     /**
      * Creates new form GUI
      */
     public GUI() {
+        MESSAGE.setFont(new Font("TimesRoman",Font.PLAIN, 20));
+        MESSAGE.setHorizontalAlignment(JLabel.CENTER);
+        MESSAGE.setVerticalAlignment(JLabel.CENTER);
         initComponents();
-        GenerateBoard(Rows, Columns);
+        GenerateBoard(Rows, Columns);   //Creates initial board
+        
     }
 
+    /**
+     * Updates the information label witth the specified message
+     * @param message 
+     */
+    public void ChangeMessage(String message){
+        MESSAGE.setText(message);
+        MESSAGE.setBounds(0, Board.getHeight(), Board.getWidth(), 60);
+    }
+    
     /**
      * Creates a new empty board
      */
     private void GenerateBoard(int rows, int columns){
-        if (Board!=null){                                                                   //Tablero inicializado
-            setSize(-FixWidth, getHeight()-Board.getHeight()+FixHeight);                    //Reseteamos tamaño frame
-            getContentPane().remove(Board);                                                 //Borramos tablero anterior
+        if (Board!=null){                       //NOT initial board case
+            setSize(-FIXWIDTH, getHeight()-Board.getHeight()-MESSAGE.getHeight()+FIXHEIGHT);        //Resets frame size
+            getContentPane().removeAll();       //Deletes previous board
         }                                                
-        Board = new Board(rows, columns);                                                   //Genera un nuevo tablero
-        getContentPane().add(Board);                                                        //Añadimos nuevo tablero
-        setSize(Board.getWidth()+FixWidth, getHeight()+Board.getHeight()-FixHeight);        //Adapta el tamaño del frame
-        setLocationRelativeTo(null);                                                        //Centra el frame 
-        setResizable(false);
+        Board = new Board(rows, columns);       //Creates a new board
+        getContentPane().add(Board);            //Adds the new board
+        
+        String s = "Block Squares or use Solve to start";
+        ChangeMessage(s);                       //Updates the message
+        getContentPane().add(MESSAGE);
+        
+        setSize(Board.getWidth()+FIXWIDTH, getHeight()+Board.getHeight()+MESSAGE.getHeight()-FIXHEIGHT);        //Adapts the frame size to include the board
+        setLocationRelativeTo(null);            //Centers frame 
+        setResizable(false);                    //Frame NOT resizable by the user
     }
     
     /**
@@ -58,10 +78,10 @@ public class GUI extends JFrame{
         SpeedMenu = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         SizeMenu = new javax.swing.JMenu();
+        BoardSize0 = new javax.swing.JMenuItem();
         BoardSize1 = new javax.swing.JMenuItem();
         BoardSize2 = new javax.swing.JMenuItem();
         BoardSize3 = new javax.swing.JMenuItem();
-        BoardSize4 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Puzzle2DPentominos");
@@ -83,6 +103,11 @@ public class GUI extends JFrame{
 
         SolveOption.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
         SolveOption.setText("Solve");
+        SolveOption.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                SolveOptionMouseReleased(evt);
+            }
+        });
         ControlMenu.add(SolveOption);
 
         ResetOption.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_R, java.awt.event.InputEvent.CTRL_MASK));
@@ -114,7 +139,15 @@ public class GUI extends JFrame{
 
         SizeMenu.setText("Size");
 
-        BoardSize1.setText("6 x 10");
+        BoardSize0.setText("6 x 10");
+        BoardSize0.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                BoardSize0MouseReleased(evt);
+            }
+        });
+        SizeMenu.add(BoardSize0);
+
+        BoardSize1.setText("5 x 12");
         BoardSize1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 BoardSize1MouseReleased(evt);
@@ -122,7 +155,7 @@ public class GUI extends JFrame{
         });
         SizeMenu.add(BoardSize1);
 
-        BoardSize2.setText("5 x 12");
+        BoardSize2.setText("4 x 15");
         BoardSize2.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 BoardSize2MouseReleased(evt);
@@ -130,21 +163,13 @@ public class GUI extends JFrame{
         });
         SizeMenu.add(BoardSize2);
 
-        BoardSize3.setText("4 x 15");
+        BoardSize3.setText("3 x 20");
         BoardSize3.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 BoardSize3MouseReleased(evt);
             }
         });
         SizeMenu.add(BoardSize3);
-
-        BoardSize4.setText("3 x 20");
-        BoardSize4.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                BoardSize4MouseReleased(evt);
-            }
-        });
-        SizeMenu.add(BoardSize4);
 
         MenuBar.add(SizeMenu);
 
@@ -164,46 +189,47 @@ public class GUI extends JFrame{
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void BoardSize0MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize0MouseReleased
+        GenerateBoard(6,10);        //New (6x10) board
+        Rows = 6;  Columns = 10;    //Updates rows, columns
+        evt.consume();              //Frees memory
+    }//GEN-LAST:event_BoardSize0MouseReleased
+
     private void BoardSize1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize1MouseReleased
-        GenerateBoard(6,10);
-        Rows = 6;  Columns = 10;
-        evt.consume();
+        GenerateBoard(5,12);        //New (5x12) board
+        Rows = 5;  Columns = 12;    //Updates rows, columns
+        evt.consume();              //Frees memory
     }//GEN-LAST:event_BoardSize1MouseReleased
 
     private void BoardSize2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize2MouseReleased
-        GenerateBoard(5,12);
-        Rows = 5;  Columns = 12;
-        evt.consume();
+        GenerateBoard(4,15);        //New (4x15) board
+        Rows = 4;  Columns = 15;    //Updates rows, columns
+        evt.consume();              //Frees memory
     }//GEN-LAST:event_BoardSize2MouseReleased
 
     private void BoardSize3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize3MouseReleased
-        GenerateBoard(4,15);
-        Rows = 4;  Columns = 15;
-        evt.consume();
+        GenerateBoard(3,20);        //New (3x20) board
+        Rows = 3;  Columns = 20;    //Updates rows, columns
+        evt.consume();              //Frees memory
     }//GEN-LAST:event_BoardSize3MouseReleased
 
-    private void BoardSize4MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize4MouseReleased
-        GenerateBoard(3,20);
-        Rows = 3;  Columns = 20;
-        evt.consume();
-    }//GEN-LAST:event_BoardSize4MouseReleased
-
     private void ExitOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExitOptionMouseReleased
-        System.exit(0);
+        System.exit(0);             //Exits the program
     }//GEN-LAST:event_ExitOptionMouseReleased
 
     private void ResetOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResetOptionMouseReleased
-        GenerateBoard(Rows, Columns);
-        evt.consume();
+        GenerateBoard(Rows, Columns);   //New board with the previous one rows and columns
+        evt.consume();                  //Frees memory 
     }//GEN-LAST:event_ResetOptionMouseReleased
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
-        if (evt.getY() > getInsets().top + MenuBar.getHeight()){
-            int x = evt.getX()-FixWidth/2;
-            int y = evt.getY()+FixHeight;
-            evt.consume();
-            Board.blockSquare(x, y);
-            repaint();
+        if ((evt.getY() > getInsets().top + MenuBar.getHeight())            //MouseEvent happened inside board
+                && (evt.getY() < getInsets().top + MenuBar.getHeight()+Board.getHeight())){    
+            int x = evt.getX()-FIXWIDTH/2;      //Fixed coordinates
+            int y = evt.getY()+FIXHEIGHT;       //Fixed coordinates
+            evt.consume();                      //Frees memory
+            Board.ChangeSquareStatus(x, y);     //Updates square's status and color
+            repaint();                          //Repaints the board with the new square's color
         }
     }//GEN-LAST:event_formMouseReleased
 
@@ -221,7 +247,15 @@ public class GUI extends JFrame{
             
             evt.consume();
         }
+        else if (evt.isControlDown() && (key == KeyEvent.VK_0)){
+            
+            evt.consume();
+        }
     }//GEN-LAST:event_formKeyReleased
+
+    private void SolveOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SolveOptionMouseReleased
+        ChangeMessage("Solving...");
+    }//GEN-LAST:event_SolveOptionMouseReleased
 
     /**
      * @param args the command line arguments
@@ -260,10 +294,10 @@ public class GUI extends JFrame{
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem BoardSize0;
     private javax.swing.JMenuItem BoardSize1;
     private javax.swing.JMenuItem BoardSize2;
     private javax.swing.JMenuItem BoardSize3;
-    private javax.swing.JMenuItem BoardSize4;
     private javax.swing.JMenu ControlMenu;
     private javax.swing.JMenuItem ExitOption;
     private javax.swing.JMenuBar MenuBar;

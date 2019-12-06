@@ -26,12 +26,11 @@ public class Board extends JPanel{
         ROWS = rows;
         COLUMNS = columns;
         SQUARES = new Square[rows*columns];
-        SIDE = new Square(Color.BLACK,0,0).getSide();
+        SIDE = new Square(0,0).getSide();
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < columns; j++) {
                 int position = (i*columns)+j;
-                float red  = (float) Math.random(); float green = (float) Math.random(); float blue  = (float) Math.random();
-                SQUARES[position] = new Square(new Color(red,green,blue), i*SIDE, j*SIDE);
+                SQUARES[position] = new Square(i*SIDE, j*SIDE);
             }
         }
     }
@@ -74,14 +73,18 @@ public class Board extends JPanel{
      * @param x
      * @param y 
      */
-    public void blockSquare(int x, int y){
+    public void ChangeSquareStatus(int x, int y){
         int row = y/SIDE -1;
         int column = x/SIDE;
         int position = row*COLUMNS+column;
-        if(SQUARES[position].getColor() != Color.BLACK){
+        if(SQUARES[position].getBlocked()){
+            SQUARES[position].setColor(Color.WHITE);
+            SQUARES[position].setBlocked(false);
+        }
+        else {
             SQUARES[position].setColor(Color.BLACK);
+            SQUARES[position].setBlocked(true);
         }
     }
 
-    
 }

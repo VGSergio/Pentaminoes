@@ -15,17 +15,18 @@ public class Square {
     private static final int SIDE = 60;
     private Color COLOR;
     private final int Row, Column;
+    private boolean Blocked;
     
     /**
      * Sqaure constructor
-     * @param col
      * @param row
      * @param column 
      */
-    public Square(Color col, int row, int column){
-        this.COLOR = col;
-        this.Row = row;
-        this.Column = column;
+    public Square(int row, int column){
+        COLOR = Color.WHITE;
+        Row = row;
+        Column = column;
+        Blocked = false;
     }
     
     /**
@@ -33,7 +34,7 @@ public class Square {
      * @param g 
      */
     public void Draw(Graphics g){
-        g.setColor(Color.WHITE);
+        g.setColor(Color.LIGHT_GRAY);
         g.drawRect(Column, Row, SIDE, SIDE);
         g.setColor(COLOR);
         g.fillRect(Column+1, Row+1, SIDE-1, SIDE-1);
@@ -48,18 +49,26 @@ public class Square {
     }
     
     /**
-     * Returns square's color
-     * @return Color
-     */
-    public Color getColor(){
-        return COLOR;
-    }
-    
-    /**
      * Sets square color
      * @param color 
      */
     public void setColor(Color color){
         COLOR = color;
+    }
+    
+    /**
+     * Square's blocked status getter
+     * @return boolean
+     */
+    public boolean getBlocked(){
+        return Blocked;
+    }
+    
+    /**
+     * Blocked status setter
+     * @param status 
+     */
+    public void setBlocked(boolean status){
+        Blocked = status;
     }
 }
