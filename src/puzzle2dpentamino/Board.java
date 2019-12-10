@@ -74,7 +74,7 @@ public class Board extends JPanel{
      * @param y 
      */
     public void ChangeSquareStatus(int x, int y){
-        int row = y/SIDE -1;
+        int row = y/SIDE;
         int column = x/SIDE;
         int position = row*COLUMNS+column;
         if(SQUARES[position].getBlocked()){

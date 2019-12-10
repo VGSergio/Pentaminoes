@@ -3,7 +3,6 @@
  */
 package puzzle2dpentamino;
 
-import java.awt.Font;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
 
@@ -14,31 +13,16 @@ import javax.swing.*;
 public class GUI extends JFrame{
     
     private Board Board;
-    private final JLabel MESSAGE = new JLabel();
     private int Rows = 6, Columns = 10;
     private int Speed;
-    private final int FIXWIDTH = 6;
-    private final int FIXHEIGHT = 10;
     
     /**
      * Creates new form GUI
      */
     public GUI() {
-        MESSAGE.setFont(new Font("TimesRoman",Font.PLAIN, 20));
-        MESSAGE.setHorizontalAlignment(JLabel.CENTER);
-        MESSAGE.setVerticalAlignment(JLabel.CENTER);
         initComponents();
+        add(Message);                   //Adds status text
         GenerateBoard(Rows, Columns);   //Creates initial board
-        
-    }
-
-    /**
-     * Updates the information label witth the specified message
-     * @param message 
-     */
-    public void ChangeMessage(String message){
-        MESSAGE.setText(message);
-        MESSAGE.setBounds(0, Board.getHeight(), Board.getWidth(), 60);
     }
     
     /**
@@ -46,17 +30,18 @@ public class GUI extends JFrame{
      */
     private void GenerateBoard(int rows, int columns){
         if (Board!=null){                       //NOT initial board case
-            setSize(-FIXWIDTH, getHeight()-Board.getHeight()-MESSAGE.getHeight()+FIXHEIGHT);        //Resets frame size
-            getContentPane().removeAll();       //Deletes previous board
+            remove(Board);                      //Deletes previous board
         }                                                
         Board = new Board(rows, columns);       //Creates a new board
-        getContentPane().add(Board);            //Adds the new board
+        add(Board);                             //Adds the new board
         
-        String s = "Block Squares or use Solve to start";
-        ChangeMessage(s);                       //Updates the message
-        getContentPane().add(MESSAGE);
+        String s = "Block Squares or use Solve(Ctrl+S) to start";                   
+        Message.setText(s);                                                 //Updates the status text
+        Message.setBounds(0, Board.getHeight(), Board.getWidth(), 60);      //Sets it's location      
         
-        setSize(Board.getWidth()+FIXWIDTH, getHeight()+Board.getHeight()+MESSAGE.getHeight()-FIXHEIGHT);        //Adapts the frame size to include the board
+        int width = getInsets().right + Board.getWidth();                                                   //Frame's new width
+        int height = getInsets().top + MenuBar.getHeight() + Board.getHeight() + Message.getHeight();       //Frame's new height
+        setSize(width, height);                 //Adapts the frame size to include the board
         setLocationRelativeTo(null);            //Centers frame 
         setResizable(false);                    //Frame NOT resizable by the user
     }
@@ -70,6 +55,7 @@ public class GUI extends JFrame{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        Message = new javax.swing.JLabel();
         MenuBar = new javax.swing.JMenuBar();
         ControlMenu = new javax.swing.JMenu();
         SolveOption = new javax.swing.JMenuItem();
@@ -82,6 +68,9 @@ public class GUI extends JFrame{
         BoardSize1 = new javax.swing.JMenuItem();
         BoardSize2 = new javax.swing.JMenuItem();
         BoardSize3 = new javax.swing.JMenuItem();
+
+        Message.setFont(new java.awt.Font("Times New Roman", 0, 20)); // NOI18N
+        Message.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Puzzle2DPentominos");
@@ -223,10 +212,11 @@ public class GUI extends JFrame{
     }//GEN-LAST:event_ResetOptionMouseReleased
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
-        if ((evt.getY() > getInsets().top + MenuBar.getHeight())            //MouseEvent happened inside board
-                && (evt.getY() < getInsets().top + MenuBar.getHeight()+Board.getHeight())){    
-            int x = evt.getX()-FIXWIDTH/2;      //Fixed coordinates
-            int y = evt.getY()+FIXHEIGHT;       //Fixed coordinates
+        if ((evt.getY() > getInsets().top + MenuBar.getHeight())                //MouseEvent happened inside board
+                && (evt.getY() < getInsets().top + MenuBar.getHeight() + Board.getHeight())){    
+            
+            int x = evt.getX() - getInsets().right;                             //Fixed coordinates
+            int y = evt.getY() + getInsets().bottom - (2*getInsets().top);;     //Fixed coordinates
             evt.consume();                      //Frees memory
             Board.ChangeSquareStatus(x, y);     //Updates square's status and color
             repaint();                          //Repaints the board with the new square's color
@@ -254,7 +244,7 @@ public class GUI extends JFrame{
     }//GEN-LAST:event_formKeyReleased
 
     private void SolveOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SolveOptionMouseReleased
-        ChangeMessage("Solving...");
+        Message.setText("Solving...");
     }//GEN-LAST:event_SolveOptionMouseReleased
 
     /**
@@ -301,6 +291,7 @@ public class GUI extends JFrame{
     private javax.swing.JMenu ControlMenu;
     private javax.swing.JMenuItem ExitOption;
     private javax.swing.JMenuBar MenuBar;
+    private javax.swing.JLabel Message;
     private javax.swing.JMenuItem ResetOption;
     private javax.swing.JMenu SizeMenu;
     private javax.swing.JMenuItem SolveOption;
