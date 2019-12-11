@@ -13,7 +13,12 @@ import java.awt.Color;
  */
 public class Piece {
     
-    private  static final int[][] PIECE_DATA = {  // All the pieces in their different perspectives
+    /**
+     * Matrix with the necessary data about the different pieces and their
+     * perspectives.
+     * First value is the piece id. The rest of values are row,column by pairs.
+     */
+    private  static final int[][] PIECE_DATA = {  // All the pieces and their different perspectives
         { 1, 0,1, 0,2, 1,0, 1,1, 2,1},          //F 0º
         { 1, 0,1, 1,0, 1,1, 1,2, 2,2},          //F 90º
         { 1, 0,1, 1,1, 1,2, 2,0, 2,1},          //F 180º
@@ -90,7 +95,10 @@ public class Piece {
         {12, 0,0, 1,0, 1,1, 1,2, 2,2}           //Z inverse 90º == Z inverse 270º
     };
     
-    private static Color PieceColor[] = {  // the colors of pieces number 1 through 12; pieceColor[0] is not used.
+    /**
+     * Piece's colors, number 1 through 12; pieceColor[0] is not used.
+     */
+    private static final Color PIECE_COLOR[] = {  
          null,
          new Color(200,0,0),
          new Color(150,150,255),
@@ -105,5 +113,42 @@ public class Piece {
          new Color(255,255,150),
          new Color(150,255,150)
    };
+    
+    /**
+     * returns the color of a given piece id
+     * @param piece
+     * @return Color
+     */
+    public Color getColor(int piece){
+        return PIECE_COLOR[piece];
+    }
+    
+    /**
+     * Returns the selected perspective of the specified piece
+     * @param piece
+     * @param persepective
+     * @return int[]
+     */
+    public int[] getPerspective(int piece, int persepective){
+        int[] p = new int[2*5];     //2 Coordinates, 5 squares, perspective array
+        int cont =0;                //perspective counter
+        boolean found = false;      //perspective found
+        int i = 0;
+        
+        while(!found && i<PIECE_DATA.length){
+            if(PIECE_DATA[i][0]==piece){
+                cont++;
+                if(cont==persepective){
+                    for (int j=1; j<PIECE_DATA[i].length; j++){
+                        p[j-1] = PIECE_DATA[i][j];
+                    }
+                    found = true;
+                }
+            }
+            i++;
+        }
+        
+        return  p;
+    }
     
 }

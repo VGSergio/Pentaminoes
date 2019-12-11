@@ -41,7 +41,7 @@ public class GUI extends JFrame{
         
         int width = getInsets().right + Board.getWidth();                                                   //Frame's new width
         int height = getInsets().top + MenuBar.getHeight() + Board.getHeight() + Message.getHeight();       //Frame's new height
-        setSize(width, height);                 //Adapts the frame size to include the board
+        setSize(width, height);                 //Sets frame's new size
         setLocationRelativeTo(null);            //Centers frame 
         setResizable(false);                    //Frame NOT resizable by the user
     }
@@ -218,7 +218,12 @@ public class GUI extends JFrame{
             int x = evt.getX() - getInsets().right;                             //Fixed coordinates
             int y = evt.getY() + getInsets().bottom - (2*getInsets().top);;     //Fixed coordinates
             evt.consume();                      //Frees memory
-            Board.ChangeSquareStatus(x, y);     //Updates square's status and color
+            
+            if(Board.isSolving()){
+                Board.patata(x, y);
+            } else {
+                Board.ChangeSquareStatus(x, y);     //Updates square's status and color
+            }
             repaint();                          //Repaints the board with the new square's color
         }
     }//GEN-LAST:event_formMouseReleased
@@ -234,17 +239,18 @@ public class GUI extends JFrame{
             evt.consume();
         }
         else if (evt.isControlDown() && (key == KeyEvent.VK_S)){
-            
-            evt.consume();
-        }
-        else if (evt.isControlDown() && (key == KeyEvent.VK_0)){
-            
+            Message.setText("Solving...");
+            Board.setSolving(true);
             evt.consume();
         }
     }//GEN-LAST:event_formKeyReleased
 
     private void SolveOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SolveOptionMouseReleased
-        Message.setText("Solving...");
+        if(!Board.isSolving()){
+            Message.setText("Solving...");
+            Board.setSolving(true);
+            evt.consume();
+        }
     }//GEN-LAST:event_SolveOptionMouseReleased
 
     /**

@@ -1,6 +1,6 @@
-/* Square class. A square is distinguished by its color, side 
- * and position in the board, determined by the row and column the square
- * is placed
+/* Square class. A square is distinguished by its color, side, 
+ * position in the board, determined by the row and column the square
+ * is placed, and wheter it's blocked or not
  */
 package puzzle2dpentamino;
 
@@ -12,7 +12,7 @@ import java.awt.*;
  */
 public class Square {
     
-    private static final int SIDE = 60;
+    private final int SIDE = 60;
     private Color COLOR;
     private final int Row, Column;
     private boolean Blocked;
@@ -33,7 +33,7 @@ public class Square {
      * Draws the square with its color and size(Determined by side)
      * @param g 
      */
-    public void Draw(Graphics g){
+    public void paint(Graphics g){
         g.setColor(Color.LIGHT_GRAY);
         g.drawRect(Column, Row, SIDE, SIDE);
         g.setColor(COLOR);
@@ -60,7 +60,7 @@ public class Square {
      * Square's blocked status getter
      * @return boolean
      */
-    public boolean getBlocked(){
+    public boolean isBlocked(){
         return Blocked;
     }
     
