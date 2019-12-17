@@ -151,4 +151,23 @@ public class Piece {
         return  p;
     }
     
+    
+    public int[][] getPerspectives(int piece){
+        int numcoords = 2*5;
+        int i=0;
+        int cont = 0;
+        while(PIECE_DATA[i][0]==piece && i<PIECE_DATA.length){
+            cont++;
+            i++;
+        }
+        
+        int[][] p = new int[cont][numcoords]; //2 Coordinates, 5 squares, perspective array
+        for(i=0; i<cont; i++){
+            for(int j=0; j<numcoords; j++){
+                p[i][j] = PIECE_DATA[i][j+1]; 
+            }
+        }
+        
+        return  p;
+    }
 }

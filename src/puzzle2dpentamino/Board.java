@@ -4,6 +4,7 @@
 package puzzle2dpentamino;
 
 import java.awt.*;
+import java.util.ArrayList;
 import javax.swing.*;
 
 /**
@@ -17,6 +18,7 @@ public class Board extends JPanel{
     private final Square[] SQUARES;
     private final int SIDE;
     private boolean Solving;
+    private ArrayList<Board> Solutions;
     
     /**
      * Board constructor
@@ -114,32 +116,29 @@ public class Board extends JPanel{
     public void patata(int column, int row){
         column /= SIDE;
         row /= SIDE;
-        int position = row*COLUMNS+column;
+        int position = row*COLUMNS+column;        
+        int squares = 5;    //5 -> a piece is formed by 5 squares
         boolean fits = true;
         int[] perspective = null;
         Color color = null;
+        int nposition[] = new int[squares];
         
         Piece piece = new Piece();
         color = piece.getColor(2);
         perspective = piece.getPerspective(2, 2); //First: piece id, second: perspective
+        
         int i=0;
-        while(i<5 && fits){
-            int row2 = perspective[2*i];
-            int column2 = perspective[2*i+1];
-            int position2 = position + row2*COLUMNS+column2;
-            fits = pieceFits(position, position2);
-            i++;
+        while(i<squares && fits){   //Checks if the piece fits and gets the necessary data to paint it
+            int nrow = perspective[2*i];
+            int ncolumn = perspective[2*i+1];
+            nposition[i] = position + nrow*COLUMNS+ncolumn;
+            fits = pieceFits(position, nposition[i]);
+            i++; 
         }
         
-        if (fits){
-                for (i=0; i<5; i++){
-                    int row2 = perspective[2*i];
-                    int column2 = perspective[2*i+1];
-                    int position2 = position + row2*COLUMNS+column2;
-                    SQUARES[position2].setColor(color);
-                    SQUARES[position2].setBlocked(true);
-                }
-            }
+        if (fits){  //If the new piece fits paints it.
+            paintNewPiece(nposition, color);
+        }
     }
     
     /**
@@ -163,11 +162,62 @@ public class Board extends JPanel{
         }                                                           //the right end   
     }
     
+    /**
+     * Paint a new piece onto the board
+     * @param nposition
+     * @param color 
+     */
+    public void paintNewPiece(int[] nposition, Color color){
+        for (int i=0; i<nposition.length; i++){
+            SQUARES[nposition[i]].setColor(color);
+            SQUARES[nposition[i]].setBlocked(true);
+        }
+    }
+    
+    /**
+     * Removes a piece from the board
+     * @param nposition 
+     */
+    public void removePiece(int[] nposition){
+        for (int i=0; i<nposition.length; i++){
+            SQUARES[nposition[i]].setColor(Color.WHITE);
+            SQUARES[nposition[i]].setBlocked(true);
+        }
+    }
+    
     @Override
     public void paint(Graphics g) {
         for (Square SQUARE1 : SQUARES) {
             SQUARE1.paint(g);
         }
+    }
+    
+    /**
+     * Returns wheter the board is full(Last square reached) or not
+     * @param nposition
+     * @return 
+     */
+    public boolean isFinalPosition(int[] nposition){
+        boolean end = false;
+        for(int i=0; i<nposition.length; i++){
+            if (nposition[i]==(ROWS*COLUMNS-1)){
+                end = true;
+            }
+        }
+        return end;
+    }
+    
+    public int squaresOccupied(){
+        int cont = 0;
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                int position = (i*COLUMNS)+j;
+                if(SQUARES[position].isBlocked()){
+                    cont++;
+                }
+            }
+        }
+        return cont;
     }
     
 }
