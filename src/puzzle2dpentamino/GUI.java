@@ -179,77 +179,84 @@ public class GUI extends JFrame{
     }// </editor-fold>//GEN-END:initComponents
 
     private void BoardSize0MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize0MouseReleased
+       evt.consume();              //Frees memory
         GenerateBoard(6,10);        //New (6x10) board
         Rows = 6;  Columns = 10;    //Updates rows, columns
-        evt.consume();              //Frees memory
     }//GEN-LAST:event_BoardSize0MouseReleased
 
     private void BoardSize1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize1MouseReleased
+        evt.consume();                  //Frees memory 
         GenerateBoard(5,12);        //New (5x12) board
         Rows = 5;  Columns = 12;    //Updates rows, columns
-        evt.consume();              //Frees memory
     }//GEN-LAST:event_BoardSize1MouseReleased
 
     private void BoardSize2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize2MouseReleased
+        evt.consume();                  //Frees memory 
         GenerateBoard(4,15);        //New (4x15) board
         Rows = 4;  Columns = 15;    //Updates rows, columns
-        evt.consume();              //Frees memory
     }//GEN-LAST:event_BoardSize2MouseReleased
 
     private void BoardSize3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize3MouseReleased
+        evt.consume();                  //Frees memory 
         GenerateBoard(3,20);        //New (3x20) board
         Rows = 3;  Columns = 20;    //Updates rows, columns
-        evt.consume();              //Frees memory
     }//GEN-LAST:event_BoardSize3MouseReleased
 
     private void ExitOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExitOptionMouseReleased
+        evt.consume();                  //Frees memory 
         System.exit(0);             //Exits the program
     }//GEN-LAST:event_ExitOptionMouseReleased
 
     private void ResetOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResetOptionMouseReleased
-        GenerateBoard(Rows, Columns);   //New board with the previous one rows and columns
         evt.consume();                  //Frees memory 
+        GenerateBoard(Rows, Columns);   //New board with the previous one rows and columns
     }//GEN-LAST:event_ResetOptionMouseReleased
 
     private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
-        if ((evt.getY() > getInsets().top + MenuBar.getHeight())                //MouseEvent happened inside board
-                && (evt.getY() < getInsets().top + MenuBar.getHeight() + Board.getHeight())){    
-            
-            int x = evt.getX() - getInsets().right;                             //Fixed coordinates
-            int y = evt.getY() + getInsets().bottom - (2*getInsets().top);;     //Fixed coordinates
-            evt.consume();                      //Frees memory
-            
-            if(Board.isSolving()){
-                Board.patata(x, y);
-            } else {
+        if(!Board.isSolving()){
+            if ((evt.getY() > getInsets().top + MenuBar.getHeight())                //MouseEvent happened inside board
+                    && (evt.getY() < getInsets().top + MenuBar.getHeight() + Board.getHeight())){    
+
+                int x = evt.getX() - getInsets().right;                             //Fixed coordinates
+                int y = evt.getY() + getInsets().bottom - (2*getInsets().top);;     //Fixed coordinates
+                evt.consume();                      //Frees memory
+
                 Board.ChangeSquareStatus(x, y);     //Updates square's status and color
             }
-            repaint();                          //Repaints the board with the new square's color
+            repaint();                          //Updates the GUI with the new square's color
         }
     }//GEN-LAST:event_formMouseReleased
 
     private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
         int key = evt.getKeyCode();
         if (evt.isControlDown() && (key == KeyEvent.VK_E)){
-            System.exit(0);
             evt.consume();
+            System.exit(0);
         }
         else if (evt.isControlDown() && (key == KeyEvent.VK_R)){
-            GenerateBoard(Rows, Columns);
             evt.consume();
+            GenerateBoard(Rows, Columns);
         }
         else if (evt.isControlDown() && (key == KeyEvent.VK_S)){
-            Message.setText("Solving...");
-            Board.setSolving(true);
             evt.consume();
+            if(!Board.isSolving()){
+                Message.setText("Solving...");
+                Board.setSolving(true);
+                Board.Solve(this, 0);
+                Message.setText("Solved");
+                Board.setSolving(false);
+            }
         }
     }//GEN-LAST:event_formKeyReleased
 
     private void SolveOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SolveOptionMouseReleased
         if(!Board.isSolving()){
+            evt.consume();
             Message.setText("Solving...");
             Board.setSolving(true);
-            evt.consume();
+            Board.Solve(this, 0);
+            Message.setText("Solved");
+            Board.setSolving(false);
         }
     }//GEN-LAST:event_SolveOptionMouseReleased
 
