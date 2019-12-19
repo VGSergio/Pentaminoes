@@ -3,6 +3,7 @@
  */
 package puzzle2dpentamino;
 
+import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
 
@@ -14,15 +15,24 @@ public class GUI extends JFrame{
     
     private Board Board;
     private int Rows = 6, Columns = 10;
-    private int Speed;
+    private int Speed = 300;
     
     /**
      * Creates new form GUI
      */
     public GUI() {
         initComponents();
+        setUpSpeedButtons();
         add(Message);                   //Adds status text
         GenerateBoard(Rows, Columns);   //Creates initial board
+    }
+    
+    private void setUpSpeedButtons(){
+        ButtonGroup g = new ButtonGroup();
+        for(int i=0; i<SpeedMenu.getMenuComponentCount(); i++){
+            g.add(SpeedMenu.getItem(i));
+        }
+        Speed3.setSelected(true);
     }
     
     /**
@@ -35,6 +45,7 @@ public class GUI extends JFrame{
         Board = new Board(rows, columns);       //Creates a new board
         add(Board);                             //Adds the new board
         Rows = rows;  Columns = columns;        //Updates rows, columns
+        Board.setSpeed(Speed);
         
         String s = "Block Squares or use Solve(Ctrl+S) to start";                   
         Message.setText(s);                                                 //Updates the status text
@@ -63,7 +74,13 @@ public class GUI extends JFrame{
         ResetOption = new javax.swing.JMenuItem();
         ExitOption = new javax.swing.JMenuItem();
         SpeedMenu = new javax.swing.JMenu();
-        jMenuItem1 = new javax.swing.JMenuItem();
+        Speed0 = new javax.swing.JRadioButtonMenuItem();
+        Speed1 = new javax.swing.JRadioButtonMenuItem();
+        Speed2 = new javax.swing.JRadioButtonMenuItem();
+        Speed3 = new javax.swing.JRadioButtonMenuItem();
+        Speed4 = new javax.swing.JRadioButtonMenuItem();
+        Speed5 = new javax.swing.JRadioButtonMenuItem();
+        Speed6 = new javax.swing.JRadioButtonMenuItem();
         SizeMenu = new javax.swing.JMenu();
         BoardSize0 = new javax.swing.JMenuItem();
         BoardSize1 = new javax.swing.JMenuItem();
@@ -122,8 +139,61 @@ public class GUI extends JFrame{
 
         SpeedMenu.setText("Speed");
 
-        jMenuItem1.setText("jMenuItem1");
-        SpeedMenu.add(jMenuItem1);
+        Speed0.setText("Only solutions");
+        Speed0.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                Speed0MouseReleased(evt);
+            }
+        });
+        SpeedMenu.add(Speed0);
+
+        Speed1.setText("Fastest");
+        Speed1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                Speed1MouseReleased(evt);
+            }
+        });
+        SpeedMenu.add(Speed1);
+
+        Speed2.setText("Faster");
+        Speed2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                Speed2MouseReleased(evt);
+            }
+        });
+        SpeedMenu.add(Speed2);
+
+        Speed3.setText("Normal");
+        Speed3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                Speed3MouseReleased(evt);
+            }
+        });
+        SpeedMenu.add(Speed3);
+
+        Speed4.setText("Slow");
+        Speed4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                Speed4MouseReleased(evt);
+            }
+        });
+        SpeedMenu.add(Speed4);
+
+        Speed5.setText("Slower");
+        Speed5.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                Speed5MouseReleased(evt);
+            }
+        });
+        SpeedMenu.add(Speed5);
+
+        Speed6.setText("Slowest");
+        Speed6.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                Speed6MouseReleased(evt);
+            }
+        });
+        SpeedMenu.add(Speed6);
 
         MenuBar.add(SpeedMenu);
 
@@ -249,11 +319,51 @@ public class GUI extends JFrame{
             }).start();
     }//GEN-LAST:event_SolveOptionMouseReleased
 
+    private void Speed0MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed0MouseReleased
+        evt.consume();
+        setSpeed(0);
+    }//GEN-LAST:event_Speed0MouseReleased
+
+    private void Speed1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed1MouseReleased
+        evt.consume();
+        setSpeed(100);
+    }//GEN-LAST:event_Speed1MouseReleased
+
+    private void Speed2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed2MouseReleased
+        evt.consume();
+        setSpeed(200);
+    }//GEN-LAST:event_Speed2MouseReleased
+
+    private void Speed3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed3MouseReleased
+        evt.consume();
+        setSpeed(300);
+    }//GEN-LAST:event_Speed3MouseReleased
+
+    private void Speed4MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed4MouseReleased
+        evt.consume();
+        setSpeed(500);
+    }//GEN-LAST:event_Speed4MouseReleased
+
+    private void Speed5MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed5MouseReleased
+        evt.consume();
+        setSpeed(700);
+    }//GEN-LAST:event_Speed5MouseReleased
+
+    private void Speed6MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed6MouseReleased
+        evt.consume();
+        setSpeed(1000);
+    }//GEN-LAST:event_Speed6MouseReleased
+
+    private void setSpeed(int miliseconds){
+        Speed = miliseconds;
+        Board.setSpeed(miliseconds);
+    }
+    
     private void solve(){
         if(!Board.isSolving()){
             Message.setText("Solving...");
             Board.setSolving(true);
-            Board.Solve(this, 0, new boolean[12], 100);
+            Board.Solve(this, 0, new boolean[12]);
             Message.setText("Solved");
         }
     }
@@ -306,8 +416,14 @@ public class GUI extends JFrame{
     private javax.swing.JMenuItem ResetOption;
     private javax.swing.JMenu SizeMenu;
     private javax.swing.JMenuItem SolveOption;
+    private javax.swing.JRadioButtonMenuItem Speed0;
+    private javax.swing.JRadioButtonMenuItem Speed1;
+    private javax.swing.JRadioButtonMenuItem Speed2;
+    private javax.swing.JRadioButtonMenuItem Speed3;
+    private javax.swing.JRadioButtonMenuItem Speed4;
+    private javax.swing.JRadioButtonMenuItem Speed5;
+    private javax.swing.JRadioButtonMenuItem Speed6;
     private javax.swing.JMenu SpeedMenu;
-    private javax.swing.JMenuItem jMenuItem1;
     // End of variables declaration//GEN-END:variables
 
 }

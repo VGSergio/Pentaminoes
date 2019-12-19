@@ -21,6 +21,7 @@ public class Board extends JPanel{
     private final int COLUMNS;
     private final Square[] SQUARES;
     
+    private int Speed;
     private int best = 0;
     private boolean Solving;
     private ArrayList<Board> Solutions = new ArrayList();
@@ -124,6 +125,10 @@ public class Board extends JPanel{
         }
     }
     
+    public void setSpeed(int miliseconds){
+        Speed = miliseconds;
+    }
+    
     /**
      * Returns wheter the board is solved or not
      * @return 
@@ -133,7 +138,7 @@ public class Board extends JPanel{
         return occ > getSquaresAmount()-PIECESQUARES; //No more pieces can be used
     }
     
-    public void Solve(JFrame game, int position, boolean[] pieces, int delay){
+    public void Solve(JFrame game, int position, boolean[] pieces){
         if(position > getSquaresAmount()-PIECESQUARES || isSolved()){
             if(getSquaresOccupied() > best){
                 best = getSquaresOccupied();
@@ -153,7 +158,7 @@ public class Board extends JPanel{
                             int[] positions = getSquaresPositions(position, perspective);
                             Color color = new Piece().getColor(i);
                             try {
-                                Thread.sleep(delay);
+                                Thread.sleep(Speed);
                             } catch (InterruptedException ex) {
                                 Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
                             }
@@ -166,7 +171,7 @@ public class Board extends JPanel{
                             npieces[i]=true;
                             int nposition = getNextPosition(position);
                             
-                            Solve(game, nposition, npieces, delay);
+                            Solve(game, nposition, npieces);
                             
                             removePiece(positions);
                             pieces[i] =  false;
@@ -174,7 +179,7 @@ public class Board extends JPanel{
                     }
                 }
             }
-            Solve(game, position+1, pieces, delay);
+            Solve(game, position+1, pieces);
         }
         
     }
