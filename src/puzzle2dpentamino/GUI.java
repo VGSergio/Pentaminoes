@@ -34,6 +34,7 @@ public class GUI extends JFrame{
         }                                                
         Board = new Board(rows, columns);       //Creates a new board
         add(Board);                             //Adds the new board
+        Rows = rows;  Columns = columns;        //Updates rows, columns
         
         String s = "Block Squares or use Solve(Ctrl+S) to start";                   
         Message.setText(s);                                                 //Updates the status text
@@ -179,32 +180,28 @@ public class GUI extends JFrame{
     }// </editor-fold>//GEN-END:initComponents
 
     private void BoardSize0MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize0MouseReleased
-       evt.consume();              //Frees memory
-        GenerateBoard(6,10);        //New (6x10) board
-        Rows = 6;  Columns = 10;    //Updates rows, columns
+        evt.consume();          //Frees memory
+        GenerateBoard(6,10);    //New (6x10) board
     }//GEN-LAST:event_BoardSize0MouseReleased
 
     private void BoardSize1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize1MouseReleased
-        evt.consume();                  //Frees memory 
-        GenerateBoard(5,12);        //New (5x12) board
-        Rows = 5;  Columns = 12;    //Updates rows, columns
+        evt.consume();          //Frees memory 
+        GenerateBoard(5,12);    //New (5x12) board
     }//GEN-LAST:event_BoardSize1MouseReleased
 
     private void BoardSize2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize2MouseReleased
-        evt.consume();                  //Frees memory 
-        GenerateBoard(4,15);        //New (4x15) board
-        Rows = 4;  Columns = 15;    //Updates rows, columns
+        evt.consume();          //Frees memory 
+        GenerateBoard(4,15);    //New (4x15) board
     }//GEN-LAST:event_BoardSize2MouseReleased
 
     private void BoardSize3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize3MouseReleased
-        evt.consume();                  //Frees memory 
-        GenerateBoard(3,20);        //New (3x20) board
-        Rows = 3;  Columns = 20;    //Updates rows, columns
+        evt.consume();          //Frees memory 
+        GenerateBoard(3,20);    //New (3x20) board
     }//GEN-LAST:event_BoardSize3MouseReleased
 
     private void ExitOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExitOptionMouseReleased
-        evt.consume();                  //Frees memory 
-        System.exit(0);             //Exits the program
+        evt.consume();      //Frees memory 
+        System.exit(0);     //Exits the program
     }//GEN-LAST:event_ExitOptionMouseReleased
 
     private void ResetOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResetOptionMouseReleased
@@ -239,27 +236,28 @@ public class GUI extends JFrame{
         }
         else if (evt.isControlDown() && (key == KeyEvent.VK_S)){
             evt.consume();
-            if(!Board.isSolving()){
-                Message.setText("Solving...");
-                Board.setSolving(true);
-                Board.Solve(this, 0);
-                Message.setText("Solved");
-                Board.setSolving(false);
-            }
+            new Thread(() -> {
+                solve();     //Inicia el puzzle
+            }).start();
         }
     }//GEN-LAST:event_formKeyReleased
 
     private void SolveOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SolveOptionMouseReleased
-        if(!Board.isSolving()){
-            evt.consume();
-            Message.setText("Solving...");
-            Board.setSolving(true);
-            Board.Solve(this, 0);
-            Message.setText("Solved");
-            Board.setSolving(false);
-        }
+        evt.consume();
+            new Thread(() -> {
+                solve();     //Inicia el puzzle
+            }).start();
     }//GEN-LAST:event_SolveOptionMouseReleased
 
+    private void solve(){
+        if(!Board.isSolving()){
+            Message.setText("Solving...");
+            Board.setSolving(true);
+            Board.Solve(this, 0, new boolean[12], 100);
+            Message.setText("Solved");
+        }
+    }
+    
     /**
      * @param args the command line arguments
      */

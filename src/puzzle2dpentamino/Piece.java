@@ -18,7 +18,7 @@ public class Piece {
      * perspectives.
      * First value is the piece id. The rest of values are row,column by pairs.
      */
-    private  static final int[][] PIECE_DATA = {  // All the pieces and their different perspectives
+    private static final int[][] PIECE_DATA = {  // All the pieces and their different perspectives
         { 0, 0,1, 0,2, 1,0, 1,1, 2,1},          //F 0º
         { 0, 0,1, 1,0, 1,1, 1,2, 2,2},          //F 90º
         { 0, 0,1, 1,1, 1,2, 2,0, 2,1},          //F 180º
@@ -113,7 +113,7 @@ public class Piece {
          new Color(150,255,150)
    };
     
-    private final int PieceSquares = 5;
+    public static final int PIECESQUARES = 5;
     
     /**
      * returns the color of a given piece id
@@ -125,7 +125,7 @@ public class Piece {
     }
     
     public int[][] getPerspectives(int piece){
-        int numcoords = 2*PieceSquares;
+        int numcoords = 2*PIECESQUARES;
         int i=0;
         int cont = 0;
         
