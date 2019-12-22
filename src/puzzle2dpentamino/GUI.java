@@ -1,9 +1,8 @@
-/* GUI class. The GUI has an options bar, the board and 
- * a text with the status of the game or some instructions
+/* GUI class. The GUI has an options bar, the board, a text with the status
+ * of the game or some instructions, and a solutions panel
  */
 package puzzle2dpentamino;
 
-import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
 
@@ -14,25 +13,28 @@ import javax.swing.*;
 public class GUI extends JFrame{
     
     private Board Board;
+    private final int[] SPEEDS = {0, 30, 70, 120, 300, 600};
     private int Rows = 6, Columns = 10;
-    private int Speed = 300;
+    private int Speed = SPEEDS[3];
     
     /**
      * Creates new form GUI
      */
     public GUI() {
         initComponents();
-        setUpSpeedButtons();
+        initSpeedButtons();
         add(Message);                   //Adds status text
         GenerateBoard(Rows, Columns);   //Creates initial board
     }
-    
-    private void setUpSpeedButtons(){
-        ButtonGroup g = new ButtonGroup();
-        for(int i=0; i<SpeedMenu.getMenuComponentCount(); i++){
-            g.add(SpeedMenu.getItem(i));
+    /**
+     * Initializes speed radio buttons
+     */
+    private void initSpeedButtons(){
+        ButtonGroup g = new ButtonGroup();                          //We add all the radiobuttons 
+        for(int i=0; i<SpeedMenu.getMenuComponentCount(); i++){     //to the same group so only 
+            g.add(SpeedMenu.getItem(i));                            //one can be selected 
         }
-        Speed3.setSelected(true);
+        Speed3.setSelected(true);       //Default speed
     }
     
     /**
@@ -40,20 +42,27 @@ public class GUI extends JFrame{
      */
     private void GenerateBoard(int rows, int columns){
         if (Board!=null){                       //NOT initial board case
-            remove(Board);                      //Deletes previous board
-        }                                                
+            remove(Board);          //Deletes previous board
+        }   
+        
+        //Board init
         Board = new Board(rows, columns);       //Creates a new board
-        add(Board);                             //Adds the new board
+        add(Board);                 //Adds the new board
         Rows = rows;  Columns = columns;        //Updates rows, columns
-        Board.setSpeed(Speed);
+        Board.setSpeed(Speed);                  //Sets solving speed
         
-        String s = "Block Squares or use Solve(Ctrl+S) to start";                   
+        //Message init
+        String s = "Block Squares or use Solve(Ctrl+S) to start";           //Updates the message        
         Message.setText(s);                                                 //Updates the status text
-        Message.setBounds(0, Board.getHeight(), Board.getWidth(), 60);      //Sets it's location      
+        Message.setBounds(0, Board.getHeight(), Board.getWidth(), 60);      //Sets it's location    
         
-        int width = getInsets().right + Board.getWidth();                                                   //Frame's new width
-        int height = getInsets().top + MenuBar.getHeight() + Board.getHeight() + Message.getHeight();       //Frame's new height
-        setSize(width, height);                 //Sets frame's new size
+        //Board panel size configuration
+        int width = getInsets().right + Board.getWidth();       //New panel width
+        int height = Board.getHeight() + Message.getHeight();    //New panel height
+//        setSize(width, height);                      //New panel size          
+        
+        //Frame config
+        setSize(width, getInsets().top + MenuBar.getBounds().height + height);  //Sets frame's new size
         setLocationRelativeTo(null);            //Centers frame 
         setResizable(false);                    //Frame NOT resizable by the user
     }
@@ -296,62 +305,62 @@ public class GUI extends JFrame{
 
     private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
         int key = evt.getKeyCode();
-        if (evt.isControlDown() && (key == KeyEvent.VK_E)){
-            evt.consume();
-            System.exit(0);
+        if (evt.isControlDown() && (key == KeyEvent.VK_E)){         //Ctrl+E
+            evt.consume();      //Frees memory
+            System.exit(0);     //Exits the program
         }
-        else if (evt.isControlDown() && (key == KeyEvent.VK_R)){
-            evt.consume();
-            GenerateBoard(Rows, Columns);
+        else if (evt.isControlDown() && (key == KeyEvent.VK_R)){    //Ctrl+R
+            evt.consume();                      //Frees memory
+            GenerateBoard(Rows, Columns);       //New board with the previous one rows and columns
         }
         else if (evt.isControlDown() && (key == KeyEvent.VK_S)){
-            evt.consume();
+            evt.consume();      //Frees memory
             new Thread(() -> {
-                solve();     //Inicia el puzzle
+                solve();        //Starts solving the puzzle
             }).start();
         }
     }//GEN-LAST:event_formKeyReleased
 
     private void SolveOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SolveOptionMouseReleased
         evt.consume();
-            new Thread(() -> {
-                solve();     //Inicia el puzzle
-            }).start();
+        new Thread(() -> {
+            solve();     //Starts solving the puzzle
+        }).start();
     }//GEN-LAST:event_SolveOptionMouseReleased
 
     private void Speed0MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed0MouseReleased
-        evt.consume();
-        setSpeed(0);
+        evt.consume();              //Frees memory
+        setSpeed(SPEEDS[0]);        //Sets solving speed
     }//GEN-LAST:event_Speed0MouseReleased
 
     private void Speed1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed1MouseReleased
-        evt.consume();
-        setSpeed(100);
+        evt.consume();              //Frees memory
+        setSpeed(SPEEDS[1]);        //Sets solving speed
     }//GEN-LAST:event_Speed1MouseReleased
 
     private void Speed2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed2MouseReleased
-        evt.consume();
-        setSpeed(200);
+        evt.consume();              //Frees memory
+        setSpeed(SPEEDS[2]);        //Sets solving speed
     }//GEN-LAST:event_Speed2MouseReleased
 
     private void Speed3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed3MouseReleased
-        evt.consume();
-        setSpeed(300);
+        evt.consume();              //Frees memory
+        setSpeed(SPEEDS[3]);        //Sets solving speed
     }//GEN-LAST:event_Speed3MouseReleased
 
     private void Speed4MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed4MouseReleased
-        evt.consume();
-        setSpeed(500);
+        evt.consume();              //Frees memory
+        setSpeed(SPEEDS[4]);        //Sets solving speed
     }//GEN-LAST:event_Speed4MouseReleased
 
     private void Speed5MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed5MouseReleased
-        evt.consume();
-        setSpeed(700);
+        evt.consume();              //Frees memory
+        setSpeed(SPEEDS[5]);        //Sets solving speed
     }//GEN-LAST:event_Speed5MouseReleased
 
     private void Speed6MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed6MouseReleased
-        evt.consume();
-        setSpeed(1000);
+        evt.consume();              //Frees memory
+        setSpeed(SPEEDS[6]);        //Sets solving speed
     }//GEN-LAST:event_Speed6MouseReleased
 
     private void setSpeed(int miliseconds){

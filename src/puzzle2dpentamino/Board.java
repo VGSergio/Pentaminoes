@@ -165,16 +165,19 @@ public class Board extends JPanel{
                             paintNewPiece(positions, color);
                             game.repaint();
                             boolean[] npieces = new boolean[pieces.length];
-                            for(int k=0; k<pieces.length; k++){
-                                npieces[k] = pieces[k];
-                            }
+                            System.arraycopy(pieces, 0, npieces, 0, pieces.length);
                             npieces[i]=true;
                             int nposition = getNextPosition(position);
                             
                             Solve(game, nposition, npieces);
                             
+                            try {
+                                Thread.sleep(Speed);
+                            } catch (InterruptedException ex) {
+                                Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                             removePiece(positions);
-                            pieces[i] =  false;
+                            game.repaint();
                         }
                     }
                 }
