@@ -25,7 +25,6 @@ public class Board extends JPanel{
     private int best = 0;
     private boolean Solving;
     private ArrayList<Board> Solutions = new ArrayList();
-    private int UsedPieces = 0;
     
     /**
      * Board constructor
@@ -131,15 +130,36 @@ public class Board extends JPanel{
     
     /**
      * Returns wheter the board is solved or not
+     * @param position
+     * @param usedpieces
+     * @param maxpieces
      * @return 
      */
-    public boolean isSolved(){
-        int occ = getSquaresOccupied();
-        return occ > getSquaresAmount()-PIECESQUARES; //No more pieces can be used
+    public boolean isSolved(int position, int usedpieces, int maxpieces){
+//        if(position > getSquaresAmount()-PIECESQUARES){
+//            return true;
+//        } else if(usedpieces==maxpieces){
+//            return true;
+//        } else {
+//            return getSquaresOccupied() > getSquaresAmount()-PIECESQUARES;
+//        }
+        int cont =0;
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
+                int position2 = (i*COLUMNS)+j;
+                if(SQUARES[position2].isBlocked()){
+                    cont++;
+                }
+            }
+        }
+        return cont==getSquaresAmount();
     }
     
-    public void Solve(JFrame game, int position, boolean[] pieces){
-        if(position > getSquaresAmount()-PIECESQUARES || isSolved()){
+    public void Solve(JFrame game, int position, boolean[] pieces, int usedpieces, int maxpieces){
+        if(isSolved(position, usedpieces, maxpieces)){
+            if(Speed==0){
+                game.repaint();
+            }
             if(getSquaresOccupied() > best){
                 best = getSquaresOccupied();
                 if(!Solutions.isEmpty())
@@ -149,42 +169,168 @@ public class Board extends JPanel{
                 Solutions.add(this);  
             }
         } else {
-            for(int i=0; i<pieces.length; i++){
-                if(!pieces[i]){
-                    int perspectives[][] = new Piece().getPerspectives(i);
-                    for (int j=0; j<perspectives.length; j++) {
-                        int[] perspective = getPerspective(perspectives, j);
-                        if(pieceFits(position, perspective)){
-                            int[] positions = getSquaresPositions(position, perspective);
-                            Color color = new Piece().getColor(i);
-                            try {
-                                Thread.sleep(Speed);
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+            if(position < getSquaresAmount()){
+                if(usedpieces < maxpieces){
+                    for(int piece=0; piece<pieces.length; piece++){
+                        if(!pieces[piece] && isSolving()){
+                            int[][] perspectives = new Piece().getPerspectives(piece);
+                            for(int i=0; i<perspectives.length; i++){
+                                int[] perspective = getPerspective(perspectives, i);
+                                if(pieceFits(position, perspective)){
+                                    int[] positions = getSquaresPositions(position, perspective);
+                                    Color color = new Piece().getColor(piece);
+
+                                    paintNewPiece(positions, color);
+                                    if(Speed>0){
+                                        try {
+                                            Thread.sleep(Speed);
+                                            game.repaint();
+                                        } catch (InterruptedException ex) {
+                                            Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+                                        }
+                                    }
+
+                                    if(!ObviousBlockExists2(position,positions)){
+                                        pieces[piece] = true;
+                                        usedpieces++;
+
+                                        Solve(game, position+1,pieces, usedpieces, maxpieces);
+
+                                        removePiece(positions);
+                                        if(Speed>0){
+                                            try {
+                                                Thread.sleep(Speed);
+                                                game.repaint(); 
+                                            } catch (InterruptedException ex) {
+                                                Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
+                                        }
+                                        usedpieces--;
+                                        pieces[piece] = false;
+                                    } else {
+                                        try {
+                                        Thread.sleep(Speed);
+                                    } catch (InterruptedException ex) {
+                                        Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                        removePiece(positions);
+                                        game.repaint();
+                                    }
+                                }
                             }
-                            paintNewPiece(positions, color);
-                            game.repaint();
-                            boolean[] npieces = new boolean[pieces.length];
-                            System.arraycopy(pieces, 0, npieces, 0, pieces.length);
-                            npieces[i]=true;
-                            int nposition = getNextPosition(position);
-                            
-                            Solve(game, nposition, npieces);
-                            
-                            try {
-                                Thread.sleep(Speed);
-                            } catch (InterruptedException ex) {
-                                Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
-                            }
-                            removePiece(positions);
-                            game.repaint();
                         }
                     }
+                    Solve(game, position+1, pieces, usedpieces, maxpieces);
                 }
             }
-            Solve(game, position+1, pieces);
+        }
+    }
+    
+    private int getLowestRightPieceSquare(int[] positions){
+        int lrposition=0;
+        int brow=-1; int bcolumn=-1;
+        for(int i=0; i<positions.length; i++){
+            int position = positions[i];
+            int row = position/COLUMNS;
+            int column = position%COLUMNS;
+            if(row>brow && column>bcolumn){
+                lrposition = positions[i];
+            }
+        }
+        return lrposition;
+    }
+    
+    private boolean ObviousBlockExists2(int position, int[] positions){
+        int row = position/COLUMNS;
+        int column = position%COLUMNS;
+        int position2 = getLowestRightPieceSquare(positions);
+        int brow = position2/COLUMNS;
+        int rcolumn = position2%COLUMNS;
+        int i = 0;
+        int j = 0;
+        boolean blocking = false;
+        int nposition;
+        if(column+1 == COLUMNS-1 && !SQUARES[position+1].isBlocked() && SQUARES[position].isBlocked()){
+            blocking = true;
+        }
+        if(row+1 == ROWS-1 && !SQUARES[position+COLUMNS].isBlocked() && SQUARES[position].isBlocked()){
+            blocking = true;
+        }
+//        System.out.print("First square: "+position+ "\tRow: "+row+"\tColumn: "+column+"\n");
+        while (row<=brow && !SQUARES[position+COLUMNS*i+j].isBlocked() && !blocking){
+            while(column<=rcolumn && !SQUARES[position+COLUMNS*i+j].isBlocked() && !blocking) {
+                nposition = position+COLUMNS*i+j;
+//                System.out.print(nposition+"\t");
+                boolean next = ObviousBlockExists2(nposition+1, positions);
+                blocking = !next;
+                
+                j++;
+                column++;
+            }
+                
+            column = position%COLUMNS;;
+            j=0;
+            i++;
+            row++;
         }
         
+        while (row<=brow && SQUARES[COLUMNS*row].isBlocked() && !blocking){
+            while(SQUARES[COLUMNS*row].isBlocked()){
+                row++;
+            }
+            while(column<=rcolumn && !SQUARES[COLUMNS*brow+j].isBlocked() && !blocking) {
+                nposition = COLUMNS*row+j;
+                boolean next = ObviousBlockExists2(nposition, positions);
+                blocking = !next;
+                
+                j++;
+                column++;
+            }  
+            column = position%COLUMNS;;
+            j=0;
+        }
+        
+//        System.out.print("\n");
+        return blocking;
+    }
+    private boolean ObviousBlockExists(int[] positions){
+        int position = getNextEMptySquare();
+        int row = position/COLUMNS;
+        int column = position%COLUMNS;
+        int i = 0;
+        int j = 0;
+        int cont=0;
+        System.out.print("First empty square: "+position+ "\tRow: "+row+"\tColumn: "+column+"\n");
+        while (row<ROWS && !SQUARES[position+COLUMNS*i].isBlocked() && cont<=5){
+            while(column<COLUMNS && !SQUARES[position+COLUMNS*i+j].isBlocked() && cont<=5) {
+                System.out.print(position+COLUMNS*i+j+"\t");
+                cont++;
+                j++;
+                column++;
+            }
+            column = getNextEMptySquare()%COLUMNS;
+            j=0;
+            i++;
+            row++;
+        }
+        System.out.print("\n");
+        return 0<cont && cont<5;
+    }
+    
+    private int getNextEMptySquare(){
+        int position = 0, i=0, j=0;
+        boolean found = false;
+        while(i<ROWS && !found) {
+            while(j<COLUMNS && !found) {
+                position = (i*COLUMNS)+j;
+                if (!SQUARES[position].isBlocked()){
+                   found=true; 
+                }
+                j++;
+            }
+            i++;
+        }
+        return position;
     }
     
     private int[] getSquaresPositions(int position, int[] perspective){
@@ -199,15 +345,19 @@ public class Board extends JPanel{
     }
     
     private int getNextPosition(int position){
-        int i = position + 1;
         int end = getSquaresAmount();
-        while(i<end){
-            if(!SQUARES[i].isBlocked()){
-                break;
+        if(position<=end-PIECESQUARES){
+            position++;
+            while(position<end-PIECESQUARES){
+                if(!SQUARES[position].isBlocked()){
+                    break;
+                }
+            position++;
             }
-            i++;
+            return position;
+        } else {
+            return 0;
         }
-        return i;
     }
     
     /**
@@ -257,7 +407,7 @@ public class Board extends JPanel{
     private void removePiece(int[] nposition){
         for (int i=0; i<nposition.length; i++){
             SQUARES[nposition[i]].setColor(Color.WHITE);
-            SQUARES[nposition[i]].setBlocked(true);
+            SQUARES[nposition[i]].setBlocked(false);
         }
     }
     
