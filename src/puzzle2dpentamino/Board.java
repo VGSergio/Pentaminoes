@@ -143,17 +143,16 @@ public class Board extends JPanel{
 //        } else {
 //            return getSquaresOccupied() > getSquaresAmount()-PIECESQUARES;
 //        }
-       // int cont =0;
-        boolean solved = true;
-        for (int i = 0; i < ROWS && solved; i++) {
-            for (int j = 0; j < COLUMNS && solved; j++) {
+        int cont =0;
+        for (int i = 0; i < ROWS; i++) {
+            for (int j = 0; j < COLUMNS; j++) {
                 int position2 = (i*COLUMNS)+j;
-                if(!SQUARES[position2].isBlocked()){
-                    solved = false;
+                if(SQUARES[position2].isBlocked()){
+                    cont++;
                 }
             }
         }
-        return solved; //cont==getSquaresAmount();
+        return cont==getSquaresAmount();
     }
     
     public void Solve(JFrame game, int position, boolean[] pieces, int usedpieces, int maxpieces){
@@ -210,10 +209,10 @@ public class Board extends JPanel{
                                         pieces[piece] = false;
                                     } else {
                                         try {
-                                            Thread.sleep(Speed);
-                                        } catch (InterruptedException ex) {
-                                            Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
-                                        }
+                                        Thread.sleep(Speed);
+                                    } catch (InterruptedException ex) {
+                                        Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
                                         removePiece(positions);
                                         game.repaint();
                                     }
@@ -269,7 +268,7 @@ public class Board extends JPanel{
                 column++;
             }
                 
-            column = position%COLUMNS;
+            column = position%COLUMNS;;
             j=0;
             i++;
             row++;
@@ -287,7 +286,7 @@ public class Board extends JPanel{
                 j++;
                 column++;
             }  
-            column = position%COLUMNS;
+            column = position%COLUMNS;;
             j=0;
         }
         
