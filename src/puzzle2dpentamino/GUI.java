@@ -13,7 +13,7 @@ import javax.swing.*;
 public class GUI extends JFrame{
     
     private Board Board;
-    private final int[] SPEEDS = {0, 30, 70, 120, 300, 600};
+    private final int[] SPEEDS = {0, 30, 70, 120, 300, 600, 3000};
     private int Rows = 6, Columns = 10;
     private int Speed = SPEEDS[3];
     
@@ -285,6 +285,7 @@ public class GUI extends JFrame{
 
     private void ResetOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResetOptionMouseReleased
         evt.consume();                  //Frees memory 
+        Board.setSolving(false);
         GenerateBoard(Rows, Columns);   //New board with the previous one rows and columns
     }//GEN-LAST:event_ResetOptionMouseReleased
 
@@ -311,6 +312,7 @@ public class GUI extends JFrame{
         }
         else if (evt.isControlDown() && (key == KeyEvent.VK_R)){    //Ctrl+R
             evt.consume();                      //Frees memory
+            Board.setSolving(false);
             GenerateBoard(Rows, Columns);       //New board with the previous one rows and columns
         }
         else if (evt.isControlDown() && (key == KeyEvent.VK_S)){
@@ -372,7 +374,8 @@ public class GUI extends JFrame{
         if(!Board.isSolving()){
             Message.setText("Solving...");
             Board.setSolving(true);
-            Board.Solve(this, 0, new boolean[12]);
+            Board.Solve(this, 0, new boolean[12], 0, 12);
+            Board.setSolving(false);
             Message.setText("Solved");
         }
     }
