@@ -253,11 +253,17 @@ public class Board extends JPanel{
         if(column+1 == COLUMNS-1 && !SQUARES[position+1].isBlocked() && SQUARES[position].isBlocked()){
             blocking = true;
         }
+        if(column == 0  && SQUARES[position+1].isBlocked() && !SQUARES[position].isBlocked()){
+            blocking = true;
+        }
         if(row+1 == ROWS-1 && !SQUARES[position+COLUMNS].isBlocked() && SQUARES[position].isBlocked()){
             blocking = true;
         }
+        if(row == 0 && SQUARES[position+COLUMNS].isBlocked() && !SQUARES[position].isBlocked()){
+            blocking = true;
+        }
 //        System.out.print("First square: "+position+ "\tRow: "+row+"\tColumn: "+column+"\n");
-        while (row<=brow && !SQUARES[position+COLUMNS*i+j].isBlocked() && !blocking){
+        while (row<=brow && !SQUARES[position+COLUMNS*i].isBlocked() && !blocking){
             while(column<=rcolumn && !SQUARES[position+COLUMNS*i+j].isBlocked() && !blocking) {
                 nposition = position+COLUMNS*i+j;
 //                System.out.print(nposition+"\t");
@@ -274,21 +280,21 @@ public class Board extends JPanel{
             row++;
         }
         
-        while (row<=brow && SQUARES[COLUMNS*row].isBlocked() && !blocking){
-            while(SQUARES[COLUMNS*row].isBlocked()){
-                row++;
-            }
-            while(column<=rcolumn && !SQUARES[COLUMNS*brow+j].isBlocked() && !blocking) {
-                nposition = COLUMNS*row+j;
-                boolean next = ObviousBlockExists2(nposition, positions);
-                blocking = !next;
-                
-                j++;
-                column++;
-            }  
-            column = position%COLUMNS;;
-            j=0;
-        }
+//        while (row<=brow && SQUARES[COLUMNS*row].isBlocked() && !blocking){
+//            while(SQUARES[COLUMNS*row].isBlocked()){
+//                row++;
+//            }
+//            while(column<=rcolumn && !SQUARES[COLUMNS*brow+j].isBlocked() && !blocking) {
+//                nposition = COLUMNS*row+j;
+//                boolean next = ObviousBlockExists2(nposition, positions);
+//                blocking = !next;
+//                
+//                j++;
+//                column++;
+//            }  
+//            column = position%COLUMNS;;
+//            j=0;
+//        }
         
 //        System.out.print("\n");
         return blocking;
