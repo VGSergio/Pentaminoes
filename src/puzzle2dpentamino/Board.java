@@ -323,25 +323,36 @@ public class Board extends JPanel{
     }
     
     private boolean isObvious(int position){
-        return isObvious(position, 1);
+        return isObvious(position, 1, "None");
     }
     
-    private boolean isObvious(int position, Integer emptySpaces){
+    private boolean isObvious(int position, Integer emptySpaces, String comesFrom){
         if(emptySpaces == 5){
             return false;
         }
         // Look right
-        if(position+1 < getSquaresAmount() && !SQUARES[position+1].isBlocked()){
+        if((position+1)%COLUMNS != 0 && position+1 < getSquaresAmount() && !SQUARES[position+1].isBlocked()
+                && !comesFrom.equals("Right")){
             emptySpaces++;
-            if(!isObvious(position+1, emptySpaces)) return false;
+            if(!isObvious(position+1, emptySpaces, "Left")) return false;
         }
-        if(position+COLUMNS < getSquaresAmount() && !SQUARES[position+COLUMNS].isBlocked()){
+        // Look down
+        if(position+COLUMNS < getSquaresAmount() && !SQUARES[position+COLUMNS].isBlocked()
+                && !comesFrom.equals("Down")){
             emptySpaces++;
-            if(!isObvious(position+COLUMNS, emptySpaces)) return false;
+            if(!isObvious(position+COLUMNS, emptySpaces, "Up")) return false;
         }
-        if(position-COLUMNS > 0 && !SQUARES[position-COLUMNS].isBlocked()){
+        // Look up
+        if(position-COLUMNS > 0 && !SQUARES[position-COLUMNS].isBlocked()
+                && !comesFrom.equals("Up")){
             emptySpaces++;
-            if(!isObvious(position-COLUMNS, emptySpaces)) return false;
+            if(!isObvious(position-COLUMNS, emptySpaces, "Down")) return false;
+        }
+        // Look left
+        if((position-1)%COLUMNS != COLUMNS-1 && position-1 > 0 && !SQUARES[position-1].isBlocked()
+                && !comesFrom.equals("Left")){
+            emptySpaces++;
+            if(!isObvious(position-1, emptySpaces, "Right")) return false;
         }
         return true;
     }
