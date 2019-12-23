@@ -143,20 +143,21 @@ public class Board extends JPanel{
 //        } else {
 //            return getSquaresOccupied() > getSquaresAmount()-PIECESQUARES;
 //        }
-        int cont =0;
+        boolean solved = true;
         for (int i = 0; i < ROWS; i++) {
             for (int j = 0; j < COLUMNS; j++) {
                 int position2 = (i*COLUMNS)+j;
-                if(SQUARES[position2].isBlocked()){
-                    cont++;
+                if(!SQUARES[position2].isBlocked()){
+                    solved = false;
                 }
             }
         }
-        return cont==getSquaresAmount();
+        return solved;
     }
     
     public void Solve(JFrame game, int position, boolean[] pieces, int usedpieces, int maxpieces){
         if(isSolved(position, usedpieces, maxpieces)){
+            System.out.println("Solved");
             if(Speed==0){
                 game.repaint();
             }
@@ -226,31 +227,34 @@ public class Board extends JPanel{
         }
     }
     
-    private int getLowestRightPieceSquare(int[] positions){
-        int lrposition=0;
+    private int[] getLowestRightPieceSquare(int[] positions){
+        int[] pos = new int[2];
         int brow=-1; int bcolumn=-1;
         for(int i=0; i<positions.length; i++){
             int position = positions[i];
             int row = position/COLUMNS;
             int column = position%COLUMNS;
-            if(row>brow && column>bcolumn){
-                lrposition = positions[i];
+            if(row>brow){
+                pos[0] = positions[i];
+            }
+            if(column>bcolumn){
+                pos[1] = positions[i];
             }
         }
-        return lrposition;
+        return pos;
     }
     
     private boolean ObviousBlockExists2(int position, int[] positions){
         int row = position/COLUMNS;
         int column = position%COLUMNS;
-        int position2 = getLowestRightPieceSquare(positions);
-        int brow = position2/COLUMNS;
-        int rcolumn = position2%COLUMNS;
+        int position2[] = getLowestRightPieceSquare(positions);
+        int brow = position2[0]/COLUMNS;
+        int rcolumn = position2[1]%COLUMNS;
         int i = 0;
         int j = 0;
         boolean blocking = false;
         int nposition;
-        if(column+1 == COLUMNS-1 && !SQUARES[position+1].isBlocked() && SQUARES[position].isBlocked()){
+        if(column+1 == COLUMNS-1 && !SQUARES[position+1].isBlocked() && SQUARES[position].isBlocked() && SQUARES[position+COLUMNS].isBlocked()){
             blocking = true;
         }
         if(column == 0  && SQUARES[position+1].isBlocked() && !SQUARES[position].isBlocked()){
@@ -262,11 +266,11 @@ public class Board extends JPanel{
         if(row == 0 && SQUARES[position+COLUMNS].isBlocked() && !SQUARES[position].isBlocked()){
             blocking = true;
         }
-//        System.out.print("First square: "+position+ "\tRow: "+row+"\tColumn: "+column+"\n");
+        System.out.print("First square: "+position+ "\tRow: "+row+"\tColumn: "+column+"\n");
         while (row<=brow && !SQUARES[position+COLUMNS*i].isBlocked() && !blocking){
             while(column<=rcolumn && !SQUARES[position+COLUMNS*i+j].isBlocked() && !blocking) {
                 nposition = position+COLUMNS*i+j;
-//                System.out.print(nposition+"\t");
+                System.out.print(nposition+"\t");
                 boolean next = ObviousBlockExists2(nposition+1, positions);
                 blocking = !next;
                 
@@ -280,47 +284,54 @@ public class Board extends JPanel{
             row++;
         }
         
-//        while (row<=brow && SQUARES[COLUMNS*row].isBlocked() && !blocking){
-//            while(SQUARES[COLUMNS*row].isBlocked()){
-//                row++;
-//            }
-//            while(column<=rcolumn && !SQUARES[COLUMNS*brow+j].isBlocked() && !blocking) {
-//                nposition = COLUMNS*row+j;
-//                boolean next = ObviousBlockExists2(nposition, positions);
-//                blocking = !next;
-//                
-//                j++;
-//                column++;
-//            }  
-//            column = position%COLUMNS;;
-//            j=0;
-//        }
+        while (row<=brow && SQUARES[COLUMNS*row].isBlocked() && !blocking){
+            while(SQUARES[COLUMNS*row].isBlocked()){
+                row++;
+            }
+            while(column<=rcolumn && !SQUARES[COLUMNS*brow+j].isBlocked() && !blocking) {
+                nposition = COLUMNS*row+j;
+                boolean next = ObviousBlockExists2(nposition, positions);
+                blocking = !next;
+                
+                j++;
+                column++;
+            }  
+            column = position%COLUMNS;;
+            j=0;
+        }
         
 //        System.out.print("\n");
         return blocking;
     }
-    private boolean ObviousBlockExists(int[] positions){
-        int position = getNextEMptySquare();
+    private boolean ObviousBlockExists(int position, int[] positions){
         int row = position/COLUMNS;
         int column = position%COLUMNS;
+        int position2[] = getLowestRightPieceSquare(positions);
+        int brow = position2[0]/COLUMNS;
+        int rcolumn = position2[1]%COLUMNS;
         int i = 0;
         int j = 0;
+        boolean blocking = false;
+        int nposition;
         int cont=0;
-        System.out.print("First empty square: "+position+ "\tRow: "+row+"\tColumn: "+column+"\n");
-        while (row<ROWS && !SQUARES[position+COLUMNS*i].isBlocked() && cont<=5){
-            while(column<COLUMNS && !SQUARES[position+COLUMNS*i+j].isBlocked() && cont<=5) {
-                System.out.print(position+COLUMNS*i+j+"\t");
-                cont++;
+        
+        while (row<=brow && !blocking){
+            while(column<=rcolumn && !blocking) {
+                nposition = position+COLUMNS*i+j;
+                if (!SQUARES[nposition].isBlocked()){
+                    if(!SQUARES[position+1].isBlocked() && !SQUARES[position+COLUMNS].isBlocked()){
+                        blocking = true;
+                    }
+                }
                 j++;
                 column++;
             }
-            column = getNextEMptySquare()%COLUMNS;
+            column = position%COLUMNS;
             j=0;
             i++;
             row++;
         }
-        System.out.print("\n");
-        return 0<cont && cont<5;
+        return blocking;
     }
     
     private int getNextEMptySquare(){
