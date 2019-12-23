@@ -191,7 +191,7 @@ public class Board extends JPanel{
                                         }
                                     }
 
-                                    if(!ObviousBlockExists2(position,positions)){
+                                    if(!ObviousBlockAndreas(position,positions)){
                                         pieces[piece] = true;
                                         usedpieces++;
 
@@ -278,7 +278,7 @@ public class Board extends JPanel{
                 column++;
             }
                 
-            column = position%COLUMNS;;
+            column = position%COLUMNS;
             j=0;
             i++;
             row++;
@@ -296,13 +296,43 @@ public class Board extends JPanel{
                 j++;
                 column++;
             }  
-            column = position%COLUMNS;;
+            column = position%COLUMNS;
             j=0;
         }
         
 //        System.out.print("\n");
         return blocking;
     }
+    
+    private boolean ObviousBlockAndreas(int position, int[] positions) {
+        int upRow = position/COLUMNS;
+        int leftColumn = position%COLUMNS;
+        int lowRightPos[] = getLowestRightPieceSquare(positions);
+        int downRow = lowRightPos[0]/COLUMNS;
+        int rightColumn = lowRightPos[1]%COLUMNS;
+        boolean obvious = false;
+        for(int i = upRow; i <= downRow && !obvious; i++){
+            for(int j = leftColumn; j <= rightColumn && !obvious; j++){
+                if(!SQUARES[i*COLUMNS+j].isBlocked())
+                    obvious = isObvious(i*COLUMNS+j);
+            }
+        }
+        return obvious;
+    }
+    
+    private boolean isObvious(int position){
+        int emptySpaces = 0;
+        int i = 0;
+        while(!SQUARES[position].isBlocked() && emptySpaces < 5){
+            while(!SQUARES[position+COLUMNS*i].isBlocked() && emptySpaces < 5){
+                emptySpaces++;
+                i++;
+            }
+            position++;
+        }
+        return emptySpaces<5;
+    }
+    
     private boolean ObviousBlockExists(int position, int[] positions){
         int row = position/COLUMNS;
         int column = position%COLUMNS;
