@@ -235,10 +235,12 @@ public class Board extends JPanel{
             int row = position/COLUMNS;
             int column = position%COLUMNS;
             if(row>brow){
-                pos[0] = positions[i];
+                brow = row;
+                pos[0] = row;
             }
             if(column>bcolumn){
-                pos[1] = positions[i];
+                bcolumn = column;
+                pos[1] = column;
             }
         }
         return pos;
@@ -308,8 +310,8 @@ public class Board extends JPanel{
         int upRow = position/COLUMNS;
         int leftColumn = position%COLUMNS;
         int lowRightPos[] = getLowestRightPieceSquare(positions);
-        int downRow = lowRightPos[0]/COLUMNS;
-        int rightColumn = lowRightPos[1]%COLUMNS;
+        int downRow = lowRightPos[0];
+        int rightColumn = lowRightPos[1];
         boolean obvious = false;
         for(int i = upRow; i <= downRow && !obvious; i++){
             for(int j = leftColumn; j <= rightColumn && !obvious; j++){
@@ -321,16 +323,27 @@ public class Board extends JPanel{
     }
     
     private boolean isObvious(int position){
-        int emptySpaces = 0;
-        int i = 0;
-        while(!SQUARES[position].isBlocked() && emptySpaces < 5){
-            while(!SQUARES[position+COLUMNS*i].isBlocked() && emptySpaces < 5){
-                emptySpaces++;
-                i++;
-            }
-            position++;
+        return isObvious(position, 1);
+    }
+    
+    private boolean isObvious(int position, Integer emptySpaces){
+        if(emptySpaces == 5){
+            return false;
         }
-        return emptySpaces<5;
+        // Look right
+        if(position+1 < getSquaresAmount() && !SQUARES[position+1].isBlocked()){
+            emptySpaces++;
+            if(!isObvious(position+1, emptySpaces)) return false;
+        }
+        if(position+COLUMNS < getSquaresAmount() && !SQUARES[position+COLUMNS].isBlocked()){
+            emptySpaces++;
+            if(!isObvious(position+COLUMNS, emptySpaces)) return false;
+        }
+        if(position-COLUMNS > 0 && !SQUARES[position-COLUMNS].isBlocked()){
+            emptySpaces++;
+            if(!isObvious(position-COLUMNS, emptySpaces)) return false;
+        }
+        return true;
     }
     
     private boolean ObviousBlockExists(int position, int[] positions){
