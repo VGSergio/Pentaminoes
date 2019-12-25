@@ -57,6 +57,15 @@ public class Square {
     }
     
     /**
+     * Square color getter
+     * @return 
+     */
+    public Color getColor(){
+        return COLOR;
+    }
+    
+    
+    /**
      * Square's blocked status getter
      * @return boolean
      */

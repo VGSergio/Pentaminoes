@@ -365,6 +365,10 @@ public class GUI extends JFrame{
         setSpeed(SPEEDS[6]);        //Sets solving speed
     }//GEN-LAST:event_Speed6MouseReleased
 
+    /**
+     * Sets the speed at which the board will be solved
+     * @param miliseconds 
+     */
     private void setSpeed(int miliseconds){
         Speed = miliseconds;
         Board.setSpeed(miliseconds);
@@ -374,9 +378,9 @@ public class GUI extends JFrame{
         if(!Board.isSolving()){
             Message.setText("Solving...");
             Board.setSolving(true);
-            Board.Solve(this, 0, new boolean[12], 0, 12);
+            Board.Solve(this,Board, new boolean[12], 0, 12);
             Board.setSolving(false);
-            Message.setText("Solved");
+//            Message.setText("Solved");
         }
     }
     
@@ -424,7 +428,7 @@ public class GUI extends JFrame{
     private javax.swing.JMenu ControlMenu;
     private javax.swing.JMenuItem ExitOption;
     private javax.swing.JMenuBar MenuBar;
-    private javax.swing.JLabel Message;
+    public static javax.swing.JLabel Message;
     private javax.swing.JMenuItem ResetOption;
     private javax.swing.JMenu SizeMenu;
     private javax.swing.JMenuItem SolveOption;
