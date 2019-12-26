@@ -3,6 +3,8 @@
  */
 package puzzle2dpentamino;
 
+import java.awt.Component;
+import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
 import javax.swing.*;
 
@@ -13,9 +15,10 @@ import javax.swing.*;
 public class GUI extends JFrame{
     
     private Board Board;
+    private Board[] Solutions;
     private final int[] SPEEDS = {0, 30, 70, 120, 300, 600, 3000};
-    private int Rows = 6, Columns = 10;
-    private int Speed = SPEEDS[3];
+    private int Rows = 3, Columns = 20;
+    private int Speed = SPEEDS[0];
     
     /**
      * Creates new form GUI
@@ -23,9 +26,53 @@ public class GUI extends JFrame{
     public GUI() {
         initComponents();
         initSpeedButtons();
-        add(Message);                   //Adds status text
+        add(TabbedPane);                //Adds TabbedPane to the frame
+        BoardPanel.add(Message);        //Adds status text
         GenerateBoard(Rows, Columns);   //Creates initial board
     }
+    
+    /**
+     * Creates a new empty board
+     */
+    private void GenerateBoard(int rows, int columns){
+        if (Board!=null){                   //A board already exists
+            BoardPanel.remove(Board);       //Deletes previous board
+        }   
+        
+        //Board configuration
+        Board = new Board(rows, columns);       //Creates a new board
+        BoardPanel.add(Board);                  //Adds the new board
+        Rows = rows;  Columns = columns;        //Updates rows, columns
+        Board.setSpeed(Speed);                  //Sets solving speed
+        
+        //Message configuration
+        String s = "Block Squares or use Solve(Ctrl+S) to start";           //Updates the message        
+        Message.setText(s);                                                 //Updates the status text
+        Message.setBounds(0, Board.getHeight(), Board.getWidth(), 60);      //Sets it's location 
+        BoardPanel.add(Message);        //Adds status text
+        
+        //Solution picker configuration
+        SolutionPicker.setSize(100, 30);            //SolutionPicker size
+        SolutionPicker.setBounds((Board.getWidth()- SolutionPicker.getWidth())/2, 10, SolutionPicker.getWidth(), SolutionPicker.getHeight());   //SolutionPicker location
+        SolutionsPanel.add(SolutionPicker);
+        
+        //BoardPanel and SolutionPanel configuration
+        int width = getInsets().right + Board.getWidth();           //New panel width
+        int height = Board.getHeight() + Message.getHeight();       //New panel height
+        BoardPanel.setSize(width, height);                          //BoardPanel new size
+        SolutionsPanel.setSize(width, height);                       //SolutionPanel new size
+        
+        //TabbedPane configuration
+        height += TabbedPane.getBoundsAt(0).height;     //TabbedPane new height
+        TabbedPane.setSize(width, height);              //TabbedPane new size
+        
+        //Frame configuration
+        height += getInsets().top + MenuBar.getBounds().height;    //Frame new height
+        setSize(width, height);                 //Sets frame's new size
+        setLocationRelativeTo(null);            //Centers frame 
+        setResizable(false);                    //Frame NOT resizable by the user
+    }
+    
     /**
      * Initializes speed radio buttons
      */
@@ -38,33 +85,44 @@ public class GUI extends JFrame{
     }
     
     /**
-     * Creates a new empty board
+     * Updates solutions picker combobox with the solutions found
      */
-    private void GenerateBoard(int rows, int columns){
-        if (Board!=null){                       //NOT initial board case
-            remove(Board);          //Deletes previous board
-        }   
-        
-        //Board init
-        Board = new Board(rows, columns);       //Creates a new board
-        add(Board);                 //Adds the new board
-        Rows = rows;  Columns = columns;        //Updates rows, columns
-        Board.setSpeed(Speed);                  //Sets solving speed
-        
-        //Message init
-        String s = "Block Squares or use Solve(Ctrl+S) to start";           //Updates the message        
-        Message.setText(s);                                                 //Updates the status text
-        Message.setBounds(0, Board.getHeight(), Board.getWidth(), 60);      //Sets it's location    
-        
-        //Board panel size configuration
-        int width = getInsets().right + Board.getWidth();       //New panel width
-        int height = Board.getHeight() + Message.getHeight();    //New panel height
-//        setSize(width, height);                      //New panel size          
-        
-        //Frame config
-        setSize(width, getInsets().top + MenuBar.getBounds().height + height);  //Sets frame's new size
-        setLocationRelativeTo(null);            //Centers frame 
-        setResizable(false);                    //Frame NOT resizable by the user
+    private void updateSolutions(){
+        if(Solutions.length>0){
+            for(int i=0; i<Solutions.length; i++){
+                SolutionPicker.addItem("Solution " + i);
+            }
+        }
+    }
+    
+     /**
+     * Clears solutions picker combobox and erases solutions boards
+     */
+    private void resetSolutions(){
+        Component[] aux = SolutionsPanel.getComponents();
+        for (Component cmpnt : aux) {
+            if(cmpnt instanceof puzzle2dpentamino.Board) {
+                SolutionsPanel.remove(cmpnt);
+            }
+        }
+        SolutionPicker.removeAllItems();
+    }
+    
+    /**
+     * Shows the desired solution
+     * @param board 
+     */
+    private void showSolution(Board board){
+        Component[] aux = SolutionsPanel.getComponents();       //Gets all the componenets
+        for (Component cmpnt : aux) {                           //on the solution panel
+            if(cmpnt instanceof puzzle2dpentamino.Board){       //if there was another 
+                SolutionsPanel.remove(cmpnt);                   //solution being shown
+            }                                                   //its deleted
+        }
+
+        board.setBounds(0, 60, getWidth(), board.getHeight());      //places the solution
+        SolutionsPanel.add(board);                                  //adds it to the solution panel
+        repaint();
     }
     
     /**
@@ -77,6 +135,10 @@ public class GUI extends JFrame{
     private void initComponents() {
 
         Message = new javax.swing.JLabel();
+        TabbedPane = new javax.swing.JTabbedPane();
+        BoardPanel = new javax.swing.JPanel();
+        SolutionsPanel = new javax.swing.JPanel();
+        SolutionPicker = new javax.swing.JComboBox<>();
         MenuBar = new javax.swing.JMenuBar();
         ControlMenu = new javax.swing.JMenu();
         SolveOption = new javax.swing.JMenuItem();
@@ -99,19 +161,53 @@ public class GUI extends JFrame{
         Message.setFont(new java.awt.Font("Times New Roman", 0, 20)); // NOI18N
         Message.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
+        TabbedPane.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                TabbedPaneKeyReleased(evt);
+            }
+        });
+
+        BoardPanel.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                BoardPanelMouseReleased(evt);
+            }
+        });
+
+        javax.swing.GroupLayout BoardPanelLayout = new javax.swing.GroupLayout(BoardPanel);
+        BoardPanel.setLayout(BoardPanelLayout);
+        BoardPanelLayout.setHorizontalGroup(
+            BoardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        BoardPanelLayout.setVerticalGroup(
+            BoardPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 16, Short.MAX_VALUE)
+        );
+
+        TabbedPane.addTab("Board", BoardPanel);
+
+        javax.swing.GroupLayout SolutionsPanelLayout = new javax.swing.GroupLayout(SolutionsPanel);
+        SolutionsPanel.setLayout(SolutionsPanelLayout);
+        SolutionsPanelLayout.setHorizontalGroup(
+            SolutionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+        SolutionsPanelLayout.setVerticalGroup(
+            SolutionsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 16, Short.MAX_VALUE)
+        );
+
+        TabbedPane.addTab("Solutions", SolutionsPanel);
+
+        SolutionPicker.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                SolutionPickerItemStateChanged(evt);
+            }
+        });
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Puzzle2DPentominos");
         setSize(new java.awt.Dimension(1000, 1000));
-        addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                formMouseReleased(evt);
-            }
-        });
-        addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyReleased(java.awt.event.KeyEvent evt) {
-                formKeyReleased(evt);
-            }
-        });
 
         MenuBar.setSelectionModel(MenuBar.getSelectionModel());
 
@@ -286,42 +382,9 @@ public class GUI extends JFrame{
     private void ResetOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResetOptionMouseReleased
         evt.consume();                  //Frees memory 
         Board.setSolving(false);
+        resetSolutions();
         GenerateBoard(Rows, Columns);   //New board with the previous one rows and columns
     }//GEN-LAST:event_ResetOptionMouseReleased
-
-    private void formMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseReleased
-        if(!Board.isSolving()){
-            if ((evt.getY() > getInsets().top + MenuBar.getHeight())                //MouseEvent happened inside board
-                    && (evt.getY() < getInsets().top + MenuBar.getHeight() + Board.getHeight())){    
-
-                int x = evt.getX() - getInsets().right;                             //Fixed coordinates
-                int y = evt.getY() + getInsets().bottom - (2*getInsets().top);;     //Fixed coordinates
-                evt.consume();                      //Frees memory
-
-                Board.ChangeSquareStatus(x, y);     //Updates square's status and color
-            }
-            repaint();                          //Updates the GUI with the new square's color
-        }
-    }//GEN-LAST:event_formMouseReleased
-
-    private void formKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyReleased
-        int key = evt.getKeyCode();
-        if (evt.isControlDown() && (key == KeyEvent.VK_E)){         //Ctrl+E
-            evt.consume();      //Frees memory
-            System.exit(0);     //Exits the program
-        }
-        else if (evt.isControlDown() && (key == KeyEvent.VK_R)){    //Ctrl+R
-            evt.consume();                      //Frees memory
-            Board.setSolving(false);
-            GenerateBoard(Rows, Columns);       //New board with the previous one rows and columns
-        }
-        else if (evt.isControlDown() && (key == KeyEvent.VK_S)){
-            evt.consume();      //Frees memory
-            new Thread(() -> {
-                solve();        //Starts solving the puzzle
-            }).start();
-        }
-    }//GEN-LAST:event_formKeyReleased
 
     private void SolveOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SolveOptionMouseReleased
         evt.consume();
@@ -365,6 +428,53 @@ public class GUI extends JFrame{
         setSpeed(SPEEDS[6]);        //Sets solving speed
     }//GEN-LAST:event_Speed6MouseReleased
 
+    private void BoardPanelMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardPanelMouseReleased
+        if(evt.getY()<Board.getHeight() && evt.getX()< Board.getWidth()){       //Event happened inside board bounds
+            if(!Board.isSolving()){
+                int x = evt.getX() ;                 //Fixed coordinates
+                int y = evt.getY() ;                 //Fixed coordinates
+                evt.consume();                       //Frees memory
+                Board.ChangeSquareStatus(x, y);     //Updates square's status and color
+                repaint();                          //Updates the GUI with the new square's color
+            }
+        }
+    }//GEN-LAST:event_BoardPanelMouseReleased
+
+    private void TabbedPaneKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TabbedPaneKeyReleased
+        int key = evt.getKeyCode();
+        if (evt.isControlDown() && (key == KeyEvent.VK_E)){         //Ctrl+E
+            evt.consume();      //Frees memory
+            System.exit(0);     //Exits the program
+        }
+        else if (evt.isControlDown() && (key == KeyEvent.VK_R)){    //Ctrl+R
+            evt.consume();                      //Frees memory
+            Board.setSolving(false);
+            resetSolutions();
+            GenerateBoard(Rows, Columns);       //New board with the previous one rows and columns
+        }
+        else if (evt.isControlDown() && (key == KeyEvent.VK_S)){
+            evt.consume();      //Frees memory
+            new Thread(() -> {
+                solve();        //Starts solving the puzzle
+            }).start();
+        }
+    }//GEN-LAST:event_TabbedPaneKeyReleased
+
+    private void SolutionPickerItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_SolutionPickerItemStateChanged
+        if (evt.getStateChange() == ItemEvent.SELECTED){    //Solution selected
+            showSolution(Solutions[SolutionPicker.getSelectedIndex()]);
+        }
+        TabbedPane.requestFocus();      //returns focus to the keyevent listener component
+    }//GEN-LAST:event_SolutionPickerItemStateChanged
+
+    /**
+     * Method to change status message
+     * @param message 
+     */
+    public void setMessage(String message){
+        Message.setText(message);
+    }
+    
     /**
      * Sets the speed at which the board will be solved
      * @param miliseconds 
@@ -378,9 +488,13 @@ public class GUI extends JFrame{
         if(!Board.isSolving()){
             Message.setText("Solving...");
             Board.setSolving(true);
-            Board.Solve(this,Board, new boolean[12], 0, 12);
+            long start = System.currentTimeMillis()/1000;
+            Solutions = Board.Solve(this,Board, new boolean[12], 0, 12);
+            long finish = System.currentTimeMillis()/1000;
+            System.out.println("Solved in "+(finish-start)+" seconds");
             Board.setSolving(false);
-//            Message.setText("Solved");
+            updateSolutions();
+            Message.setText("Done."+Message.getText().replaceAll("Solving...", ""));
         }
     }
     
@@ -421,6 +535,7 @@ public class GUI extends JFrame{
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JPanel BoardPanel;
     private javax.swing.JMenuItem BoardSize0;
     private javax.swing.JMenuItem BoardSize1;
     private javax.swing.JMenuItem BoardSize2;
@@ -431,6 +546,8 @@ public class GUI extends JFrame{
     public static javax.swing.JLabel Message;
     private javax.swing.JMenuItem ResetOption;
     private javax.swing.JMenu SizeMenu;
+    private javax.swing.JComboBox<String> SolutionPicker;
+    private javax.swing.JPanel SolutionsPanel;
     private javax.swing.JMenuItem SolveOption;
     private javax.swing.JRadioButtonMenuItem Speed0;
     private javax.swing.JRadioButtonMenuItem Speed1;
@@ -440,6 +557,7 @@ public class GUI extends JFrame{
     private javax.swing.JRadioButtonMenuItem Speed5;
     private javax.swing.JRadioButtonMenuItem Speed6;
     private javax.swing.JMenu SpeedMenu;
+    private javax.swing.JTabbedPane TabbedPane;
     // End of variables declaration//GEN-END:variables
 
 }

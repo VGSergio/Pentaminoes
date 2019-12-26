@@ -111,7 +111,15 @@ public class Piece {
          new Color(150,255,150)
    };
     
-    public static final int PIECESQUARES = 5;
+    private final int PIECESQUARES = 5;
+    
+    /**
+     * Returns the amount of squares that form a piece
+     * @return 
+     */
+    public int getPieceSquares(){
+        return PIECESQUARES;
+    }
     
     /**
      * returns the color of a given piece id

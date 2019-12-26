@@ -5,12 +5,9 @@ package puzzle2dpentamino;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.*;
-import static puzzle2dpentamino.Square.SIDE;
-import static puzzle2dpentamino.Piece.PIECESQUARES;
 
 /**
  * @authors Sergio Vega     (43480752B)
@@ -21,6 +18,8 @@ public class Board extends JPanel{
     private final int ROWS;
     private final int COLUMNS;
     private final Square[] SQUARES;
+    private final int SIDE;
+    private final int PIECESQUARES;
     
     private int Speed;
     private int best = 0;
@@ -36,6 +35,9 @@ public class Board extends JPanel{
      * @param columns 
      */
     public Board(int rows, int columns){
+        PIECESQUARES = new Piece().getPieceSquares();
+        SIDE = new Square(0,0).getSide();
+        
         ROWS = rows;
         COLUMNS = columns;
         SQUARES = new Square[rows*columns];
@@ -163,9 +165,9 @@ public class Board extends JPanel{
         return solved;
     }
     
-    public void Solve(JFrame game, Board board, boolean[] pieces, int usedpieces, int maxpieces){
+    public Board[] Solve(GUI game, Board board, boolean[] pieces, int usedpieces, int maxpieces){
         if(usedpieces==maxpieces){
-            Solutions.add(board);
+            Solutions.add(board.clone());
             sol++;
         }
         
@@ -183,14 +185,14 @@ public class Board extends JPanel{
                                 Color color = new Piece().getColor(piece);
                                 AddPiece(positions, color);
                                 iterations++;
-                                GUI.Message.setText("Solving... "+iterations+" iterations done. "+sol+" Solution(s) found");
+                                game.setMessage(getMessage());
                                 
                                 try {
-                                        Thread.sleep(Speed);
-                                        game.repaint();
-                                    } catch (InterruptedException ex) {
-                                        Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
-                                    }
+                                    Thread.sleep(Speed);
+                                    game.repaint();
+                                } catch (InterruptedException ex) {
+                                    Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+                                }
                                 if(!ObviousBlockExists(i, positions)){
                                     pieces[piece] = true;
                                     usedpieces++;
@@ -213,6 +215,11 @@ public class Board extends JPanel{
                 }
             }
         }
+        Board[] solutions = new Board[Solutions.size()];
+        for(int i=0; i<Solutions.size(); i++){
+            solutions[i] = Solutions.get(i);
+        }
+        return solutions;
     }
     
     /**
@@ -510,4 +517,22 @@ public class Board extends JPanel{
         return visited;
     }
     
+    private String getMessage(){
+        String s = "";
+        switch(iterations%4){
+            case 0:
+                s = "Solving    "+iterations+" iterations realised. "+sol+" Solution(s) found";
+                break;
+            case 1:
+                s = "Solving.   "+iterations+" iterations realised. "+sol+" Solution(s) found";
+                break;
+            case 2:
+                s = "Solving..  "+iterations+" iterations realised. "+sol+" Solution(s) found";
+                break;
+            case 3: 
+                s = "Solving... "+iterations+" iterations realised. "+sol+" Solution(s) found";
+                break;
+        }
+        return s;
+    }
 }

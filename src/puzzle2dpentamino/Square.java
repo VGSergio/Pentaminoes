@@ -12,7 +12,7 @@ import java.awt.*;
  */
 public class Square {
     
-    public static final int SIDE = 60;
+    private final int SIDE = 60;
     private Color COLOR;
     private final int Row, Column;
     private boolean Blocked;
