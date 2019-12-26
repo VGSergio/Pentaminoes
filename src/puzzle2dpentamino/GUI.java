@@ -6,6 +6,9 @@ package puzzle2dpentamino;
 import java.awt.Component;
 import java.awt.event.ItemEvent;
 import java.awt.event.KeyEvent;
+import static java.lang.Thread.sleep;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 
 /**
@@ -26,8 +29,10 @@ public class GUI extends JFrame{
     public GUI() {
         initComponents();
         initSpeedButtons();
+        initMessages();
+        SolutionsPanel.add(SolutionPicker);
+        
         add(TabbedPane);                //Adds TabbedPane to the frame
-        BoardPanel.add(Message);        //Adds status text
         GenerateBoard(Rows, Columns);   //Creates initial board
     }
     
@@ -46,28 +51,24 @@ public class GUI extends JFrame{
         Board.setSpeed(Speed);                  //Sets solving speed
         
         //Message configuration
-        String s = "Block Squares or use Solve(Ctrl+S) to start";           //Updates the message        
-        Message.setText(s);                                                 //Updates the status text
-        Message.setBounds(0, Board.getHeight(), Board.getWidth(), 60);      //Sets it's location 
-        BoardPanel.add(Message);        //Adds status text
+        setUpMessages();
         
         //Solution picker configuration
         SolutionPicker.setSize(100, 30);            //SolutionPicker size
-        SolutionPicker.setBounds((Board.getWidth()- SolutionPicker.getWidth())/2, 10, SolutionPicker.getWidth(), SolutionPicker.getHeight());   //SolutionPicker location
-        SolutionsPanel.add(SolutionPicker);
+        SolutionPicker.setLocation((Board.getWidth()- SolutionPicker.getWidth())/2, 30);   //SolutionPicker location
         
         //BoardPanel and SolutionPanel configuration
-        int width = getInsets().right + Board.getWidth();           //New panel width
-        int height = Board.getHeight() + Message.getHeight();       //New panel height
+        int width = Board.getWidth();           //New panel width
+        int height = Board.getHeight() + Message1.getHeight()*3;    //New panel height
         BoardPanel.setSize(width, height);                          //BoardPanel new size
-        SolutionsPanel.setSize(width, height);                       //SolutionPanel new size
+        SolutionsPanel.setSize(width, height);                      //SolutionPanel new size
         
         //TabbedPane configuration
         height += TabbedPane.getBoundsAt(0).height;     //TabbedPane new height
         TabbedPane.setSize(width, height);              //TabbedPane new size
         
         //Frame configuration
-        height += getInsets().top + MenuBar.getBounds().height;    //Frame new height
+        height += getInsets().top + MenuBar.getBounds().height + getInsets().bottom*2;    //Frame new height
         setSize(width, height);                 //Sets frame's new size
         setLocationRelativeTo(null);            //Centers frame 
         setResizable(false);                    //Frame NOT resizable by the user
@@ -81,8 +82,29 @@ public class GUI extends JFrame{
         for(int i=0; i<SpeedMenu.getMenuComponentCount(); i++){     //to the same group so only 
             g.add(SpeedMenu.getItem(i));                            //one can be selected 
         }
-        Speed3.setSelected(true);       //Default speed
+        Speed0.setSelected(true);       //Default speed
     }
+    
+    private void setUpMessages(){
+        String s2 = "Block Squares or use Solve(Ctrl+S) to start";              //Updates the message    
+        Message1.setText("");                                                   //Updates the status text
+        Message2.setText(s2);                                                   //Updates the status text
+        Message3.setText("");                                                   //Updates the status text
+        
+        Message1.setBounds(0, Board.getHeight()                       , Board.getWidth(), Message1.getHeight());      //Sets it's location 
+        Message2.setBounds(0, Board.getHeight()+Message1.getHeight()  , Board.getWidth(), Message2.getHeight());      //Sets it's location
+        Message3.setBounds(0, Board.getHeight()+Message1.getHeight()*2, Board.getWidth(), Message3.getHeight());      //Sets it's location
+    }
+    
+    private void initMessages(){
+        JLabel[] array = {Message1, Message2, Message3};
+        for (JLabel array1 : array) {
+            array1.setSize(100, 30);
+            array1.setAlignmentX(CENTER_ALIGNMENT);
+            array1.setAlignmentY(CENTER_ALIGNMENT);
+            BoardPanel.add(array1);
+        }
+     }
     
     /**
      * Updates solutions picker combobox with the solutions found
@@ -120,7 +142,7 @@ public class GUI extends JFrame{
             }                                                   //its deleted
         }
 
-        board.setBounds(0, 60, getWidth(), board.getHeight());      //places the solution
+        board.setBounds(0, Message1.getHeight()*3, getWidth(), board.getHeight());      //places the solution
         SolutionsPanel.add(board);                                  //adds it to the solution panel
         repaint();
     }
@@ -134,11 +156,13 @@ public class GUI extends JFrame{
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        Message = new javax.swing.JLabel();
         TabbedPane = new javax.swing.JTabbedPane();
         BoardPanel = new javax.swing.JPanel();
         SolutionsPanel = new javax.swing.JPanel();
         SolutionPicker = new javax.swing.JComboBox<>();
+        Message1 = new javax.swing.JLabel();
+        Message2 = new javax.swing.JLabel();
+        Message3 = new javax.swing.JLabel();
         MenuBar = new javax.swing.JMenuBar();
         ControlMenu = new javax.swing.JMenu();
         SolveOption = new javax.swing.JMenuItem();
@@ -157,9 +181,6 @@ public class GUI extends JFrame{
         BoardSize1 = new javax.swing.JMenuItem();
         BoardSize2 = new javax.swing.JMenuItem();
         BoardSize3 = new javax.swing.JMenuItem();
-
-        Message.setFont(new java.awt.Font("Times New Roman", 0, 20)); // NOI18N
-        Message.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         TabbedPane.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -204,6 +225,15 @@ public class GUI extends JFrame{
                 SolutionPickerItemStateChanged(evt);
             }
         });
+
+        Message1.setFont(new java.awt.Font("Times New Roman", 0, 20)); // NOI18N
+        Message1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        Message2.setFont(new java.awt.Font("Times New Roman", 0, 20)); // NOI18N
+        Message2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        Message3.setFont(new java.awt.Font("Times New Roman", 0, 20)); // NOI18N
+        Message3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Puzzle2DPentominos");
@@ -356,21 +386,25 @@ public class GUI extends JFrame{
 
     private void BoardSize0MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize0MouseReleased
         evt.consume();          //Frees memory
+        resetSolutions();
         GenerateBoard(6,10);    //New (6x10) board
     }//GEN-LAST:event_BoardSize0MouseReleased
 
     private void BoardSize1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize1MouseReleased
         evt.consume();          //Frees memory 
+        resetSolutions();
         GenerateBoard(5,12);    //New (5x12) board
     }//GEN-LAST:event_BoardSize1MouseReleased
 
     private void BoardSize2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize2MouseReleased
         evt.consume();          //Frees memory 
+        resetSolutions();
         GenerateBoard(4,15);    //New (4x15) board
     }//GEN-LAST:event_BoardSize2MouseReleased
 
     private void BoardSize3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize3MouseReleased
         evt.consume();          //Frees memory 
+        resetSolutions();
         GenerateBoard(3,20);    //New (3x20) board
     }//GEN-LAST:event_BoardSize3MouseReleased
 
@@ -382,6 +416,11 @@ public class GUI extends JFrame{
     private void ResetOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResetOptionMouseReleased
         evt.consume();                  //Frees memory 
         Board.setSolving(false);
+        try {
+            sleep(1);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
         resetSolutions();
         GenerateBoard(Rows, Columns);   //New board with the previous one rows and columns
     }//GEN-LAST:event_ResetOptionMouseReleased
@@ -449,6 +488,11 @@ public class GUI extends JFrame{
         else if (evt.isControlDown() && (key == KeyEvent.VK_R)){    //Ctrl+R
             evt.consume();                      //Frees memory
             Board.setSolving(false);
+            try {
+                sleep(1);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
             resetSolutions();
             GenerateBoard(Rows, Columns);       //New board with the previous one rows and columns
         }
@@ -469,10 +513,14 @@ public class GUI extends JFrame{
 
     /**
      * Method to change status message
-     * @param message 
+     * @param message1
+     * @param message2
+     * @param message3 
      */
-    public void setMessage(String message){
-        Message.setText(message);
+    public void setMessage(String message1, String message2, String message3){
+        Message1.setText(message1);
+        Message2.setText(message2);
+        Message3.setText(message3);
     }
     
     /**
@@ -486,15 +534,14 @@ public class GUI extends JFrame{
     
     private void solve(){
         if(!Board.isSolving()){
-            Message.setText("Solving...");
             Board.setSolving(true);
             long start = System.currentTimeMillis()/1000;
-            Solutions = Board.Solve(this,Board, new boolean[12], 0, 12);
+            Solutions = Board.Solve(this, Board, new boolean[12], 0, 12);
+            
             long finish = System.currentTimeMillis()/1000;
             System.out.println("Solved in "+(finish-start)+" seconds");
-            Board.setSolving(false);
+            Message1.setText("Done.");
             updateSolutions();
-            Message.setText("Done."+Message.getText().replaceAll("Solving...", ""));
         }
     }
     
@@ -543,7 +590,9 @@ public class GUI extends JFrame{
     private javax.swing.JMenu ControlMenu;
     private javax.swing.JMenuItem ExitOption;
     private javax.swing.JMenuBar MenuBar;
-    public static javax.swing.JLabel Message;
+    public static javax.swing.JLabel Message1;
+    public static javax.swing.JLabel Message2;
+    public static javax.swing.JLabel Message3;
     private javax.swing.JMenuItem ResetOption;
     private javax.swing.JMenu SizeMenu;
     private javax.swing.JComboBox<String> SolutionPicker;

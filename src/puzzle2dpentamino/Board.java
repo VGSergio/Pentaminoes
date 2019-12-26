@@ -166,48 +166,51 @@ public class Board extends JPanel{
     }
     
     public Board[] Solve(GUI game, Board board, boolean[] pieces, int usedpieces, int maxpieces){
-        if(usedpieces==maxpieces){
-            Solutions.add(board.clone());
-            sol++;
-        }
-        
-        int aux=getSquaresAmount();
-        
-        for(int i=0; i<getSquaresAmount(); i++){
-            if(i<aux){
-                for(int piece=0; piece<pieces.length; piece++){
-                    if(!pieces[piece]){
-                        int[][] perspectives = new Piece().getPerspectives(piece);
-                        for(int pers=0; pers<perspectives.length; pers++){
-                            int[] perspective = getPerspective(perspectives, pers);
-                            if(pieceFits(i, perspective)){
-                                int[] positions = getSquaresPositions(i, perspective);
-                                Color color = new Piece().getColor(piece);
-                                AddPiece(positions, color);
-                                iterations++;
-                                game.setMessage(getMessage());
-                                
-                                try {
-                                    Thread.sleep(Speed);
-                                    game.repaint();
-                                } catch (InterruptedException ex) {
-                                    Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
-                                }
-                                if(!ObviousBlockExists(i, positions)){
-                                    pieces[piece] = true;
-                                    usedpieces++;
-                                    aux = i;
-                                    Solve(game, board, pieces, usedpieces, maxpieces);
+        if(isSolving()){
+            if(usedpieces==maxpieces){
+                Solutions.add(board.clone());
+                sol++;
+            }
 
-                                    usedpieces--;
-                                    pieces[piece] = false;
-                                }
-                                removePiece(positions);
-                                try {
-                                    Thread.sleep(Speed);
-                                    game.repaint();
-                                } catch (InterruptedException ex) {
-                                    Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+            int aux=getSquaresAmount();
+
+            for(int i=0; i<getSquaresAmount(); i++){
+                if(i<aux){
+                    for(int piece=0; piece<pieces.length; piece++){
+                        if(!pieces[piece]){
+                            int[][] perspectives = new Piece().getPerspectives(piece);
+                            for(int pers=0; pers<perspectives.length; pers++){
+                                int[] perspective = getPerspective(perspectives, pers);
+                                if(pieceFits(i, perspective)){
+                                    int[] positions = getSquaresPositions(i, perspective);
+                                    Color color = new Piece().getColor(piece);
+                                    AddPiece(positions, color);
+                                    iterations++;
+                                    String[] message = getMessage();
+                                    game.setMessage(message[0], message[1], message[2]);
+
+                                    try {
+                                        Thread.sleep(Speed);
+                                        game.repaint();
+                                    } catch (InterruptedException ex) {
+                                        Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
+                                    if(!ObviousBlockExists(i, positions)){
+                                        pieces[piece] = true;
+                                        usedpieces++;
+                                        aux = i;
+                                        Solve(game, board, pieces, usedpieces, maxpieces);
+
+                                        usedpieces--;
+                                        pieces[piece] = false;
+                                    }
+                                    removePiece(positions);
+                                    try {
+                                        Thread.sleep(Speed);
+                                        game.repaint();
+                                    } catch (InterruptedException ex) {
+                                        Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+                                    }
                                 }
                             }
                         }
@@ -517,22 +520,26 @@ public class Board extends JPanel{
         return visited;
     }
     
-    private String getMessage(){
-        String s = "";
-        switch(iterations%4){
+    private String[] getMessage(){
+        String s1 = "";
+        String s2 = iterations+" iterations realised.";
+        String s3 = sol+" Solution(s) found.";
+        
+        switch(iterations/50000%4){
             case 0:
-                s = "Solving    "+iterations+" iterations realised. "+sol+" Solution(s) found";
+                s1 = "Solving   ";
                 break;
             case 1:
-                s = "Solving.   "+iterations+" iterations realised. "+sol+" Solution(s) found";
+                s1 = "Solving.  ";
                 break;
             case 2:
-                s = "Solving..  "+iterations+" iterations realised. "+sol+" Solution(s) found";
+                s1 = "Solving.. ";
                 break;
             case 3: 
-                s = "Solving... "+iterations+" iterations realised. "+sol+" Solution(s) found";
+                s1 = "Solving...";
                 break;
         }
-        return s;
+        String[] message = {s1,s2,s3};
+        return message;
     }
 }
