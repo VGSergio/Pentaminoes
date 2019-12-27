@@ -178,7 +178,7 @@ public class Board extends JPanel{
             int aux=getSquaresAmount();
 
             for(int i=pos; i<getSquaresAmount(); i++){
-                if(i<aux){
+                if(!hasLeftEmptySquares(i)){
                     for(int piece=0; piece<pieces.length; piece++){
                         if(!pieces[piece]){
                             int[][] perspectives = new Piece().getPerspectives(piece);
@@ -198,15 +198,17 @@ public class Board extends JPanel{
                                     } catch (InterruptedException ex) {
                                         Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
                                     }
+                                    
                                     if(!ObviousBlockExists2()){
                                         aux = i;
                                         pieces[piece] = true;
                                         usedpieces++;
                                         Solve(game, board, i+1, pieces, usedpieces, maxpieces);
-
+                                        
                                         usedpieces--;
                                         pieces[piece] = false;
                                     }
+                                    
                                     removePiece(positions);
                                     try {
                                         Thread.sleep(Speed);
@@ -456,10 +458,12 @@ public class Board extends JPanel{
             } else if(SQUARES[position2].isBlocked()){      //The square you want to use 
                 fits = false;                               //is already used by another piece
                 
-            }else {
+            }else if(position2%COLUMNS<0 || position2%COLUMNS>=COLUMNS || position2/COLUMNS<0 || position2/COLUMNS>=ROWS){
+                fits = false;
+                
+            } else {
                 fits = (position%COLUMNS) <= (position2%COLUMNS);       //The piece doesn't exceed
             }                                                           //the right end 
-            
             i++; 
         }    
         return fits;
@@ -558,5 +562,14 @@ public class Board extends JPanel{
         }
         String[] message = {s1,s2,s3};
         return message;
+    }
+    
+    private boolean hasLeftEmptySquares(int position){
+        for(int i=0; i<position; i++){
+            if(!SQUARES[i].isBlocked()){
+                return true;
+            }
+        }
+        return false;
     }
 }

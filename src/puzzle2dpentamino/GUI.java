@@ -54,7 +54,7 @@ public class GUI extends JFrame{
         setUpMessages();
         
         //Solution picker configuration
-        SolutionPicker.setSize(100, 30);            //SolutionPicker size
+        SolutionPicker.setSize(150, 30);            //SolutionPicker size
         SolutionPicker.setLocation((Board.getWidth()- SolutionPicker.getWidth())/2, 30);   //SolutionPicker location
         
         //BoardPanel and SolutionPanel configuration
