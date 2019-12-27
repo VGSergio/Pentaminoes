@@ -542,7 +542,7 @@ public class GUI extends JFrame{
         if(!Board.isSolving()){
             Board.setSolving(true);
             long start = System.currentTimeMillis()/1000;
-            Solutions = Board.Solve(this, Board, new boolean[12], 0, 12);
+            Solutions = Board.Solve(this, Board, 0, new boolean[12], 0, 12);
             
             long finish = System.currentTimeMillis()/1000;
             System.out.println("Solved in "+(finish-start)+" seconds");

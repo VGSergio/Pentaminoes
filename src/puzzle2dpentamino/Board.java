@@ -168,7 +168,7 @@ public class Board extends JPanel{
         return solved;
     }
     
-    public Board[] Solve(GUI game, Board board, boolean[] pieces, int usedpieces, int maxpieces){
+    public Board[] Solve(GUI game, Board board, int pos, boolean[] pieces, int usedpieces, int maxpieces){
         if(isSolving()){
             if(usedpieces==maxpieces){
                 Solutions.add(board.clone());
@@ -177,7 +177,7 @@ public class Board extends JPanel{
 
             int aux=getSquaresAmount();
 
-            for(int i=0; i<getSquaresAmount(); i++){
+            for(int i=pos; i<getSquaresAmount(); i++){
                 if(i<aux){
                     for(int piece=0; piece<pieces.length; piece++){
                         if(!pieces[piece]){
@@ -202,7 +202,7 @@ public class Board extends JPanel{
                                         aux = i;
                                         pieces[piece] = true;
                                         usedpieces++;
-                                        Solve(game, board, pieces, usedpieces, maxpieces);
+                                        Solve(game, board, i+1, pieces, usedpieces, maxpieces);
 
                                         usedpieces--;
                                         pieces[piece] = false;
