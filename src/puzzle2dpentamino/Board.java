@@ -25,9 +25,11 @@ public class Board extends JPanel{
     private int best = 0;
     private boolean Solving;
     private ArrayList<Board> Solutions = new ArrayList();
-    private ArrayList<String> Visited = new ArrayList();
     private int iterations =0;
     private int sol=0;
+    
+    private int blockCheckCt;
+    private final int[] blockCheck;
     
     /**
      * Board constructor
@@ -48,6 +50,7 @@ public class Board extends JPanel{
             }
         }
         Solving = false;
+        blockCheck = new int[SQUARES.length];
     }
         
     /**
@@ -195,10 +198,10 @@ public class Board extends JPanel{
                                     } catch (InterruptedException ex) {
                                         Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
                                     }
-                                    if(!ObviousBlockExists(i, positions)){
+                                    if(!ObviousBlockExists2()){
+                                        aux = i;
                                         pieces[piece] = true;
                                         usedpieces++;
-                                        aux = i;
                                         Solve(game, board, pieces, usedpieces, maxpieces);
 
                                         usedpieces--;
@@ -224,6 +227,42 @@ public class Board extends JPanel{
         }
         return solutions;
     }
+    
+    private boolean ObviousBlockExists2(){
+        blockCheckCt++;
+        int forcedEmptyCt = 0;
+        for(int r=0; r<ROWS; r++)
+            for(int c=0; c<COLUMNS; c++){
+                int blockSize = countEmptyBlock(r,c);
+                if (blockSize % 5 == 0)
+                  continue;
+                forcedEmptyCt += blockSize % 5;
+                if (forcedEmptyCt < 5)
+                  return true;
+            }
+        return false;
+    }
+    
+    private int countEmptyBlock(int r, int c) {  // Find the size of one empty region on the board; recursive routine called by obviousBlockExists.
+        if(blockCheck[r*COLUMNS+c]==blockCheckCt || SQUARES[r*COLUMNS+c].isBlocked()){
+            return 0;
+        }
+        int c1 = c, c2 = c;
+        while (c1 > 0 && !SQUARES[(r*COLUMNS)+(c1-1)].isBlocked())
+           c1--;
+        while (c2 < COLUMNS-1 && !SQUARES[(r*COLUMNS)+(c2+1)].isBlocked())
+           c2++;
+        for (int i = c1; i <= c2; i++)
+            blockCheck[r*COLUMNS+i] = blockCheckCt;
+        int ct = c2 - c1 + 1;
+        if (r > 1)
+           for (int i = c1; i <= c2; i++)
+              ct += countEmptyBlock(r-1,i);
+        if (r < ROWS-1)
+           for (int i = c1; i <= c2; i++)
+              ct += countEmptyBlock(r+1,i);
+        return ct;
+      }
     
     /**
      * ????????????
@@ -417,7 +456,7 @@ public class Board extends JPanel{
             } else if(SQUARES[position2].isBlocked()){      //The square you want to use 
                 fits = false;                               //is already used by another piece
                 
-            } else {
+            }else {
                 fits = (position%COLUMNS) <= (position2%COLUMNS);       //The piece doesn't exceed
             }                                                           //the right end 
             
@@ -497,29 +536,7 @@ public class Board extends JPanel{
         }
         return clone;
     }
-   
-    /**
-     * String representation of a board, if a board has already been tried
-     * dismiss it
-     * @param board
-     * @return 
-     */
-    private boolean checkAndUpdateVisitedState(Board board){
-        String aux = board.toString();
-        boolean visited = false;
-        if(Visited.size()>0){
-            for(int i=0; i<Visited.size(); i++){
-                if(Visited.get(i).equals(aux)){
-                    visited=true;
-                }
-            }
-        }
-        if(!visited){
-            Visited.add(aux);
-        }
-        return visited;
-    }
-    
+       
     private String[] getMessage(){
         String s1 = "";
         String s2 = iterations+" iterations realised.";

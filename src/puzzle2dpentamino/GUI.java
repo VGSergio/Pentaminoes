@@ -85,6 +85,9 @@ public class GUI extends JFrame{
         Speed0.setSelected(true);       //Default speed
     }
     
+    /**
+     * Default status message setter
+     */
     private void setUpMessages(){
         String s2 = "Block Squares or use Solve(Ctrl+S) to start";              //Updates the message    
         Message1.setText("");                                                   //Updates the status text
@@ -96,6 +99,9 @@ public class GUI extends JFrame{
         Message3.setBounds(0, Board.getHeight()+Message1.getHeight()*2, Board.getWidth(), Message3.getHeight());      //Sets it's location
     }
     
+    /**
+     * Initializes status messages
+     */
     private void initMessages(){
         JLabel[] array = {Message1, Message2, Message3};
         for (JLabel array1 : array) {
@@ -117,7 +123,7 @@ public class GUI extends JFrame{
         }
     }
     
-     /**
+    /**
      * Clears solutions picker combobox and erases solutions boards
      */
     private void resetSolutions(){
