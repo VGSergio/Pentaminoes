@@ -64,7 +64,6 @@ public class Square {
         return COLOR;
     }
     
-    
     /**
      * Square's blocked status getter
      * @return boolean

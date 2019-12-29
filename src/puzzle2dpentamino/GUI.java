@@ -3,12 +3,10 @@
  */
 package puzzle2dpentamino;
 
-import java.awt.Component;
-import java.awt.event.ItemEvent;
-import java.awt.event.KeyEvent;
+import java.awt.*;
+import java.awt.event.*;
 import static java.lang.Thread.sleep;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.logging.*;
 import javax.swing.*;
 
 /**
@@ -19,8 +17,8 @@ public class GUI extends JFrame{
     
     private Board Board;
     private Board[] Solutions;
-    private final int[] SPEEDS = {0, 30, 70, 120, 300, 600, 3000};
-    private int Rows = 3, Columns = 20;
+    private final int[] SPEEDS = {0, 1, 30, 70, 120, 300, 600};
+    private int Rows = 6, Columns = 10;
     private int Speed = SPEEDS[0];
     
     /**
@@ -68,6 +66,7 @@ public class GUI extends JFrame{
         TabbedPane.setSize(width, height);              //TabbedPane new size
         
         //Frame configuration
+        width += getInsets().right;
         height += getInsets().top + MenuBar.getBounds().height + getInsets().bottom*2;    //Frame new height
         setSize(width, height);                 //Sets frame's new size
         setLocationRelativeTo(null);            //Centers frame 
@@ -187,6 +186,8 @@ public class GUI extends JFrame{
         BoardSize1 = new javax.swing.JMenuItem();
         BoardSize2 = new javax.swing.JMenuItem();
         BoardSize3 = new javax.swing.JMenuItem();
+        jMenu1 = new javax.swing.JMenu();
+        StatusMessageCheckBox = new javax.swing.JCheckBoxMenuItem();
 
         TabbedPane.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -374,6 +375,18 @@ public class GUI extends JFrame{
 
         MenuBar.add(SizeMenu);
 
+        jMenu1.setText("ImprovePerformance");
+
+        StatusMessageCheckBox.setText("Disable status message");
+        StatusMessageCheckBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                StatusMessageCheckBoxMouseReleased(evt);
+            }
+        });
+        jMenu1.add(StatusMessageCheckBox);
+
+        MenuBar.add(jMenu1);
+
         setJMenuBar(MenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -392,26 +405,34 @@ public class GUI extends JFrame{
 
     private void BoardSize0MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize0MouseReleased
         evt.consume();          //Frees memory
+        Board.setSolving(false);
         resetSolutions();
         GenerateBoard(6,10);    //New (6x10) board
+        Board.setStatusMessage(!StatusMessageCheckBox.getState());
     }//GEN-LAST:event_BoardSize0MouseReleased
 
     private void BoardSize1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize1MouseReleased
         evt.consume();          //Frees memory 
+        Board.setSolving(false);
         resetSolutions();
         GenerateBoard(5,12);    //New (5x12) board
+        Board.setStatusMessage(!StatusMessageCheckBox.getState());
     }//GEN-LAST:event_BoardSize1MouseReleased
 
     private void BoardSize2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize2MouseReleased
         evt.consume();          //Frees memory 
+        Board.setSolving(false);
         resetSolutions();
         GenerateBoard(4,15);    //New (4x15) board
+        Board.setStatusMessage(!StatusMessageCheckBox.getState());
     }//GEN-LAST:event_BoardSize2MouseReleased
 
     private void BoardSize3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize3MouseReleased
         evt.consume();          //Frees memory 
+        Board.setSolving(false);
         resetSolutions();
         GenerateBoard(3,20);    //New (3x20) board
+        Board.setStatusMessage(!StatusMessageCheckBox.getState());
     }//GEN-LAST:event_BoardSize3MouseReleased
 
     private void ExitOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExitOptionMouseReleased
@@ -429,6 +450,7 @@ public class GUI extends JFrame{
         }
         resetSolutions();
         GenerateBoard(Rows, Columns);   //New board with the previous one rows and columns
+        Board.setStatusMessage(!StatusMessageCheckBox.getState());
     }//GEN-LAST:event_ResetOptionMouseReleased
 
     private void SolveOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SolveOptionMouseReleased
@@ -501,6 +523,7 @@ public class GUI extends JFrame{
             }
             resetSolutions();
             GenerateBoard(Rows, Columns);       //New board with the previous one rows and columns
+            Board.setStatusMessage(!StatusMessageCheckBox.getState());
         }
         else if (evt.isControlDown() && (key == KeyEvent.VK_S)){
             evt.consume();      //Frees memory
@@ -516,6 +539,10 @@ public class GUI extends JFrame{
         }
         TabbedPane.requestFocus();      //returns focus to the keyevent listener component
     }//GEN-LAST:event_SolutionPickerItemStateChanged
+
+    private void StatusMessageCheckBoxMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_StatusMessageCheckBoxMouseReleased
+        Board.setStatusMessage(!StatusMessageCheckBox.getState());
+    }//GEN-LAST:event_StatusMessageCheckBoxMouseReleased
 
     /**
      * Method to change status message
@@ -538,11 +565,18 @@ public class GUI extends JFrame{
         Board.setSpeed(miliseconds);
     }
     
+    /**
+     * 
+     */
     private void solve(){
         if(!Board.isSolving()){
             Board.setSolving(true);
             long start = System.currentTimeMillis()/1000;
-            Solutions = Board.Solve(this, Board, 0, new boolean[12], 0, 12);
+            Message2.setText("Solving");
+            if(Board.hasBlockedSquares())
+                Solutions = Board.Solve(this, Board, 0, new boolean[12]);
+            else
+                Solutions = Board.Solve(this, Board, 0, new boolean[12], 0, 12);
             
             long finish = System.currentTimeMillis()/1000;
             System.out.println("Solved in "+(finish-start)+" seconds");
@@ -612,7 +646,9 @@ public class GUI extends JFrame{
     private javax.swing.JRadioButtonMenuItem Speed5;
     private javax.swing.JRadioButtonMenuItem Speed6;
     private javax.swing.JMenu SpeedMenu;
+    private javax.swing.JCheckBoxMenuItem StatusMessageCheckBox;
     private javax.swing.JTabbedPane TabbedPane;
+    private javax.swing.JMenu jMenu1;
     // End of variables declaration//GEN-END:variables
 
 }

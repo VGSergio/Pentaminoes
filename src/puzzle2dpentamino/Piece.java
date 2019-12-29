@@ -16,7 +16,7 @@ public class Piece {
      * perspectives.
      * First value is the piece id. The rest of values are row,column by pairs.
      */
-    private static final int[] PIECE_DATA = {  // All the pieces and their different perspectives
+    private static final int[] PIECE_DATA = {   // All the pieces and their different perspectives
           0, 0,1, 0,2, 1,0, 1,1, 2,1,           //F 0º
           0, 0,1, 1,0, 1,1, 1,2, 2,2,           //F 90º
           0, 0,1, 1,1, 1,2, 2,0, 2,1,           //F 180º
@@ -147,14 +147,15 @@ public class Piece {
             if(PIECE_DATA[i]==piece){
                 cont++;
             }
-            i += 11;
+            i += 2*PIECESQUARES+1;
         }
         
-        int g = i/11-cont;
-        int[] p = new int[cont*numcoords]; //2 Coordinates, 5 squares, perspective array
+        int g = i/((2*PIECESQUARES)+1)-cont;    //index first perspective
+        int[] p = new int[cont*numcoords];      //perspectives found*10 CoordinatesXperspective, perspective array
+        
         for(i=0; i<cont; i++){
             for(int j=1; j<=numcoords; j++){
-                p[i*10+(j-1)] = PIECE_DATA[11*(g+i)+j]; 
+                p[i*(2*PIECESQUARES)+(j-1)] = PIECE_DATA[((2*PIECESQUARES)+1)*(g+i)+j]; 
             }
         }
         
