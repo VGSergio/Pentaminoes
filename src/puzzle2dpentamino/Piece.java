@@ -15,6 +15,7 @@ public class Piece {
      * Array with the necessary data about the different pieces and their
      * perspectives.
      * First value is the piece id. The rest of values are row,column relative values by pairs.
+     * Static for a better performance, values are always the same
      */
     private static final int[] PIECE_DATA = {   // All the pieces and their different perspectives
           0, 0,1, 0,2, 1,0, 1,1, 2,1,           //F 0º
@@ -95,6 +96,7 @@ public class Piece {
     
     /**
      * Pieces colors, index matches piece id.
+     * Static for a better performance, values are always the same
      */
     private static final Color PIECE_COLOR[] = {  
          new Color(200,0,0),

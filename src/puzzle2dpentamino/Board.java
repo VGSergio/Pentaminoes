@@ -252,9 +252,7 @@ public class Board extends JPanel{
         }
         if(pos==0){             //Once BackTracking is done
             Board[] solutions = new Board[SOLUTIONS.size()];            //Solutions array
-            for(int i=0; i<SOLUTIONS.size(); i++){                      //ArrayList -> Array
-                solutions[i] = SOLUTIONS.get(i);
-            }
+            SOLUTIONS.toArray(solutions);
             System.out.println(Iterations+" iterations done.");         //Debugging data / useful info
             System.out.println(Solutions+" solutions found(s).");       //Debugging data / useful info
             return solutions;
@@ -328,10 +326,8 @@ public class Board extends JPanel{
             }
         }
         if(pos==0){             //Once backtracking is done
-            Board[] solutions = new Board[SOLUTIONS.size()];        //Solutions array
-            for(int i=0; i<SOLUTIONS.size(); i++){                  //ArrayList -> Array
-                solutions[i] = SOLUTIONS.get(i);
-            }
+            Board[] solutions = new Board[SOLUTIONS.size()];            //Solutions array
+            SOLUTIONS.toArray(solutions);
             System.out.println(Iterations+" iterations done.");                     //Debugging data / useful info
             System.out.println(Solutions+" solutions found(s).");                   //Debugging data / useful info
             System.out.println("Best solution found: "+best+" squares occupied");   //Debugging data / useful info
