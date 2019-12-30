@@ -16,7 +16,7 @@ public class Piece {
      * perspectives.
      * First value is the piece id. The rest of values are row,column relative values by pairs.
      */
-    private static final int[] PIECE_DATA = {   // All the pieces and their different perspectives
+    private final int[] PIECE_DATA = {   // All the pieces and their different perspectives
           0, 0,1, 0,2, 1,0, 1,1, 2,1,           //F 0º
           0, 0,1, 1,0, 1,1, 1,2, 2,2,           //F 90º
           0, 0,1, 1,1, 1,2, 2,0, 2,1,           //F 180º
@@ -96,7 +96,7 @@ public class Piece {
     /**
      * Pieces colors, index matches piece id.
      */
-    private static final Color PIECE_COLOR[] = {  
+    private final Color PIECE_COLOR[] = {  
          new Color(200,0,0),
          new Color(150,150,255),
          new Color(0,200,200),
