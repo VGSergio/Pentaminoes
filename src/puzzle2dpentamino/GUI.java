@@ -3,11 +3,15 @@
  */
 package puzzle2dpentamino;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Component;
+import java.awt.event.ItemEvent;
+import java.awt.event.KeyEvent;
 import static java.lang.Thread.sleep;
-import java.util.logging.*;
-import javax.swing.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ButtonGroup;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
 
 /**
  * @authors Sergio Vega     (43480752B)
@@ -17,9 +21,9 @@ public class GUI extends JFrame{
     
     private Board Board;
     private Board[] Solutions;
-    private final int[] SPEEDS = {0, 1, 30, 70, 120, 300, 600};
+    private final int[] SPEEDS = {0, 1, 30, 70, 120, 300, 600};     //Change this values to change solving Board speeds, value 0 shouln't be changed
     private int Rows = 6, Columns = 10;
-    private int Speed = SPEEDS[0];
+    private int Speed = SPEEDS[3];                                  //Initial speed
     
     /**
      * Creates new form GUI
@@ -35,121 +39,15 @@ public class GUI extends JFrame{
     }
     
     /**
-     * Creates a new empty board
+     * Method to change status message
+     * @param message1
+     * @param message2
+     * @param message3 
      */
-    private void GenerateBoard(int rows, int columns){
-        if (Board!=null){                   //A board already exists
-            BoardPanel.remove(Board);       //Deletes previous board
-        }   
-        
-        //Board configuration
-        Board = new Board(rows, columns);       //Creates a new board
-        BoardPanel.add(Board);                  //Adds the new board
-        Rows = rows;  Columns = columns;        //Updates rows, columns
-        Board.setSpeed(Speed);                  //Sets solving speed
-        
-        //Message configuration
-        setUpMessages();
-        
-        //Solution picker configuration
-        SolutionPicker.setSize(150, 30);            //SolutionPicker size
-        SolutionPicker.setLocation((Board.getWidth()- SolutionPicker.getWidth())/2, 30);   //SolutionPicker location
-        
-        //BoardPanel and SolutionPanel configuration
-        int width = Board.getWidth();           //New panel width
-        int height = Board.getHeight() + Message1.getHeight()*3;    //New panel height
-        BoardPanel.setSize(width, height);                          //BoardPanel new size
-        SolutionsPanel.setSize(width, height);                      //SolutionPanel new size
-        
-        //TabbedPane configuration
-        height += TabbedPane.getBoundsAt(0).height;     //TabbedPane new height
-        TabbedPane.setSize(width, height);              //TabbedPane new size
-        
-        //Frame configuration
-        width += getInsets().right;
-        height += getInsets().top + MenuBar.getBounds().height + getInsets().bottom*2;    //Frame new height
-        setSize(width, height);                 //Sets frame's new size
-        setLocationRelativeTo(null);            //Centers frame 
-        setResizable(false);                    //Frame NOT resizable by the user
-    }
-    
-    /**
-     * Initializes speed radio buttons
-     */
-    private void initSpeedButtons(){
-        ButtonGroup g = new ButtonGroup();                          //We add all the radiobuttons 
-        for(int i=0; i<SpeedMenu.getMenuComponentCount(); i++){     //to the same group so only 
-            g.add(SpeedMenu.getItem(i));                            //one can be selected 
-        }
-        Speed0.setSelected(true);       //Default speed
-    }
-    
-    /**
-     * Default status message setter
-     */
-    private void setUpMessages(){
-        String s2 = "Block Squares or use Solve(Ctrl+S) to start";              //Updates the message    
-        Message1.setText("");                                                   //Updates the status text
-        Message2.setText(s2);                                                   //Updates the status text
-        Message3.setText("");                                                   //Updates the status text
-        
-        Message1.setBounds(0, Board.getHeight()                       , Board.getWidth(), Message1.getHeight());      //Sets it's location 
-        Message2.setBounds(0, Board.getHeight()+Message1.getHeight()  , Board.getWidth(), Message2.getHeight());      //Sets it's location
-        Message3.setBounds(0, Board.getHeight()+Message1.getHeight()*2, Board.getWidth(), Message3.getHeight());      //Sets it's location
-    }
-    
-    /**
-     * Initializes status messages
-     */
-    private void initMessages(){
-        JLabel[] array = {Message1, Message2, Message3};
-        for (JLabel array1 : array) {
-            array1.setSize(100, 30);
-            array1.setAlignmentX(CENTER_ALIGNMENT);
-            array1.setAlignmentY(CENTER_ALIGNMENT);
-            BoardPanel.add(array1);
-        }
-     }
-    
-    /**
-     * Updates solutions picker combobox with the solutions found
-     */
-    private void updateSolutions(){
-        if(Solutions.length>0){
-            for(int i=0; i<Solutions.length; i++){
-                SolutionPicker.addItem("Solution " + i);
-            }
-        }
-    }
-    
-    /**
-     * Clears solutions picker combobox and erases solutions boards
-     */
-    private void resetSolutions(){
-        Component[] aux = SolutionsPanel.getComponents();
-        for (Component cmpnt : aux) {
-            if(cmpnt instanceof puzzle2dpentamino.Board) {
-                SolutionsPanel.remove(cmpnt);
-            }
-        }
-        SolutionPicker.removeAllItems();
-    }
-    
-    /**
-     * Shows the desired solution
-     * @param board 
-     */
-    private void showSolution(Board board){
-        Component[] aux = SolutionsPanel.getComponents();       //Gets all the componenets
-        for (Component cmpnt : aux) {                           //on the solution panel
-            if(cmpnt instanceof puzzle2dpentamino.Board){       //if there was another 
-                SolutionsPanel.remove(cmpnt);                   //solution being shown
-            }                                                   //its deleted
-        }
-
-        board.setBounds(0, Message1.getHeight()*3, getWidth(), board.getHeight());      //places the solution
-        SolutionsPanel.add(board);                                  //adds it to the solution panel
-        repaint();
+    public void setMessage(String message1, String message2, String message3){
+        Message1.setText(message1);
+        Message2.setText(message2);
+        Message3.setText(message3);
     }
     
     /**
@@ -404,35 +302,23 @@ public class GUI extends JFrame{
     }// </editor-fold>//GEN-END:initComponents
 
     private void BoardSize0MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize0MouseReleased
-        evt.consume();          //Frees memory
-        Board.setSolving(false);
-        resetSolutions();
-        GenerateBoard(6,10);    //New (6x10) board
-        Board.setStatusMessage(!StatusMessageCheckBox.getState());
+        evt.consume();              //Frees memory
+        ResetBoard(6, 10);
     }//GEN-LAST:event_BoardSize0MouseReleased
 
     private void BoardSize1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize1MouseReleased
-        evt.consume();          //Frees memory 
-        Board.setSolving(false);
-        resetSolutions();
-        GenerateBoard(5,12);    //New (5x12) board
-        Board.setStatusMessage(!StatusMessageCheckBox.getState());
+        evt.consume();              //Frees memory 
+        ResetBoard(5, 12);
     }//GEN-LAST:event_BoardSize1MouseReleased
 
     private void BoardSize2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize2MouseReleased
         evt.consume();          //Frees memory 
-        Board.setSolving(false);
-        resetSolutions();
-        GenerateBoard(4,15);    //New (4x15) board
-        Board.setStatusMessage(!StatusMessageCheckBox.getState());
+        ResetBoard(4, 15);
     }//GEN-LAST:event_BoardSize2MouseReleased
 
     private void BoardSize3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize3MouseReleased
         evt.consume();          //Frees memory 
-        Board.setSolving(false);
-        resetSolutions();
-        GenerateBoard(3,20);    //New (3x20) board
-        Board.setStatusMessage(!StatusMessageCheckBox.getState());
+        ResetBoard(3, 20);
     }//GEN-LAST:event_BoardSize3MouseReleased
 
     private void ExitOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExitOptionMouseReleased
@@ -442,15 +328,7 @@ public class GUI extends JFrame{
 
     private void ResetOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResetOptionMouseReleased
         evt.consume();                  //Frees memory 
-        Board.setSolving(false);
-        try {
-            sleep(1);
-        } catch (InterruptedException ex) {
-            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        resetSolutions();
-        GenerateBoard(Rows, Columns);   //New board with the previous one rows and columns
-        Board.setStatusMessage(!StatusMessageCheckBox.getState());
+        ResetBoard(Rows, Columns);
     }//GEN-LAST:event_ResetOptionMouseReleased
 
     private void SolveOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SolveOptionMouseReleased
@@ -498,11 +376,9 @@ public class GUI extends JFrame{
     private void BoardPanelMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardPanelMouseReleased
         if(evt.getY()<Board.getHeight() && evt.getX()< Board.getWidth()){       //Event happened inside board bounds
             if(!Board.isSolving()){
-                int x = evt.getX() ;                 //Fixed coordinates
-                int y = evt.getY() ;                 //Fixed coordinates
-                evt.consume();                       //Frees memory
-                Board.ChangeSquareStatus(x, y);     //Updates square's status and color
-                repaint();                          //Updates the GUI with the new square's color
+                Board.ChangeSquareStatus(evt.getX(), evt.getY());       //Updates square's status and color
+                evt.consume();          //Frees memory
+                repaint();              //Updates the GUI with the new square's color
             }
         }
     }//GEN-LAST:event_BoardPanelMouseReleased
@@ -515,15 +391,7 @@ public class GUI extends JFrame{
         }
         else if (evt.isControlDown() && (key == KeyEvent.VK_R)){    //Ctrl+R
             evt.consume();                      //Frees memory
-            Board.setSolving(false);
-            try {
-                sleep(1);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            resetSolutions();
-            GenerateBoard(Rows, Columns);       //New board with the previous one rows and columns
-            Board.setStatusMessage(!StatusMessageCheckBox.getState());
+            ResetBoard(Rows, Columns);
         }
         else if (evt.isControlDown() && (key == KeyEvent.VK_S)){
             evt.consume();      //Frees memory
@@ -534,10 +402,10 @@ public class GUI extends JFrame{
     }//GEN-LAST:event_TabbedPaneKeyReleased
 
     private void SolutionPickerItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_SolutionPickerItemStateChanged
-        if (evt.getStateChange() == ItemEvent.SELECTED){    //Solution selected
-            showSolution(Solutions[SolutionPicker.getSelectedIndex()]);
+        if (evt.getStateChange() == ItemEvent.SELECTED){                    //A solution has been selected
+            showSolution(Solutions[SolutionPicker.getSelectedIndex()]);     //Shows the selected solution
         }
-        TabbedPane.requestFocus();      //returns focus to the keyevent listener component
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_SolutionPickerItemStateChanged
 
     private void StatusMessageCheckBoxMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_StatusMessageCheckBoxMouseReleased
@@ -545,17 +413,145 @@ public class GUI extends JFrame{
     }//GEN-LAST:event_StatusMessageCheckBoxMouseReleased
 
     /**
-     * Method to change status message
-     * @param message1
-     * @param message2
-     * @param message3 
+     * Creates a new empty board
      */
-    public void setMessage(String message1, String message2, String message3){
-        Message1.setText(message1);
-        Message2.setText(message2);
-        Message3.setText(message3);
+    private void GenerateBoard(int rows, int columns){
+        if (Board!=null){                   //A board already exists
+            BoardPanel.remove(Board);       //Deletes previous board
+        }   
+        
+        //Board configuration
+        Board = new Board(rows, columns);       //Creates a new board
+        BoardPanel.add(Board);                  //Adds the new board
+        Rows = rows;  Columns = columns;        //Updates rows, columns
+        Board.setSpeed(Speed);                  //Sets solving speed
+        
+        //Message configuration
+        setUpMessages();
+        
+        //Solution picker configuration
+        SolutionPicker.setSize(150, 30);            //SolutionPicker size
+        SolutionPicker.setLocation((Board.getWidth()- SolutionPicker.getWidth())/2, 30);   //SolutionPicker location
+        
+        //BoardPanel and SolutionPanel configuration
+        int width = Board.getWidth();           //New panel width
+        int height = Board.getHeight() + Message1.getHeight()*3;    //New panel height
+        BoardPanel.setSize(width, height);                          //BoardPanel new size
+        SolutionsPanel.setSize(width, height);                      //SolutionPanel new size
+        
+        //TabbedPane configuration
+        height += TabbedPane.getBoundsAt(0).height;     //TabbedPane new height
+        TabbedPane.setSize(width, height);              //TabbedPane new size
+        
+        //Frame configuration
+        width += getInsets().right;
+        height += getInsets().top + MenuBar.getBounds().height + getInsets().bottom*2;    //Frame new height
+        setSize(width, height);                 //Sets frame's new size
+        setLocationRelativeTo(null);            //Centers frame 
+        setResizable(false);                    //Frame NOT resizable by the user
     }
     
+    /**
+     * Initializes speed radio buttons
+     */
+    private void initSpeedButtons(){
+        ButtonGroup g = new ButtonGroup();                          //We add all the radiobuttons 
+        for(int i=0; i<SpeedMenu.getMenuComponentCount(); i++){     //to the same group so only 
+            g.add(SpeedMenu.getItem(i));                            //one can be selected at a time
+        }
+        Speed3.setSelected(true);       //Default speed -> Normal speed
+    }
+    
+    /**
+     * Default status message setter
+     */
+    private void setUpMessages(){
+        String s2 = "Block Squares or use Solve(Ctrl+S) to start";              //Initial message    
+        Message1.setText("");                                                   //Updates the status text
+        Message2.setText(s2);                                                   //Updates the status text
+        Message3.setText("");                                                   //Updates the status text
+        
+        Message1.setBounds(0, Board.getHeight()                       , Board.getWidth(), Message1.getHeight());      //Sets its location 
+        Message2.setBounds(0, Board.getHeight()+Message1.getHeight()  , Board.getWidth(), Message2.getHeight());      //Sets its location
+        Message3.setBounds(0, Board.getHeight()+Message1.getHeight()*2, Board.getWidth(), Message3.getHeight());      //Sets its location
+    }
+    
+    /**
+     * Initializes status messages
+     */
+    private void initMessages(){
+        JLabel[] array = {Message1, Message2, Message3};
+        for (JLabel array1 : array) {
+            array1.setSize(100, 30);
+            array1.setAlignmentX(CENTER_ALIGNMENT);
+            array1.setAlignmentY(CENTER_ALIGNMENT);
+            BoardPanel.add(array1);
+        }
+     }
+    
+    /**
+     * Updates solutions picker combobox with the solutions found
+     */
+    private void updateSolutions(){
+        if(Solutions.length>0){
+            for(int i=0; i<Solutions.length; i++){
+                SolutionPicker.addItem("Solution " + i);
+            }
+        }
+    }
+    
+    /**
+     * Clears solutions picker combobox and erases solutions boards
+     */
+    private void resetSolutions(){
+        Component[] aux = SolutionsPanel.getComponents();
+        for (Component cmpnt : aux) {
+            if(cmpnt instanceof puzzle2dpentamino.Board) {
+                SolutionsPanel.remove(cmpnt);
+            }
+        }
+        SolutionPicker.removeAllItems();
+    }
+    
+    /**
+     * Shows the desired solution
+     * @param board 
+     */
+    private void showSolution(Board board){
+        Component[] aux = SolutionsPanel.getComponents();       //Gets all the componenets
+        for (Component cmpnt : aux) {                           //on the solution panel
+            if(cmpnt instanceof puzzle2dpentamino.Board){       //if there was another 
+                SolutionsPanel.remove(cmpnt);                   //solution being shown
+            }                                                   //its deleted
+        }
+
+        board.setBounds(0, Message1.getHeight()*3, getWidth(), board.getHeight());      //Places the solution
+        SolutionsPanel.add(board);                                                      //adds it to the solution panel
+        repaint();                      //Repaints frame
+    }
+    
+    /**
+     * Stops board solving, resets status message and solutions panel, 
+     * and creates a new Board.
+     * @param row
+     * @param column 
+     */
+    private void ResetBoard(int row, int column){
+        Board.setSolving(false);            //Stops BackTracking solver method in case it was stooped during execution
+        
+        try {               
+            sleep(10);                      //Wait for a proper status message update
+            setUpMessages();                //Resets the status message
+            sleep(10);                      //Wait for a proper status message update
+        } catch (InterruptedException ex) {
+            Logger.getLogger(GUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        resetSolutions();                   //Erases previous solutions found
+        GenerateBoard(row, column);         //New (rowXcolumn) board
+        Board.setStatusMessage(!StatusMessageCheckBox.getState());          //Sets the new board StatusMessage to the previously selected one
+    }
+        
     /**
      * Sets the speed at which the board will be solved
      * @param miliseconds 

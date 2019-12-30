@@ -1,10 +1,11 @@
 /* Square class. A square is distinguished by its color, side, 
  * position in the board, determined by the row and column the square
- * is placed, and wheter it's blocked or not
+ * is placed, and whether it's blocked or not.
  */
 package puzzle2dpentamino;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
 
 /**
  * @authors Sergio Vega     (43480752B)
@@ -12,7 +13,7 @@ import java.awt.*;
  */
 public class Square {
     
-    private final int SIDE = 60;
+    private final int SIDE = 60;        //Change this value to change squares size
     private Color COLOR;
     private final int Row, Column;
     private boolean Blocked;
@@ -34,14 +35,14 @@ public class Square {
      * @param g 
      */
     public void paint(Graphics g){
-        g.setColor(Color.LIGHT_GRAY);
-        g.drawRect(Column, Row, SIDE, SIDE);
-        g.setColor(COLOR);
-        g.fillRect(Column+1, Row+1, SIDE-1, SIDE-1);
+        g.setColor(Color.LIGHT_GRAY);                   //Border color
+        g.drawRect(Column, Row, SIDE, SIDE);            //Border
+        g.setColor(COLOR);                              //Square color
+        g.fillRect(Column+1, Row+1, SIDE-1, SIDE-1);    //+-1 sothe border can be seen
     }
     
     /**
-     * Returns the square's side value
+     * Returns squares side value
      * @return int
      */
     public int getSide(){
@@ -49,7 +50,7 @@ public class Square {
     }
     
     /**
-     * Sets square color
+     * Squares color setter
      * @param color 
      */
     public void setColor(Color color){
@@ -57,7 +58,7 @@ public class Square {
     }
     
     /**
-     * Square color getter
+     * Squares color getter
      * @return 
      */
     public Color getColor(){
@@ -65,7 +66,7 @@ public class Square {
     }
     
     /**
-     * Square's blocked status getter
+     * Squares blocked status getter
      * @return boolean
      */
     public boolean isBlocked(){
