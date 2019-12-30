@@ -618,33 +618,33 @@ public class GUI extends JFrame{
     }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JPanel BoardPanel;
-    private javax.swing.JMenuItem BoardSize0;
-    private javax.swing.JMenuItem BoardSize1;
-    private javax.swing.JMenuItem BoardSize2;
-    private javax.swing.JMenuItem BoardSize3;
-    private javax.swing.JMenu ControlMenu;
-    private javax.swing.JMenuItem ExitOption;
-    private javax.swing.JMenuBar MenuBar;
-    public static javax.swing.JLabel Message1;
-    public static javax.swing.JLabel Message2;
-    public static javax.swing.JLabel Message3;
-    private javax.swing.JMenuItem ResetOption;
-    private javax.swing.JMenu SizeMenu;
+    private static javax.swing.JPanel BoardPanel;
+    private static javax.swing.JMenuItem BoardSize0;
+    private static javax.swing.JMenuItem BoardSize1;
+    private static javax.swing.JMenuItem BoardSize2;
+    private static javax.swing.JMenuItem BoardSize3;
+    private static javax.swing.JMenu ControlMenu;
+    private static javax.swing.JMenuItem ExitOption;
+    private static javax.swing.JMenuBar MenuBar;
+    private static javax.swing.JLabel Message1;
+    private static javax.swing.JLabel Message2;
+    private static javax.swing.JLabel Message3;
+    private static javax.swing.JMenuItem ResetOption;
+    private static javax.swing.JMenu SizeMenu;
     private javax.swing.JComboBox<String> SolutionPicker;
-    private javax.swing.JPanel SolutionsPanel;
-    private javax.swing.JMenuItem SolveOption;
-    private javax.swing.JRadioButtonMenuItem Speed0;
-    private javax.swing.JRadioButtonMenuItem Speed1;
-    private javax.swing.JRadioButtonMenuItem Speed2;
-    private javax.swing.JRadioButtonMenuItem Speed3;
-    private javax.swing.JRadioButtonMenuItem Speed4;
-    private javax.swing.JRadioButtonMenuItem Speed5;
-    private javax.swing.JRadioButtonMenuItem Speed6;
-    private javax.swing.JMenu SpeedMenu;
-    private javax.swing.JCheckBoxMenuItem StatusMessageCheckBox;
-    private javax.swing.JTabbedPane TabbedPane;
-    private javax.swing.JMenu jMenu1;
+    private static javax.swing.JPanel SolutionsPanel;
+    private static javax.swing.JMenuItem SolveOption;
+    private static javax.swing.JRadioButtonMenuItem Speed0;
+    private static javax.swing.JRadioButtonMenuItem Speed1;
+    private static javax.swing.JRadioButtonMenuItem Speed2;
+    private static javax.swing.JRadioButtonMenuItem Speed3;
+    private static javax.swing.JRadioButtonMenuItem Speed4;
+    private static javax.swing.JRadioButtonMenuItem Speed5;
+    private static javax.swing.JRadioButtonMenuItem Speed6;
+    private static javax.swing.JMenu SpeedMenu;
+    private static javax.swing.JCheckBoxMenuItem StatusMessageCheckBox;
+    private static javax.swing.JTabbedPane TabbedPane;
+    private static javax.swing.JMenu jMenu1;
     // End of variables declaration//GEN-END:variables
 
 }
