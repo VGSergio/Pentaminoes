@@ -570,13 +570,13 @@ public class GUI extends JFrame{
             long start = System.currentTimeMillis()/1000;
             Message2.setText("Solving");
             if(Board.hasBlockedSquares())
-                Solutions = Board.Solve(this, Board, 0, new boolean[12]);
+                Solutions = Board.Solve(this, 0, new boolean[12]);
             else
-                Solutions = Board.Solve(this, Board, 0, new boolean[12], 0, 12);
+                Solutions = Board.Solve(this, 0, new boolean[12], 0, 12);
             
             long finish = System.currentTimeMillis()/1000;
-            System.out.println("Solved in "+(finish-start)+" seconds");
-            Message1.setText("Done.");
+            System.out.println("Solved in "+(finish-start)+" seconds\n");
+            Message2.setText("Solved");
             updateSolutions();
         }
     }

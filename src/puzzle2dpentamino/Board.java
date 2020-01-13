@@ -24,12 +24,12 @@ public class Board extends JPanel{
     
     private int Speed;
     private boolean Solving;
-    private final ArrayList<Board> SOLUTIONS = new ArrayList();
+    private final ArrayList<Board> SOLUTIONS = new ArrayList();          
     private int Iterations = 0;
     private int Solutions = 0;
     private int best = 0;
     private int blockCheckCt;
-    private final int[] blockCheck;
+    private int[] blockCheck;                                            
     private boolean StatusMessage;
     
     /**
@@ -176,17 +176,16 @@ public class Board extends JPanel{
      * BackTracking recursive method to find the pentominoes solutions of an
      * empty board
      * @param game
-     * @param board
      * @param pos
      * @param pieces
      * @param usedpieces
      * @param maxpieces
      * @return 
      */
-    public Board[] Solve(GUI game, Board board, int pos, boolean[] pieces, int usedpieces, int maxpieces){
+    public Board[] Solve(GUI game, int pos, boolean[] pieces, int usedpieces, int maxpieces){
         if(isSolving()){                                //If the board is still solving
             if(usedpieces==maxpieces){                  //If all the pieces has been used
-                SOLUTIONS.add(board.cloneBoard());      //Adds the solution to the solutions array
+                SOLUTIONS.add(cloneBoard());            //Adds the solution to the solutions array
                 Solutions++;                            //Updates solutions counter
                 if(Speed==0){                           //If OnlySolutions speed is selected, repaints the board
                     try {
@@ -227,7 +226,7 @@ public class Board extends JPanel{
                                         if(!ObviousBlockExists()){              //If no unfillable areas has been created
                                             pieces[piece] = true;               //Updates used pieces array
                                             usedpieces++;                       //Updates used pieces counter
-                                            Solve(game, board, i+1, pieces, usedpieces, maxpieces);     //Recursive call
+                                            Solve(game, i+1, pieces, usedpieces, maxpieces);     //Recursive call
 
                                             usedpieces--;                       //Updates used pieces counter
                                             pieces[piece] = false;              //Updates used pieces array
@@ -264,20 +263,19 @@ public class Board extends JPanel{
      * BackTracking recursive method to find the pentominoes solutions of a
      * board with blocked squares
      * @param game
-     * @param board
      * @param pos
      * @param pieces
      * @return 
      */
-    public Board[] Solve(GUI game, Board board, int pos, boolean[] pieces){
+    public Board[] Solve(GUI game, int pos, boolean[] pieces){
         if(isSolving()){                                    //If the board is still solving
-            if(board.getSquaresOccupied()>best){            //If a better solution has been found
-                best=board.getSquaresOccupied();            //Sets best solution found
+            if(getSquaresOccupied()>best){                  //If a better solution has been found
+                best=getSquaresOccupied();                  //Sets best solution found
                 SOLUTIONS.clear();                          //Erases previous solutions found
-                SOLUTIONS.add(board.cloneBoard());          //Adds the new solution to the solutions array
+                SOLUTIONS.add(cloneBoard());                //Adds the new solution to the solutions array
                 Solutions = 1;                              //Resets solution counter
-            } else if(board.getSquaresOccupied()==best){    //If a equally good solution found
-                SOLUTIONS.add(board.cloneBoard());          //Adds it to the solution array
+            } else if(getSquaresOccupied()==best){          //If a equally good solution found
+                SOLUTIONS.add(cloneBoard());                //Adds it to the solution array
                 Solutions++;                                //Updates solutions counter
             }
             for(int i=pos; i<getSquaresAmount(); i++){      //Tries each position
@@ -306,7 +304,7 @@ public class Board extends JPanel{
 
 //                                    if(!ObviousBlockExists()){                //Invalid pruning method, some solutions wouldn't be found
                                         pieces[piece] = true;                   //Updates the used pieces array
-                                        Solve(game, board, i+1, pieces);        //Recursive call
+                                        Solve(game, i+1, pieces);               //Recursive call
 
                                         pieces[piece] = false;                  //Updates the used pieces array
 //                                    }
