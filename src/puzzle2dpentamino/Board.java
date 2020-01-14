@@ -11,8 +11,8 @@ import java.util.logging.Logger;
 import javax.swing.JPanel;
 
 /**
- * @authors Sergio Vega     (43480752B)
- *          Andreas Korn    (X4890193W)
+ * @author Sergio Vega
+ *         Andreas Korn
  */
 public class Board extends JPanel{
     
@@ -29,7 +29,7 @@ public class Board extends JPanel{
     private int Solutions = 0;
     private int best = 0;
     private int blockCheckCt;
-    private int[] blockCheck;                                            
+    private final int[] blockCheck;                                            
     private boolean StatusMessage;
     
     /**
@@ -73,7 +73,7 @@ public class Board extends JPanel{
     
     /**
      * Returns the amount of squares that form the board
-     * @return 
+     * @return SquaresAmount
      */
     public int getSquaresAmount(){
         return ROWS*COLUMNS;
@@ -81,7 +81,7 @@ public class Board extends JPanel{
     
     /**
      * Returns true if the board has blocked squares.
-     * @return 
+     * @return boolean
      */
     public boolean hasBlockedSquares(){
         for(int i=0; i<getSquaresAmount(); i++){
@@ -94,7 +94,7 @@ public class Board extends JPanel{
     
     /**
      * Returns Boards width
-     * @return 
+     * @return int
      */
     @Override
     public int getWidth(){
@@ -103,7 +103,7 @@ public class Board extends JPanel{
     
     /**
      * Returns board height
-     * @return 
+     * @return int
      */
     @Override
     public int getHeight(){
@@ -119,8 +119,8 @@ public class Board extends JPanel{
     }
 
     /**
-     * Solving status setter
-     * @param Solving 
+     * Solving status setter 
+     * @param Solving
      */
     public void setSolving(boolean Solving) {
         this.Solving = Solving;
@@ -138,15 +138,14 @@ public class Board extends JPanel{
         if(SQUARES[position].isBlocked()){
             SQUARES[position].setColor(Color.WHITE);
             SQUARES[position].setBlocked(false);
-        }
-        else {
+        } else {
             SQUARES[position].setColor(Color.BLACK);
             SQUARES[position].setBlocked(true);
         }
     }
     
     /**
-     * Boards paint method
+     * Board paint method
      * @param g 
      */
     @Override
@@ -189,9 +188,9 @@ public class Board extends JPanel{
                 Solutions++;                            //Updates solutions counter
                 if(Speed==0){                           //If OnlySolutions speed is selected, repaints the board
                     try {
-                        Thread.sleep(10);               //Mandatory sleep to have an accurate representation of the solution, some visual bugs may still happen sometimes
+                        Thread.sleep(1);               //Mandatory sleep to have an accurate representation of the solution, some visual bugs may still happen sometimes
                         game.repaint();                 //Repaints the board
-                        Thread.sleep(10);               //Mandatory sleep to have an accurate representation of the solution, some visual bugs may still happen sometimes
+                        Thread.sleep(1);               //Mandatory sleep to have an accurate representation of the solution, some visual bugs may still happen sometimes
                     } catch (InterruptedException ex) {
                         Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -282,7 +281,7 @@ public class Board extends JPanel{
                 if(!hasLeftEmptySquares(i)){                                //No squares have been left empty
                     for(int piece=0; piece<pieces.length; piece++){         //Tries each piece
                         if(!pieces[piece]){                                 //The piece has not been used
-                            int[] perspectives = new Piece().getPerspectives(piece);            //Gets the piece pespectives
+                            int[] perspectives = new Piece().getPerspectives(piece);            //Gets the piece perspectives
                             for(int pers=0; pers<perspectives.length/10; pers++){               //Tries each piece perspective
                                 int[] perspective = getPerspective(perspectives, pers);         //Gets the desired perspective
                                 if(pieceFits(i, perspective)){                                  //The piece fits
@@ -349,10 +348,10 @@ public class Board extends JPanel{
             for(int c=0; c<COLUMNS; c++){
                 int blockSize = countEmptyBlock(r,c);
                 if (blockSize % 5 == 0)
-                  continue;
+                    continue;
                 forcedEmptyCt += blockSize % 5;
                 if (forcedEmptyCt < 5)
-                  return true;
+                    return true;
             }
         return false;
     }
@@ -369,19 +368,26 @@ public class Board extends JPanel{
             return 0;
         }
         int c1 = c, c2 = c;
-        while (c1 > 0 && !SQUARES[(r*COLUMNS)+(c1-1)].isBlocked())
-           c1--;
-        while (c2 < COLUMNS-1 && !SQUARES[(r*COLUMNS)+(c2+1)].isBlocked())
-           c2++;
-        for (int i = c1; i <= c2; i++)
+        while (c1 > 0 && !SQUARES[(r*COLUMNS)+(c1-1)].isBlocked()){
+            c1--;
+        }
+        while (c2 < COLUMNS-1 && !SQUARES[(r*COLUMNS)+(c2+1)].isBlocked()){
+            c2++;
+        }
+        for (int i = c1; i <= c2; i++){
             blockCheck[r*COLUMNS+i] = blockCheckCt;
+        }
         int ct = c2 - c1 + 1;
-        if (r > 1)
-           for (int i = c1; i <= c2; i++)
-              ct += countEmptyBlock(r-1,i);
-        if (r < ROWS-1)
-           for (int i = c1; i <= c2; i++)
-              ct += countEmptyBlock(r+1,i);
+        if (r > 1){
+            for (int i = c1; i <= c2; i++){
+                ct += countEmptyBlock(r-1,i);
+            }
+        }
+        if (r < ROWS-1){
+            for (int i = c1; i <= c2; i++){
+                ct += countEmptyBlock(r+1,i);
+            }
+        }
         return ct;
       }
     
@@ -420,7 +426,7 @@ public class Board extends JPanel{
             } else if(SQUARES[position2].isBlocked()){      //The square you want to use 
                 return false;                               //is already used by another piece
             } else if((position%COLUMNS) > (position2%COLUMNS)){    //The piece doesn't exceed
-                return false ;                                      //the right end 
+                return false;                                       //the right end 
             }                       
             i++; 
         }    

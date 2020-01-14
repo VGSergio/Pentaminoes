@@ -14,14 +14,14 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 
 /**
- * @authors Sergio Vega     (43480752B)
- *          Andreas Korn    (X4890193W)
+ * @author Sergio Vega
+ *         Andreas Korn
  */
 public class GUI extends JFrame{
     
     private Board Board;
     private Board[] Solutions;
-    private final int[] SPEEDS = {0, 1, 30, 70, 120, 300, 600};     //Change this values to change solving Board speeds, value 0 shouln't be changed
+    private final int[] SPEEDS = {0, 1, 30, 70, 120, 300, 600};     //Change this values to change solving Board speeds, value 0 CAN'T be changed
     private int Rows = 6, Columns = 10;
     private int Speed = SPEEDS[3];                                  //Initial speed
     
@@ -36,6 +36,7 @@ public class GUI extends JFrame{
         
         add(TabbedPane);                //Adds TabbedPane to the frame
         GenerateBoard(Rows, Columns);   //Creates initial board
+        
     }
     
     /**
@@ -393,7 +394,7 @@ public class GUI extends JFrame{
             evt.consume();                      //Frees memory
             ResetBoard(Rows, Columns);
         }
-        else if (evt.isControlDown() && (key == KeyEvent.VK_S)){
+        else if (evt.isControlDown() && (key == KeyEvent.VK_S)){    //Ctrl+S
             evt.consume();      //Frees memory
             new Thread(() -> {
                 solve();        //Starts solving the puzzle
@@ -409,6 +410,7 @@ public class GUI extends JFrame{
     }//GEN-LAST:event_SolutionPickerItemStateChanged
 
     private void StatusMessageCheckBoxMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_StatusMessageCheckBoxMouseReleased
+        evt.consume();
         Board.setStatusMessage(!StatusMessageCheckBox.getState());
     }//GEN-LAST:event_StatusMessageCheckBoxMouseReleased
 

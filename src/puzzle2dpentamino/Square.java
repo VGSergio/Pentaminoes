@@ -1,4 +1,4 @@
-/* Square class. A square is distinguished by its color, side, 
+/** Square class. A square is distinguished by its color, side, 
  * position in the board, determined by the row and column the square
  * is placed, and whether it's blocked or not.
  */
@@ -8,8 +8,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 /**
- * @authors Sergio Vega     (43480752B)
- *          Andreas Korn    (X4890193W)
+ * @author Sergio Vega
+ *         Andreas Korn
  */
 public class Square {
     
@@ -19,7 +19,7 @@ public class Square {
     private boolean Blocked;
     
     /**
-     * Sqaure constructor
+     * Square constructor
      * @param row
      * @param column 
      */
@@ -38,7 +38,7 @@ public class Square {
         g.setColor(Color.LIGHT_GRAY);                   //Border color
         g.drawRect(Column, Row, SIDE, SIDE);            //Border
         g.setColor(COLOR);                              //Square color
-        g.fillRect(Column+1, Row+1, SIDE-1, SIDE-1);    //+-1 sothe border can be seen
+        g.fillRect(Column+1, Row+1, SIDE-1, SIDE-1);    //+-1 so the border can be seen
     }
     
     /**
