@@ -72,6 +72,7 @@ public class GUI extends JFrame{
         SolveOption = new javax.swing.JMenuItem();
         ResetOption = new javax.swing.JMenuItem();
         ExitOption = new javax.swing.JMenuItem();
+        StopOption = new javax.swing.JMenuItem();
         SpeedMenu = new javax.swing.JMenu();
         Speed0 = new javax.swing.JRadioButtonMenuItem();
         Speed1 = new javax.swing.JRadioButtonMenuItem();
@@ -87,6 +88,7 @@ public class GUI extends JFrame{
         BoardSize3 = new javax.swing.JMenuItem();
         jMenu1 = new javax.swing.JMenu();
         StatusMessageCheckBox = new javax.swing.JCheckBoxMenuItem();
+        TempSolCheckBox = new javax.swing.JCheckBoxMenuItem();
 
         TabbedPane.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -175,6 +177,15 @@ public class GUI extends JFrame{
             }
         });
         ControlMenu.add(ExitOption);
+
+        StopOption.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        StopOption.setText("Stop");
+        StopOption.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                StopOptionMouseReleased(evt);
+            }
+        });
+        ControlMenu.add(StopOption);
 
         MenuBar.add(ControlMenu);
 
@@ -274,15 +285,23 @@ public class GUI extends JFrame{
 
         MenuBar.add(SizeMenu);
 
-        jMenu1.setText("ImprovePerformance");
+        jMenu1.setText("Performance");
 
-        StatusMessageCheckBox.setText("Disable status message");
+        StatusMessageCheckBox.setText("Disable status message (better performance)");
         StatusMessageCheckBox.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 StatusMessageCheckBoxMouseReleased(evt);
             }
         });
         jMenu1.add(StatusMessageCheckBox);
+
+        TempSolCheckBox.setText("Save temporary solutions (worse performance)");
+        TempSolCheckBox.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                TempSolCheckBoxMouseReleased(evt);
+            }
+        });
+        jMenu1.add(TempSolCheckBox);
 
         MenuBar.add(jMenu1);
 
@@ -305,21 +324,25 @@ public class GUI extends JFrame{
     private void BoardSize0MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize0MouseReleased
         evt.consume();              //Frees memory
         ResetBoard(6, 10);
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_BoardSize0MouseReleased
 
     private void BoardSize1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize1MouseReleased
         evt.consume();              //Frees memory 
         ResetBoard(5, 12);
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_BoardSize1MouseReleased
 
     private void BoardSize2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize2MouseReleased
         evt.consume();          //Frees memory 
         ResetBoard(4, 15);
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_BoardSize2MouseReleased
 
     private void BoardSize3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize3MouseReleased
         evt.consume();          //Frees memory 
         ResetBoard(3, 20);
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_BoardSize3MouseReleased
 
     private void ExitOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExitOptionMouseReleased
@@ -330,6 +353,7 @@ public class GUI extends JFrame{
     private void ResetOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResetOptionMouseReleased
         evt.consume();                  //Frees memory 
         ResetBoard(Rows, Columns);
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_ResetOptionMouseReleased
 
     private void SolveOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SolveOptionMouseReleased
@@ -337,41 +361,49 @@ public class GUI extends JFrame{
         new Thread(() -> {
             solve();     //Starts solving the puzzle
         }).start();
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_SolveOptionMouseReleased
 
     private void Speed0MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed0MouseReleased
         evt.consume();              //Frees memory
         setSpeed(SPEEDS[0]);        //Sets solving speed
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_Speed0MouseReleased
 
     private void Speed1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed1MouseReleased
         evt.consume();              //Frees memory
         setSpeed(SPEEDS[1]);        //Sets solving speed
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_Speed1MouseReleased
 
     private void Speed2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed2MouseReleased
         evt.consume();              //Frees memory
         setSpeed(SPEEDS[2]);        //Sets solving speed
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_Speed2MouseReleased
 
     private void Speed3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed3MouseReleased
         evt.consume();              //Frees memory
         setSpeed(SPEEDS[3]);        //Sets solving speed
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_Speed3MouseReleased
 
     private void Speed4MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed4MouseReleased
         evt.consume();              //Frees memory
-        setSpeed(SPEEDS[4]);        //Sets solving speed
+        setSpeed(SPEEDS[4]);        //Sets solving spee
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener componentd
     }//GEN-LAST:event_Speed4MouseReleased
 
     private void Speed5MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed5MouseReleased
         evt.consume();              //Frees memory
         setSpeed(SPEEDS[5]);        //Sets solving speed
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_Speed5MouseReleased
 
     private void Speed6MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed6MouseReleased
         evt.consume();              //Frees memory
         setSpeed(SPEEDS[6]);        //Sets solving speed
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_Speed6MouseReleased
 
     private void BoardPanelMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardPanelMouseReleased
@@ -382,6 +414,7 @@ public class GUI extends JFrame{
                 repaint();              //Updates the GUI with the new square's color
             }
         }
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_BoardPanelMouseReleased
 
     private void TabbedPaneKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TabbedPaneKeyReleased
@@ -389,17 +422,19 @@ public class GUI extends JFrame{
         if (evt.isControlDown() && (key == KeyEvent.VK_E)){         //Ctrl+E
             evt.consume();      //Frees memory
             System.exit(0);     //Exits the program
-        }
-        else if (evt.isControlDown() && (key == KeyEvent.VK_R)){    //Ctrl+R
+        } else if (evt.isControlDown() && (key == KeyEvent.VK_R)){    //Ctrl+R
             evt.consume();                      //Frees memory
             ResetBoard(Rows, Columns);
-        }
-        else if (evt.isControlDown() && (key == KeyEvent.VK_S)){    //Ctrl+S
+        } else if (evt.isControlDown() && (key == KeyEvent.VK_S)){    //Ctrl+S
             evt.consume();      //Frees memory
             new Thread(() -> {
                 solve();        //Starts solving the puzzle
             }).start();
+        } else if (evt.isControlDown() && (key == KeyEvent.VK_P)){    //Ctrl+P
+            evt.consume();
+            Board.setSolving(false);
         }
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_TabbedPaneKeyReleased
 
     private void SolutionPickerItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_SolutionPickerItemStateChanged
@@ -411,8 +446,21 @@ public class GUI extends JFrame{
 
     private void StatusMessageCheckBoxMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_StatusMessageCheckBoxMouseReleased
         evt.consume();
-        Board.setStatusMessage(!StatusMessageCheckBox.getState());
+        Board.setStatusMessage(StatusMessageCheckBox.getState());
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_StatusMessageCheckBoxMouseReleased
+
+    private void TempSolCheckBoxMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TempSolCheckBoxMouseReleased
+        evt.consume();
+        Board.setTemporalSolutions(TempSolCheckBox.getState());
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
+    }//GEN-LAST:event_TempSolCheckBoxMouseReleased
+
+    private void StopOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_StopOptionMouseReleased
+        evt.consume();
+        Board.setSolving(false);
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
+    }//GEN-LAST:event_StopOptionMouseReleased
 
     /**
      * Creates a new empty board
@@ -427,7 +475,8 @@ public class GUI extends JFrame{
         BoardPanel.add(Board);                  //Adds the new board
         Rows = rows;  Columns = columns;        //Updates rows, columns
         Board.setSpeed(Speed);                  //Sets solving speed
-        Board.setStatusMessage(!StatusMessageCheckBox.getState());              //Sets the new board StatusMessage to the previously selected one
+        Board.setStatusMessage(StatusMessageCheckBox.getState());              //Sets the new board StatusMessage to the previously selected one
+        Board.setTemporalSolutions(TempSolCheckBox.getState());
         
         //Message configuration
         setUpMessages();
@@ -633,7 +682,7 @@ public class GUI extends JFrame{
     private static javax.swing.JLabel Message3;
     private static javax.swing.JMenuItem ResetOption;
     private static javax.swing.JMenu SizeMenu;
-    private javax.swing.JComboBox<String> SolutionPicker;
+    private static javax.swing.JComboBox<String> SolutionPicker;
     private static javax.swing.JPanel SolutionsPanel;
     private static javax.swing.JMenuItem SolveOption;
     private static javax.swing.JRadioButtonMenuItem Speed0;
@@ -645,7 +694,9 @@ public class GUI extends JFrame{
     private static javax.swing.JRadioButtonMenuItem Speed6;
     private static javax.swing.JMenu SpeedMenu;
     private static javax.swing.JCheckBoxMenuItem StatusMessageCheckBox;
+    private static javax.swing.JMenuItem StopOption;
     private static javax.swing.JTabbedPane TabbedPane;
+    private static javax.swing.JCheckBoxMenuItem TempSolCheckBox;
     private static javax.swing.JMenu jMenu1;
     // End of variables declaration//GEN-END:variables
 

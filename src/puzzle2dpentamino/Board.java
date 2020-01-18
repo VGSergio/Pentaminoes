@@ -34,6 +34,7 @@ public class Board extends JPanel{
     private int blockCheckCt;
     private final int[] blockCheck;                                            
     private boolean StatusMessage;
+    private boolean temp;
     
     /**
      * Board constructor
@@ -56,6 +57,7 @@ public class Board extends JPanel{
         Solving = false;
         blockCheck = new int[SQUARES.length];
         StatusMessage = true;
+        temp = false;
     }
         
     /**
@@ -171,7 +173,15 @@ public class Board extends JPanel{
      * @param status 
      */
     public void setStatusMessage(boolean status){
-        StatusMessage = status;
+        StatusMessage = !status;
+    }
+    
+    public void setTemporalSolutions(boolean temporal){
+        temp = temporal;
+    }
+    
+    public boolean isSavingTempSol(){
+        return temp;
     }
     
     /**
@@ -251,11 +261,13 @@ public class Board extends JPanel{
                 }
             }
         }
-        if(pos==0){             //Once BackTracking is done
+        if(temp || pos==0){             //Once BackTracking is done
             Board[] solutions = new Board[SOLUTIONS.size()];            //Solutions array
             SOLUTIONS.toArray(solutions);
-            System.out.println(Iterations+" iterations done.");         //Debugging data / useful info
-            System.out.println(Solutions+" solution(s) found.");       //Debugging data / useful info
+            if(pos==0){
+                System.out.println(Iterations+" iterations done.");         //Debugging data / useful info
+                System.out.println(Solutions+" solution(s) found.");        //Debugging data / useful info
+            }
             return solutions;
         }
         return null;
