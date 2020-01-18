@@ -1,5 +1,5 @@
 /** A piece has an identificator, a color, and multiple representations depending
- * of the piece.
+ *  of the piece.
  */
 package puzzle2dpentamino;
 

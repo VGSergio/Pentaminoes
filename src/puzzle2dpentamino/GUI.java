@@ -427,6 +427,7 @@ public class GUI extends JFrame{
         BoardPanel.add(Board);                  //Adds the new board
         Rows = rows;  Columns = columns;        //Updates rows, columns
         Board.setSpeed(Speed);                  //Sets solving speed
+        Board.setStatusMessage(!StatusMessageCheckBox.getState());              //Sets the new board StatusMessage to the previously selected one
         
         //Message configuration
         setUpMessages();
@@ -551,7 +552,6 @@ public class GUI extends JFrame{
         
         resetSolutions();                   //Erases previous solutions found
         GenerateBoard(row, column);         //New (rowXcolumn) board
-        Board.setStatusMessage(!StatusMessageCheckBox.getState());          //Sets the new board StatusMessage to the previously selected one
     }
         
     /**
