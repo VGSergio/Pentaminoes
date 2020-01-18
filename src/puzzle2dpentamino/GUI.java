@@ -616,7 +616,7 @@ public class GUI extends JFrame{
      * 
      */
     private void solve(){
-        if(!Board.isSolving()){
+        if(!Board.isSolving() && SolutionPicker.getItemCount()==0){
             Board.setSolving(true);
             long start = System.currentTimeMillis()/1000;
             Message2.setText("Solving");
