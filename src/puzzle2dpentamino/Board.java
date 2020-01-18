@@ -6,6 +6,9 @@ package puzzle2dpentamino;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
@@ -181,16 +184,16 @@ public class Board extends JPanel{
      * @param maxpieces
      * @return 
      */
-    public Board[] Solve(GUI game, int pos, boolean[] pieces, int usedpieces, int maxpieces){
+    public Board[] Solve(GUI game, int pos, boolean[] pieces, int usedpieces, int maxpieces) {
         if(isSolving()){                                //If the board is still solving
             if(usedpieces==maxpieces){                  //If all the pieces has been used
                 SOLUTIONS.add(cloneBoard());            //Adds the solution to the solutions array
                 Solutions++;                            //Updates solutions counter
                 if(Speed==0){                           //If OnlySolutions speed is selected, repaints the board
                     try {
-                        Thread.sleep(1);               //Mandatory sleep to have an accurate representation of the solution, some visual bugs may still happen sometimes
+                        Thread.sleep(1);                //Mandatory sleep to have an accurate representation of the solution, some visual bugs may still happen sometimes
                         game.repaint();                 //Repaints the board
-                        Thread.sleep(1);               //Mandatory sleep to have an accurate representation of the solution, some visual bugs may still happen sometimes
+                        Thread.sleep(1);                //Mandatory sleep to have an accurate representation of the solution, some visual bugs may still happen sometimes
                     } catch (InterruptedException ex) {
                         Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -273,50 +276,66 @@ public class Board extends JPanel{
                 SOLUTIONS.clear();                          //Erases previous solutions found
                 SOLUTIONS.add(cloneBoard());                //Adds the new solution to the solutions array
                 Solutions = 1;                              //Resets solution counter
+                try {
+                    Thread.sleep(1);                //Mandatory sleep to have an accurate representation of the solution, some visual bugs may still happen sometimes
+                    game.repaint();                 //Repaints the board
+                    Thread.sleep(1);                //Mandatory sleep to have an accurate representation of the solution, some visual bugs may still happen sometimes
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+                }
             } else if(getSquaresOccupied()==best){          //If a equally good solution found
                 SOLUTIONS.add(cloneBoard());                //Adds it to the solution array
                 Solutions++;                                //Updates solutions counter
+                try {
+                    Thread.sleep(1);                //Mandatory sleep to have an accurate representation of the solution, some visual bugs may still happen sometimes
+                    game.repaint();                 //Repaints the board
+                    Thread.sleep(1);                //Mandatory sleep to have an accurate representation of the solution, some visual bugs may still happen sometimes
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-            for(int i=pos; i<getSquaresAmount(); i++){                      //Tries each position
-                if(!hasLeftEmptySquares(i)){                                //No squares have been left empty
-                    for(int piece=0; piece<pieces.length; piece++){         //Tries each piece
-                        if(!pieces[piece]){                                 //The piece has not been used
-                            int[] perspectives = new Piece().getPerspectives(piece);            //Gets the piece perspectives
-                            for(int pers=0; pers<perspectives.length/10; pers++){               //Tries each piece perspective
-                                int[] perspective = getPerspective(perspectives, pers);         //Gets the desired perspective
-                                if(pieceFits(i, perspective)){                                  //The piece fits
-                                    int[] positions = getSquaresPositions(i, perspective);
-                                    Color color = new Piece().getColor(piece);
-                                    AddPiece(positions, color);                                 //Adds the piece onto the board
-                                    Iterations++;
-                                    if(StatusMessage){                                          //Updates the status message if selected
-                                        String[] message = getMessage();
-                                        game.setMessage(message[0], message[1], message[2]); 
-                                    }
-
-                                    if(Speed>0){                            //If the selected speed != OnlySolutions -> repaints the board
-                                        try {
-                                            Thread.sleep(Speed);
-                                            game.repaint();                 //Repaints the board
-                                        } catch (InterruptedException ex) {
-                                            Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+            if(CanBeSolution()){
+                for(int i=pos; i<getSquaresAmount(); i++){                      //Tries each position
+                    if(!hasLeftEmptySquares(i)){                                //No squares have been left empty
+                        for(int piece=0; piece<pieces.length; piece++){         //Tries each piece
+                            if(!pieces[piece]){                                 //The piece has not been used
+                                int[] perspectives = new Piece().getPerspectives(piece);            //Gets the piece perspectives
+                                for(int pers=0; pers<perspectives.length/10; pers++){               //Tries each piece perspective
+                                    int[] perspective = getPerspective(perspectives, pers);         //Gets the desired perspective
+                                    if(pieceFits(i, perspective)){                                  //The piece fits
+                                        int[] positions = getSquaresPositions(i, perspective);
+                                        Color color = new Piece().getColor(piece);
+                                        AddPiece(positions, color);                                 //Adds the piece onto the board
+                                        Iterations++;
+                                        if(StatusMessage){                                          //Updates the status message if selected
+                                            String[] message = getMessage();
+                                            game.setMessage(message[0], message[1], message[2]); 
                                         }
-                                    }
 
-                                    //if(!ObviousBlockExists()){              //If no unfillable areas has been created
-                                        pieces[piece] = true;               //Updates used pieces array
-                                        Solve(game, i+1, pieces);           //Recursive call
+                                        if(Speed>0){                            //If the selected speed != OnlySolutions -> repaints the board
+                                            try {
+                                                Thread.sleep(Speed);
+                                                game.repaint();                 //Repaints the board
+                                            } catch (InterruptedException ex) {
+                                                Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
+                                        }
 
-                                        pieces[piece] = false;              //Updates used pieces array
-                                    //}
+                                        //if(!ObviousBlockExists()){              //If no unfillable areas has been created
+                                            pieces[piece] = true;               //Updates used pieces array
+                                            Solve(game, i+1, pieces);           //Recursive call
 
-                                    removePiece(positions);                 //Removes the piece from the board
-                                    if(Speed>0){                            //If the selected speed != OnlySolutions -> repaints the board
-                                        try {
-                                            Thread.sleep(Speed);
-                                            game.repaint();                 //Repaints the board
-                                        } catch (InterruptedException ex) {
-                                            Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+                                            pieces[piece] = false;              //Updates used pieces array
+                                        //}
+
+                                        removePiece(positions);                 //Removes the piece from the board
+                                        if(Speed>0){                            //If the selected speed != OnlySolutions -> repaints the board
+                                            try {
+                                                Thread.sleep(Speed);
+                                                game.repaint();                 //Repaints the board
+                                            } catch (InterruptedException ex) {
+                                                Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
+                                            }
                                         }
                                     }
                                 }
@@ -347,10 +366,10 @@ public class Board extends JPanel{
         for(int r=0; r<ROWS; r++)
             for(int c=0; c<COLUMNS; c++){
                 int blockSize = countEmptyBlock(r,c);
-                if (blockSize % 5 == 0)
+                if (blockSize % PIECESQUARES == 0)
                     continue;
-                forcedEmptyCt += blockSize % 5;
-                if (forcedEmptyCt < 5)
+                forcedEmptyCt += blockSize % PIECESQUARES;
+                if (forcedEmptyCt < PIECESQUARES)
                     return true;
             }
         return false;
@@ -399,12 +418,9 @@ public class Board extends JPanel{
      * @return 
      */
     private int[] getSquaresPositions(int position, int[] perspective){
-        int[] positions = new int[perspective.length/2];
+        int[] positions = new int[PIECESQUARES];
         for(int i=0; i<PIECESQUARES; i++){
-            //int nrow = perspective[2*i];  int ncolumn = perspective[2*i+1];
-            //int position2 = position + nrow*COLUMNS+ncolumn;
-            //int position2 = position + perspective[2*i]*COLUMNS+perspective[2*i+1];
-            positions[i] = position + perspective[2*i]*COLUMNS+perspective[2*i+1];
+            positions[i] = position + perspective[2*i]*COLUMNS + perspective[2*i+1];
         }
         return positions;
     }
@@ -417,17 +433,16 @@ public class Board extends JPanel{
      */
     private boolean pieceFits(int position, int[] perspective){
         int i=0;
-        while(i<PIECESQUARES){   
-//            int nrow = perspective[2*i];  int ncolumn = perspective[2*i+1];   
-//            int position2 = position + nrow*COLUMNS+ncolumn;
+        while(i<PIECESQUARES){
             int position2 = position + perspective[2*i]*COLUMNS+perspective[2*i+1];     //Computes the squares position
-            if(position2 >= getSquaresAmount()){            //The piece doesn't fit 
-                return false;                               //in the board array
-            } else if(SQUARES[position2].isBlocked()){      //The square you want to use 
-                return false;                               //is already used by another piece
-            } else if((position%COLUMNS) > (position2%COLUMNS)){    //The piece doesn't exceed
+            if(position2 >= getSquaresAmount()){    //The piece doesn't fit 
+                return false;                       //in the board array
+            }else if(SQUARES[position2].isBlocked()){   //The square you want to use 
+                return false;                           //is already used by another piece
+            }else if((position%COLUMNS) > (position2%COLUMNS)){     //The piece doesn't exceed
                 return false;                                       //the right end 
-            }                       
+            }
+                                  
             i++; 
         }    
         return true;
@@ -481,7 +496,7 @@ public class Board extends JPanel{
         boolean found = false;
         
         for (int i=0; i<perspectives.length && !found; i+=(2*PIECESQUARES)){    //1 new perspective every 10 values
-            if(i/10==persepective){             //Desired perspective found
+            if(i/(2*PIECESQUARES)==persepective){             //Desired perspective found
                 for(int j=0; j<p.length; j++){  
                     p[j] = perspectives[i+j];   //Copies perspective datra
                 }
@@ -546,4 +561,25 @@ public class Board extends JPanel{
         return false;
     }
 
+    /**
+     * Computes if a board has the potential to be a solution
+     * @return 
+     */
+    private boolean CanBeSolution(){
+        blockCheckCt++;
+        int forcedEmptyCt = 0;
+        int blocks = 0;
+        for(int r=0; r<ROWS; r++)
+            for(int c=0; c<COLUMNS; c++){
+                int blockSize = countEmptyBlock(r,c);
+                if (blockSize % PIECESQUARES == 0)
+                    continue;
+                forcedEmptyCt += blockSize % PIECESQUARES;
+                if (forcedEmptyCt < PIECESQUARES)
+                    blocks++;
+            }
+        int maxp = (getSquaresAmount() - getSquaresOccupied())/PIECESQUARES;
+        int max = getSquaresOccupied() + (maxp-blocks)*PIECESQUARES;
+        return max>=best;
+    }
 }
