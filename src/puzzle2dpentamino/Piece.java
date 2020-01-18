@@ -116,7 +116,7 @@ public class Piece {
     /**
      * Number of squares that form a piece
      */
-    private final int PIECESQUARES = 5;
+    private static final int PIECESQUARES = 5;
     
     /**
      * Returns the amount of squares that form a piece
@@ -141,7 +141,7 @@ public class Piece {
      * @return 
      */
     public int[] getPerspectives(int piece){
-        int numcoords = 2*PIECESQUARES;
+        int coords = 2*PIECESQUARES;
         int i=0;
         int cont = 0;
         
@@ -149,15 +149,15 @@ public class Piece {
             if(PIECE_DATA[i]==piece){
                 cont++;
             }
-            i += numcoords+1;                   //1 perspective every 11 values (1 id, 10 coordinates)
+            i += coords+1;                  //1 perspective every 11 values (1 id, 10 coordinates)
         }
         
-        int g = i/((numcoords)+1)-cont;    //Index of the first perspective
-        int[] p = new int[cont*numcoords];      //Perspectives found*10 CoordinatesXperspective, perspective array
+        int g = i/(coords+1)-cont;          //Index of the first perspective
+        int[] p = new int[cont*coords];     //Perspectives found*10 CoordinatesXperspective, perspective array
         
         for(i=0; i<cont; i++){                  //For every perspective the piece have
-            for(int j=1; j<=numcoords; j++){    //Gets the 10 coordinates of each perspective
-                p[i*numcoords+(j-1)] = PIECE_DATA[(numcoords+1)*(g+i)+j]; 
+            for(int j=1; j<=coords; j++){       //Gets the 10 coordinates of each perspective
+                p[i*coords+(j-1)] = PIECE_DATA[(coords+1)*(g+i)+j]; 
             }
         }
         

@@ -20,7 +20,7 @@ public class Board extends JPanel{
     private final int COLUMNS;
     private final Square[] SQUARES;
     private final int SIDE;
-    private final int PIECESQUARES;
+    private static final int PIECESQUARES = new Piece().getPieceSquares();
     
     private int Speed;
     private boolean Solving;
@@ -38,7 +38,6 @@ public class Board extends JPanel{
      * @param columns 
      */
     public Board(int rows, int columns){
-        PIECESQUARES = new Piece().getPieceSquares();       //Sets how many squares form the pieces
         SIDE = new Square(0,0).getSide();                   //Sets Squares SIDE value
         
         ROWS = rows;
@@ -185,7 +184,7 @@ public class Board extends JPanel{
                         for(int piece=0; piece<pieces.length; piece++){         //Tries each piece
                             if(!pieces[piece]){                                 //The piece has not been used
                                 int[] perspectives = new Piece().getPerspectives(piece);            //Gets the piece pespectives
-                                for(int pers=0; pers<perspectives.length/10; pers++){               //Tries each piece perspective /// (2*PIECESQUARES) -> 10
+                                for(int pers=0; pers<perspectives.length/(2*PIECESQUARES); pers++){ //Tries each piece perspective
                                     int[] perspective = getPerspective(perspectives, pers);         //Gets the desired perspective
                                     if(pieceFits(i, perspective)){                                  //The piece fits
                                         int[] positions = getSquaresPositions(i, perspective);
@@ -281,7 +280,7 @@ public class Board extends JPanel{
                         for(int piece=0; piece<pieces.length; piece++){         //Tries each piece
                             if(!pieces[piece]){                                 //The piece has not been used
                                 int[] perspectives = new Piece().getPerspectives(piece);            //Gets the piece perspectives
-                                for(int pers=0; pers<perspectives.length/10; pers++){               //Tries each piece perspective /// (2*PIECESQUARES) -> 10
+                                for(int pers=0; pers<perspectives.length/(2*PIECESQUARES); pers++){ //Tries each piece perspective
                                     int[] perspective = getPerspective(perspectives, pers);         //Gets the desired perspective
                                     if(pieceFits(i, perspective)){                                  //The piece fits
                                         int[] positions = getSquaresPositions(i, perspective);
@@ -473,12 +472,12 @@ public class Board extends JPanel{
      * @return int[]
      */
     private int[] getPerspective(int[] perspectives,int persepective){
-        int numcoords = 2*PIECESQUARES;
-        int[] p = new int[numcoords];     //2 Coordinates, 5 squares, perspective array
+        int coord = 2*PIECESQUARES;
+        int[] p = new int[coord];
         boolean found = false;
         
-        for (int i=0; i<perspectives.length && !found; i+=(numcoords)){    //1 new perspective every 10 values
-            if(i/(numcoords)==persepective){        //Desired perspective found
+        for (int i=0; i<perspectives.length && !found; i+=coord){    //1 new perspective every 10 values
+            if(i/coord==persepective){              //Desired perspective found
                 for(int j=0; j<p.length; j++){  
                     p[j] = perspectives[i+j];       //Copies perspective datra
                 }
