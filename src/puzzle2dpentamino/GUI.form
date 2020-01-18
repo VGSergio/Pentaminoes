@@ -149,17 +149,6 @@
                 <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="ExitOptionMouseReleased"/>
               </Events>
             </MenuItem>
-            <MenuItem class="javax.swing.JMenuItem" name="StopOption">
-              <Properties>
-                <Property name="accelerator" type="javax.swing.KeyStroke" editor="org.netbeans.modules.form.editors.KeyStrokeEditor">
-                  <KeyStroke key="Ctrl+P"/>
-                </Property>
-                <Property name="text" type="java.lang.String" value="Stop"/>
-              </Properties>
-              <Events>
-                <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="StopOptionMouseReleased"/>
-              </Events>
-            </MenuItem>
           </SubComponents>
         </Menu>
         <Menu class="javax.swing.JMenu" name="SpeedMenu">
@@ -266,23 +255,15 @@
         </Menu>
         <Menu class="javax.swing.JMenu" name="jMenu1">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Performance"/>
+            <Property name="text" type="java.lang.String" value="ImprovePerformance"/>
           </Properties>
           <SubComponents>
             <MenuItem class="javax.swing.JCheckBoxMenuItem" name="StatusMessageCheckBox">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Disable status message (better performance)"/>
+                <Property name="text" type="java.lang.String" value="Disable status message"/>
               </Properties>
               <Events>
                 <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="StatusMessageCheckBoxMouseReleased"/>
-              </Events>
-            </MenuItem>
-            <MenuItem class="javax.swing.JCheckBoxMenuItem" name="TempSolCheckBox">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Save temporary solutions (worse performance)"/>
-              </Properties>
-              <Events>
-                <EventHandler event="mouseReleased" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="TempSolCheckBoxMouseReleased"/>
               </Events>
             </MenuItem>
           </SubComponents>
