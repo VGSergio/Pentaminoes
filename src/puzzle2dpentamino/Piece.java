@@ -1,5 +1,5 @@
-/** A piece has an identificator, a color, and multiple representations depending
- *  of the piece.
+/* A piece has an identificator, a color, and multiple representations depending
+ * of the piece.
  */
 package puzzle2dpentamino;
 
@@ -149,15 +149,15 @@ public class Piece {
             if(PIECE_DATA[i]==piece){
                 cont++;
             }
-            i += 2*PIECESQUARES+1;              //1 perspective every 11 values (1 id, 10 coordinates)
+            i += numcoords+1;                   //1 perspective every 11 values (1 id, 10 coordinates)
         }
         
-        int g = i/((2*PIECESQUARES)+1)-cont;    //Index of the first perspective
+        int g = i/((numcoords)+1)-cont;    //Index of the first perspective
         int[] p = new int[cont*numcoords];      //Perspectives found*10 CoordinatesXperspective, perspective array
         
         for(i=0; i<cont; i++){                  //For every perspective the piece have
             for(int j=1; j<=numcoords; j++){    //Gets the 10 coordinates of each perspective
-                p[i*(2*PIECESQUARES)+(j-1)] = PIECE_DATA[((2*PIECESQUARES)+1)*(g+i)+j]; 
+                p[i*numcoords+(j-1)] = PIECE_DATA[(numcoords+1)*(g+i)+j]; 
             }
         }
         

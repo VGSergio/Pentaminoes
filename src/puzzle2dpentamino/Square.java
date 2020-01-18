@@ -1,4 +1,4 @@
-/** Square class. A square is distinguished by its color, side, 
+/* Square class. A square is distinguished by its color, side, 
  * position in the board, determined by the row and column the square
  * is placed, and whether it's blocked or not.
  */

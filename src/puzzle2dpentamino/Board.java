@@ -6,9 +6,6 @@ package puzzle2dpentamino;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JPanel;
@@ -56,22 +53,6 @@ public class Board extends JPanel{
         Solving = false;
         blockCheck = new int[SQUARES.length];
         StatusMessage = true;
-    }
-        
-    /**
-     * Rows amount getter
-     * @return int
-     */
-    public int getRows(){
-        return ROWS;
-    }
-        
-    /**
-     * Columns amount getter
-     * @return int
-     */
-    public int getColumns(){
-        return COLUMNS;
     }
     
     /**
@@ -171,7 +152,7 @@ public class Board extends JPanel{
      * @param status 
      */
     public void setStatusMessage(boolean status){
-        StatusMessage = status;
+        StatusMessage = !status;
     }
     
     /**
@@ -204,7 +185,7 @@ public class Board extends JPanel{
                         for(int piece=0; piece<pieces.length; piece++){         //Tries each piece
                             if(!pieces[piece]){                                 //The piece has not been used
                                 int[] perspectives = new Piece().getPerspectives(piece);            //Gets the piece pespectives
-                                for(int pers=0; pers<perspectives.length/10; pers++){               //Tries each piece perspective
+                                for(int pers=0; pers<perspectives.length/10; pers++){               //Tries each piece perspective /// (2*PIECESQUARES) -> 10
                                     int[] perspective = getPerspective(perspectives, pers);         //Gets the desired perspective
                                     if(pieceFits(i, perspective)){                                  //The piece fits
                                         int[] positions = getSquaresPositions(i, perspective);
@@ -300,7 +281,7 @@ public class Board extends JPanel{
                         for(int piece=0; piece<pieces.length; piece++){         //Tries each piece
                             if(!pieces[piece]){                                 //The piece has not been used
                                 int[] perspectives = new Piece().getPerspectives(piece);            //Gets the piece perspectives
-                                for(int pers=0; pers<perspectives.length/10; pers++){               //Tries each piece perspective
+                                for(int pers=0; pers<perspectives.length/10; pers++){               //Tries each piece perspective /// (2*PIECESQUARES) -> 10
                                     int[] perspective = getPerspective(perspectives, pers);         //Gets the desired perspective
                                     if(pieceFits(i, perspective)){                                  //The piece fits
                                         int[] positions = getSquaresPositions(i, perspective);
@@ -492,13 +473,14 @@ public class Board extends JPanel{
      * @return int[]
      */
     private int[] getPerspective(int[] perspectives,int persepective){
-        int[] p = new int[2*PIECESQUARES];     //2 Coordinates, 5 squares, perspective array
+        int numcoords = 2*PIECESQUARES;
+        int[] p = new int[numcoords];     //2 Coordinates, 5 squares, perspective array
         boolean found = false;
         
-        for (int i=0; i<perspectives.length && !found; i+=(2*PIECESQUARES)){    //1 new perspective every 10 values
-            if(i/(2*PIECESQUARES)==persepective){             //Desired perspective found
+        for (int i=0; i<perspectives.length && !found; i+=(numcoords)){    //1 new perspective every 10 values
+            if(i/(numcoords)==persepective){        //Desired perspective found
                 for(int j=0; j<p.length; j++){  
-                    p[j] = perspectives[i+j];   //Copies perspective datra
+                    p[j] = perspectives[i+j];       //Copies perspective datra
                 }
                 found=true;
             }

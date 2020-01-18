@@ -36,7 +36,6 @@ public class GUI extends JFrame{
         
         add(TabbedPane);                //Adds TabbedPane to the frame
         GenerateBoard(Rows, Columns);   //Creates initial board
-        
     }
     
     /**
@@ -305,21 +304,25 @@ public class GUI extends JFrame{
     private void BoardSize0MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize0MouseReleased
         evt.consume();              //Frees memory
         ResetBoard(6, 10);
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_BoardSize0MouseReleased
 
     private void BoardSize1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize1MouseReleased
         evt.consume();              //Frees memory 
         ResetBoard(5, 12);
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_BoardSize1MouseReleased
 
     private void BoardSize2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize2MouseReleased
         evt.consume();          //Frees memory 
         ResetBoard(4, 15);
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_BoardSize2MouseReleased
 
     private void BoardSize3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardSize3MouseReleased
         evt.consume();          //Frees memory 
         ResetBoard(3, 20);
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_BoardSize3MouseReleased
 
     private void ExitOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ExitOptionMouseReleased
@@ -330,6 +333,7 @@ public class GUI extends JFrame{
     private void ResetOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ResetOptionMouseReleased
         evt.consume();                  //Frees memory 
         ResetBoard(Rows, Columns);
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_ResetOptionMouseReleased
 
     private void SolveOptionMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_SolveOptionMouseReleased
@@ -337,41 +341,49 @@ public class GUI extends JFrame{
         new Thread(() -> {
             solve();     //Starts solving the puzzle
         }).start();
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_SolveOptionMouseReleased
 
     private void Speed0MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed0MouseReleased
         evt.consume();              //Frees memory
         setSpeed(SPEEDS[0]);        //Sets solving speed
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_Speed0MouseReleased
 
     private void Speed1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed1MouseReleased
         evt.consume();              //Frees memory
         setSpeed(SPEEDS[1]);        //Sets solving speed
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_Speed1MouseReleased
 
     private void Speed2MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed2MouseReleased
         evt.consume();              //Frees memory
         setSpeed(SPEEDS[2]);        //Sets solving speed
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_Speed2MouseReleased
 
     private void Speed3MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed3MouseReleased
         evt.consume();              //Frees memory
         setSpeed(SPEEDS[3]);        //Sets solving speed
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_Speed3MouseReleased
 
     private void Speed4MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed4MouseReleased
         evt.consume();              //Frees memory
         setSpeed(SPEEDS[4]);        //Sets solving speed
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_Speed4MouseReleased
 
     private void Speed5MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed5MouseReleased
         evt.consume();              //Frees memory
         setSpeed(SPEEDS[5]);        //Sets solving speed
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_Speed5MouseReleased
 
     private void Speed6MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Speed6MouseReleased
         evt.consume();              //Frees memory
         setSpeed(SPEEDS[6]);        //Sets solving speed
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_Speed6MouseReleased
 
     private void BoardPanelMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_BoardPanelMouseReleased
@@ -382,6 +394,7 @@ public class GUI extends JFrame{
                 repaint();              //Updates the GUI with the new square's color
             }
         }
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_BoardPanelMouseReleased
 
     private void TabbedPaneKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TabbedPaneKeyReleased
@@ -400,6 +413,7 @@ public class GUI extends JFrame{
                 solve();        //Starts solving the puzzle
             }).start();
         }
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_TabbedPaneKeyReleased
 
     private void SolutionPickerItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_SolutionPickerItemStateChanged
@@ -411,7 +425,8 @@ public class GUI extends JFrame{
 
     private void StatusMessageCheckBoxMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_StatusMessageCheckBoxMouseReleased
         evt.consume();
-        Board.setStatusMessage(!StatusMessageCheckBox.getState());
+        Board.setStatusMessage(StatusMessageCheckBox.getState());
+        TabbedPane.requestFocus();      //Returns focus to the keyevent listener component
     }//GEN-LAST:event_StatusMessageCheckBoxMouseReleased
 
     /**
@@ -427,7 +442,7 @@ public class GUI extends JFrame{
         BoardPanel.add(Board);                  //Adds the new board
         Rows = rows;  Columns = columns;        //Updates rows, columns
         Board.setSpeed(Speed);                  //Sets solving speed
-        Board.setStatusMessage(!StatusMessageCheckBox.getState());              //Sets the new board StatusMessage to the previously selected one
+        Board.setStatusMessage(StatusMessageCheckBox.getState());               //Sets the new board StatusMessage to the previously selected one
         
         //Message configuration
         setUpMessages();
