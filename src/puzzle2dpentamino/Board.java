@@ -272,47 +272,45 @@ public class Board extends JPanel{
                     Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            if(CanBeSolution()){
-                for(int i=pos; i<getSquaresAmount() && !hasLeftEmptySquares(i); i++){           //Tries each position && No squares have been left empty
-                    for(int piece=0; piece<pieces.length; piece++){                             //Tries each piece
-                        if(!pieces[piece]){                                                     //The piece has not been used
-                            int[] perspectives = new Piece().getPerspectives(piece);            //Gets the piece perspectives
-                            for(int pers=0; pers<perspectives.length/(2*PIECESQUARES); pers++){ //Tries each piece perspective
-                                int[] perspective = getPerspective(perspectives, pers);         //Gets the desired perspective
-                                if(pieceFits(i, perspective)){                                  //The piece fits
-                                    int[] positions = getSquaresPositions(i, perspective);
-                                    Color color = new Piece().getColor(piece);
-                                    AddPiece(positions, color);                                 //Adds the piece onto the board
-                                    Iterations++;
-                                    if(StatusMessage){                                          //Updates the status message if selected
-                                        String[] message = getMessage();
-                                        game.setMessage(message[0], message[1], message[2]); 
+            for(int i=pos; i<getSquaresAmount() && !hasLeftEmptySquares(i); i++){           //Tries each position && No squares have been left empty
+                for(int piece=0; piece<pieces.length; piece++){                             //Tries each piece
+                    if(!pieces[piece]){                                                     //The piece has not been used
+                        int[] perspectives = new Piece().getPerspectives(piece);            //Gets the piece perspectives
+                        for(int pers=0; pers<perspectives.length/(2*PIECESQUARES); pers++){ //Tries each piece perspective
+                            int[] perspective = getPerspective(perspectives, pers);         //Gets the desired perspective
+                            if(pieceFits(i, perspective)){                                  //The piece fits
+                                int[] positions = getSquaresPositions(i, perspective);
+                                Color color = new Piece().getColor(piece);
+                                AddPiece(positions, color);                                 //Adds the piece onto the board
+                                Iterations++;
+                                if(StatusMessage){                                          //Updates the status message if selected
+                                    String[] message = getMessage();
+                                    game.setMessage(message[0], message[1], message[2]); 
+                                }
+
+                                if(Speed>0){                            //If the selected speed != OnlySolutions -> repaints the board
+                                    try {
+                                        Thread.sleep(Speed);
+                                        game.repaint();                 //Repaints the board
+                                    } catch (InterruptedException ex) {
+                                        Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
                                     }
+                                }
 
-                                    if(Speed>0){                            //If the selected speed != OnlySolutions -> repaints the board
-                                        try {
-                                            Thread.sleep(Speed);
-                                            game.repaint();                 //Repaints the board
-                                        } catch (InterruptedException ex) {
-                                            Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
-                                        }
-                                    }
+                                //if(!ObviousBlockExists()){              //If no unfillable areas has been created
+                                    pieces[piece] = true;               //Updates used pieces array
+                                    Solve(game, i+1, pieces);           //Recursive call
 
-                                    //if(!ObviousBlockExists()){              //If no unfillable areas has been created
-                                        pieces[piece] = true;               //Updates used pieces array
-                                        Solve(game, i+1, pieces);           //Recursive call
+                                    pieces[piece] = false;              //Updates used pieces array
+                                //}
 
-                                        pieces[piece] = false;              //Updates used pieces array
-                                    //}
-
-                                    removePiece(positions);                 //Removes the piece from the board
-                                    if(Speed>0){                            //If the selected speed != OnlySolutions -> repaints the board
-                                        try {
-                                            Thread.sleep(Speed);
-                                            game.repaint();                 //Repaints the board
-                                        } catch (InterruptedException ex) {
-                                            Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
-                                        }
+                                removePiece(positions);                 //Removes the piece from the board
+                                if(Speed>0){                            //If the selected speed != OnlySolutions -> repaints the board
+                                    try {
+                                        Thread.sleep(Speed);
+                                        game.repaint();                 //Repaints the board
+                                    } catch (InterruptedException ex) {
+                                        Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
                                     }
                                 }
                             }
@@ -536,27 +534,5 @@ public class Board extends JPanel{
             }
         }
         return false;
-    }
-
-    /**
-     * Computes if a board has the potential to be a solution
-     * @return 
-     */
-    private boolean CanBeSolution(){
-        blockCheckCt++;
-        int forcedEmptyCt = 0;
-        int blocks = 0;
-        for(int r=0; r<ROWS; r++)
-            for(int c=0; c<COLUMNS; c++){
-                int blockSize = countEmptyBlock(r,c);
-                if (blockSize % PIECESQUARES == 0)
-                    continue;
-                forcedEmptyCt += blockSize % PIECESQUARES;
-                if (forcedEmptyCt < PIECESQUARES)
-                    blocks++;
-            }
-        int maxp = (getSquaresAmount() - getSquaresOccupied())/PIECESQUARES;
-        int max = getSquaresOccupied() + (maxp-blocks)*PIECESQUARES;
-        return max>=best;
     }
 }
