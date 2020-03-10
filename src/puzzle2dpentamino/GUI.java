@@ -36,6 +36,7 @@ public class GUI extends JFrame{
         
         add(TabbedPane);                //Adds TabbedPane to the frame
         GenerateBoard(Rows, Columns);   //Creates initial board
+        GenerateBoard(Rows, Columns);   //Creates initial board
     }
     
     /**

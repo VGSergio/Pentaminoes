@@ -171,7 +171,7 @@ public class Board extends JPanel{
                 Solutions++;                            //Updates solutions counter
                 if(Speed==0){                           //If OnlySolutions speed is selected, repaints the board
                     try {
-                        Thread.sleep(1);                //Mandatory sleep to have an accurate representation of the solution, some visual bugs may still happen sometimes
+//                        Thread.sleep(1);                //Mandatory sleep to have an accurate representation of the solution, some visual bugs may still happen sometimes
                         game.repaint();                 //Repaints the board
                         Thread.sleep(1);                //Mandatory sleep to have an accurate representation of the solution, some visual bugs may still happen sometimes
                     } catch (InterruptedException ex) {
