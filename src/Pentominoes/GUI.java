@@ -144,7 +144,7 @@ public class GUI extends JFrame{
         Message3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Puzzle2DPentominos");
+        setTitle("Pentominoes");
         setSize(new java.awt.Dimension(1000, 1000));
 
         MenuBar.setSelectionModel(MenuBar.getSelectionModel());
