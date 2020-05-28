@@ -234,15 +234,18 @@ public class Board extends JPanel{
                     }
                 }
             }
-        }
-        if(pos==0){             //Once BackTracking is done
+            if(usedpieces==0){             //Once BackTracking is done
             Board[] solutions = new Board[SOLUTIONS.size()];            //Solutions array
             SOLUTIONS.toArray(solutions);
             System.out.println(Iterations+" iterations done.");         //Debugging data / useful info
             System.out.println(Solutions+" solution(s) found.");        //Debugging data / useful info
             return solutions;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
         }
-        return null;
     }
     
     /**
@@ -271,14 +274,14 @@ public class Board extends JPanel{
                 SOLUTIONS.add(cloneBoard());                //Adds it to the solution array
                 Solutions++;                                //Updates solutions counter
                 try {
-                    Thread.sleep(1);                //Mandatory sleep to have an accurate representation of the solution, some visual bugs may still happen sometimes
+                    //Thread.sleep(1);                //Mandatory sleep to have an accurate representation of the solution, some visual bugs may still happen sometimes
                     game.repaint();                 //Repaints the board
                     Thread.sleep(1);                //Mandatory sleep to have an accurate representation of the solution, some visual bugs may still happen sometimes
                 } catch (InterruptedException ex) {
                     Logger.getLogger(Board.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            for(int i=pos; i<getSquaresAmount() && !hasLeftEmptySquares(i); i++){   //Tries each position && No squares have been left empty                              //
+            for(int i=pos; i<getSquaresAmount() /*&& !hasLeftEmptySquares(i)*/; i++){   //Tries each position && No squares have been left empty                              //
                 for(int p=0; p<pieces.length; p++){                                 //Tries each piece
                     if(!pieces[p]){                                                 //The piece has not been used
                         Piece piece = getPiece(p);                                  //Creates the piece
@@ -331,15 +334,18 @@ public class Board extends JPanel{
                     }
                 }
             }
-        }
-        if(pos==0){             //Once BackTracking is done
+            if(pos==0){             //Once BackTracking is done
             Board[] solutions = new Board[SOLUTIONS.size()];            //Solutions array
             SOLUTIONS.toArray(solutions);
             System.out.println(Iterations+" iterations done.");         //Debugging data / useful info
             System.out.println(Solutions+" solution(s) found.");        //Debugging data / useful info
             return solutions;
+            } else {
+                return null;
+            }
+        } else {
+            return null;
         }
-        return null;
     }
     
     /**
