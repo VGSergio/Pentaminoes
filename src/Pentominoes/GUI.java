@@ -53,6 +53,10 @@ public class GUI extends JFrame{
         Message3.setText(message3);
     }
     
+    public String getMessage(){
+        return Message2.getText();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -594,8 +598,8 @@ public class GUI extends JFrame{
                 Solutions = Board.Solve(this, 0, new boolean[12], 0, 12);
             
             long finish = System.currentTimeMillis()/1000;
-            System.out.println("Solved in "+(finish-start)+" seconds\n");
-            Message2.setText("Solved");
+            Message3.setText("Solved in "+(finish-start)+" seconds");
+            
             updateSolutions();
         }
     }
